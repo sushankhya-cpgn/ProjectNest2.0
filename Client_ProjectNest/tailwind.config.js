@@ -6,3 +6,10 @@ export default {
   },
   plugins: [],
 };
+// colors: {
+//   'text': '#dbdbdb',
+//   'background': '#03122b',
+//   'primary': '#212731',
+//   'secondary': '#31363f',
+//   'accent': '#1f92b5',
+//  },
