@@ -1,0 +1,21 @@
+{
+  "name": "projectnest-server",
+  "version": "1.0.0",
+  "author": "",
+  "license": "ISC",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --env-file config.env server.js",
+    "startt": "NODE_ENV=production nodemon --env-file config.env server.js",
+    "start": "SET NODE_ENV=production nodemon --env-file config.env server.js"
+  },
+  "description": "",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
