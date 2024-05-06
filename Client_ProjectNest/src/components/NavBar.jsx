@@ -25,7 +25,7 @@ export default function NavBar() {
         />
         {isFullMenue && <Logo />}
       </div>
-      <div className="mb-20 flex flex-col gap-5 ">
+      <div className="mb-20 flex flex-col gap-5 h-fit">
         {user.role === "student" && (
           <>
             <NavBarItem isFullMenue={isFullMenue} name="home">
@@ -40,18 +40,19 @@ export default function NavBar() {
             </NavBarItem>
           </>
         )}
-      </div>
-      {user.role === "supervisor" && (
-        <>
-          <NavBarItem isFullMenue={isFullMenue} name="home">
-            <GrHomeRounded color={iconColor} size={20} />
-          </NavBarItem>
+        {user.role === "supervisor" && (
+          <>
+            <NavBarItem isFullMenue={isFullMenue} name="home">
+              <GrHomeRounded color={iconColor} size={20} />
+            </NavBarItem>
 
-          <NavBarItem isFullMenue={isFullMenue} name="settings">
-            <FiSettings color={iconColor} size={20} />
-          </NavBarItem>
-        </>
-      )}
+            <NavBarItem isFullMenue={isFullMenue} name="settings">
+              <FiSettings color={iconColor} size={20} />
+            </NavBarItem>
+          </>
+        )}
+      </div>
+
       <NavBarItem isFullMenue={isFullMenue} name="logout">
         <CiLogout color={iconColor} size={20} />
       </NavBarItem>
