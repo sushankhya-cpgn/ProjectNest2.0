@@ -4,3 +4,7 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.active {
+  @apply bg-accent/60 rounded-lg;
+}
