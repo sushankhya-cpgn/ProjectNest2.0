@@ -11,7 +11,7 @@ function SideImage() {
     </div>
   );
 }
-
+/* eslint-disable react/prop-types */
 function InputField({ styleobj }) {
   return (
     <input

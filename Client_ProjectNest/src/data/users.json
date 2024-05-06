@@ -1,0 +1,40 @@
+{
+  "users": [
+    {
+      "id": "4233123",
+      "firstName": "John",
+      "lastName": "Doe",
+      "role": "student",
+      "email": "john@gmail.com",
+      "projects": [],
+      "active": true
+    },
+    {
+      "id": "9876543",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "role": "supervisor",
+      "email": "jane@example.com",
+      "projects": [],
+      "active": true
+    },
+    {
+      "id": "1234567",
+      "firstName": "Admin",
+      "lastName": "User",
+      "role": "admin",
+      "email": "admin@example.com",
+      "projects": [],
+      "active": true
+    },
+    {
+      "id": "9876543",
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "role": "student",
+      "email": "alice.johnson@example.com",
+      "projects": [],
+      "active": true
+    }
+  ]
+}
