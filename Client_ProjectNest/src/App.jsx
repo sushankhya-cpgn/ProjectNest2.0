@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./components/Login/LoginPage";
 import SupervisorDashboard from "./pages/SupervisorDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import { UserProvider } from "./contexts/userContext";
