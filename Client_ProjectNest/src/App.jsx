@@ -6,6 +6,8 @@ import { UserProvider } from "./contexts/userContext";
 import FindProject from "./components/student/FindProject";
 import Feed from "./components/student/Feed";
 import Setting from "./components/student/Setting";
+import AdminPage from "./pages/AdminPage";
+
 function App() {
   return (
     <>
@@ -26,6 +28,7 @@ function App() {
                 <Route path="settings" element={<Setting />} />
               </Route>
               <Route path="supervisor" element={<SupervisorDashboard />} />
+              <Route path="admin" element={<AdminPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

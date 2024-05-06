@@ -23,11 +23,7 @@ export default function NavBar() {
           color={iconColor}
           onClick={() => setIsFullMenue((preState) => !preState)}
         />
-        <img
-          className="h-7 sm:hidden"
-          alt="logo"
-          src="../public/logo_light2.png"
-        ></img>
+        <img className="h-7 sm:hidden" alt="logo" src="/logo_light2.png"></img>
         {isFullMenue && (
           <div className="hidden sm:block">
             <Logo />
