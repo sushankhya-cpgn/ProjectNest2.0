@@ -13,7 +13,7 @@ export default {
         accent: "#1f92b5",
       },
       backgroundImage: {
-        loginbackground: "url('/public/bg.jpg')",
+        loginbackground: "url('/public/sc.jpg')",
       },
     },
   },

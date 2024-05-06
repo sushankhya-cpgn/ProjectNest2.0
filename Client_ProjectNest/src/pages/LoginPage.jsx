@@ -2,11 +2,11 @@ import React from "react";
 
 function SideImage() {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center m-10  ">
       <img
         src="./public/productivity.png"
         alt="pic"
-        className="  w-10/12 h-4/6 "
+        className=" h-36  w-full"
       />
     </div>
   );
@@ -17,14 +17,14 @@ function InputField({ styleobj }) {
     <input
       type={styleobj.inputtype}
       placeholder={styleobj.placeholder}
-      className={` mt-2 bg-sky-100  w-60 h-10 p-3 rounded-md`}
+      className={` first-of-type:mt-8 bg-sky-100   h-10 p-3 rounded-md w-11/12 `}
     ></input>
   );
 }
 
 function Button() {
   return (
-    <button className=" bg-blue-500 h-10 text-white rounded-lg border-none hover:bg-blue-600 ">
+    <button className=" bg-blue-500 h-10 w-11/12 text-white rounded-lg border-none hover:bg-blue-600 ">
       Sign In
     </button>
   );
@@ -32,7 +32,7 @@ function Button() {
 
 function LoginHeader() {
   return (
-    <h1 className="font-bold   font-serif text-2xl">
+    <h1 className="font-bold   font-serif text-2xl  w-max ">
       Login in using KU Account
     </h1>
   );
@@ -47,15 +47,29 @@ function Form() {
       margin: 0,
     },
   ];
+
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
+  function ForgotPassword() {
+    return (
+      <p className="text-xs text-end  text-blue-600  hover:text-blue-800 cursor-pointer ">
+        Forgot Password ?
+      </p>
+    );
+  }
   return (
-    <form className="flex flex-row justify-around  border-2 h-3/5 w-5/12 rounded-lg bg-white  text-black shadow-2xl ">
+    <form
+      className="flex flex-row justify-evenly  border-2 h-3/5 w-5/12 rounded-lg bg-white  text-black shadow-2xl "
+      onSubmit={handleSubmit}
+    >
       <SideImage />
       <div className="mt-16 flex flex-col pr-7 ">
         <LoginHeader />
         <div className="h-full flex flex-col gap-4  text-black">
           <InputField styleobj={styleobj[0]} />
           <InputField styleobj={styleobj[1]} />
-          <p className="text-xs text-end text-black">Forgot Password ?</p>
+          <ForgotPassword />
           <Button />
         </div>
       </div>
@@ -65,7 +79,7 @@ function Form() {
 
 function LoginPage() {
   return (
-    <div className="h-screen w-screen  bg-loginbackground text-text flex justify-center items-center">
+    <div className="h-screen w-screen  bg-loginbackground bg-cover text-text flex justify-center items-center">
       <Form />
     </div>
   );
