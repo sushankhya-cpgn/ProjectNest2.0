@@ -11,8 +11,10 @@ function App() {
           <Route index element={<Navigate to="/login" replace />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-        <Route path="/supervisor" element={<SupervisorDashboard />} />
-        <Route index element={<StudentDashboard />} />
+        <Route path="/app">
+          <Route path="student" element={<StudentDashboard />} />
+          <Route path="supervisor" element={<SupervisorDashboard />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
