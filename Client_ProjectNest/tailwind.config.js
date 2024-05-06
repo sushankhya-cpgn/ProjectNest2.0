@@ -10,6 +10,9 @@ export default {
         secondary: "#31363f",
         accent: "#1f92b5",
       },
+      backgroundImage: {
+        loginbackground: "url('/public/bg.jpg')",
+      },
     },
   },
   plugins: [],
