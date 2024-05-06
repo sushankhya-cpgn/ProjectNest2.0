@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-// import StudentHome from "./pages/StudentHome";
-import DashboardLayout from "./pages/DashboardLayout";
-import HomePage from "./pages/HomePage";
+import SupervisorDashboard from "./pages/SupervisorDashboard";
+import StudentDashboard from "./pages/StudentDashboard";
 
 function App() {
   return (
@@ -12,9 +11,8 @@ function App() {
           <Route index element={<Navigate to="/login" replace />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-        {/* <Route path="app" element={<StudentHome />} /> */}
-        <Route path="/app" element={<DashboardLayout />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/supervisor" element={<SupervisorDashboard />} />
+        <Route index element={<StudentDashboard />} />
       </Routes>
     </BrowserRouter>
   );

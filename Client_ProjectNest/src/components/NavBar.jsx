@@ -3,13 +3,13 @@ import { GrHomeRounded } from "react-icons/gr";
 import { LuSearchCode } from "react-icons/lu";
 import { CiLogout } from "react-icons/ci";
 import { FiSettings } from "react-icons/fi";
-import Logo from "../Logo";
+import Logo from "./Logo";
 import { useState } from "react";
-import StudentNavBarItem from "./StudentNavBarItem";
+import NavBarItem from "./NavBarItem";
 
 const iconColor = "#B4B4B8";
 
-function StudentNavBar() {
+export default function NavBar() {
   const [isFullMenue, setIsFullMenue] = useState(true);
   return (
     <div className=" bg-background overflow-y-scroll w-fit flex flex-col justify-between h-full px-2 py-8 rounded-lg ">
@@ -23,23 +23,20 @@ function StudentNavBar() {
         {isFullMenue && <Logo />}
       </div>
       <div className="mb-20 flex flex-col gap-5 ">
-        <StudentNavBarItem isFullMenue={isFullMenue} name="home">
+        <NavBarItem isFullMenue={isFullMenue} name="home">
           <GrHomeRounded color={iconColor} size={20} />
-        </StudentNavBarItem>
-
-        <StudentNavBarItem isFullMenue={isFullMenue} name="find project">
+        </NavBarItem>
+        <NavBarItem isFullMenue={isFullMenue} name="find project">
           <LuSearchCode color={iconColor} size={20} />
-        </StudentNavBarItem>
+        </NavBarItem>
 
-        <StudentNavBarItem isFullMenue={isFullMenue} name="settings">
+        <NavBarItem isFullMenue={isFullMenue} name="settings">
           <FiSettings color={iconColor} size={20} />
-        </StudentNavBarItem>
+        </NavBarItem>
       </div>
-      <StudentNavBarItem isFullMenue={isFullMenue} name="logout">
+      <NavBarItem isFullMenue={isFullMenue} name="logout">
         <CiLogout color={iconColor} size={20} />
-      </StudentNavBarItem>
+      </NavBarItem>
     </div>
   );
 }
-
-export default StudentNavBar;

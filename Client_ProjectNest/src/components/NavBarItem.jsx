@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-function StudentNavBarItem({ children, isFullMenue, name }) {
+function NavBarItem({ children, isFullMenue, name }) {
   return (
     <div
       className={`${
@@ -16,4 +16,4 @@ function StudentNavBarItem({ children, isFullMenue, name }) {
   );
 }
 
-export default StudentNavBarItem;
+export default NavBarItem;
