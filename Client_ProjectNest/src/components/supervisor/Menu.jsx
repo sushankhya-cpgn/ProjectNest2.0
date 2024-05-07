@@ -1,11 +1,15 @@
 import Profile from "./Profile";
+import WelcomeMessage from "./WelcomeMessage";
 import SearchBar from "./SearchBar";
 
 export default function Menu() {
   return (
-    <div className="  h-20 rounded-lg text-text flex flex-row justify-between">
-      <SearchBar />
-      <Profile />
+    <div className=" text-text">
+      <div className="flex flex-row text-stone-100 justify-between ">
+        <SearchBar />
+        <Profile />
+      </div>
+      <WelcomeMessage />
     </div>
   );
 }

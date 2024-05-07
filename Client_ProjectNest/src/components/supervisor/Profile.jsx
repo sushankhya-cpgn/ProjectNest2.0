@@ -9,7 +9,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="relative  mt-3 mr-1.5">
+    <div className="relative  mr-1.5">
       <button
         className="flex items-center text-white focus:outline-none"
         onClick={toggleDropdown}

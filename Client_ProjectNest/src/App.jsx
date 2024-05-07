@@ -5,8 +5,11 @@ import StudentDashboard from "./pages/StudentDashboard";
 import { UserProvider } from "./contexts/userContext";
 import FindProject from "./components/student/FindProject";
 import Feed from "./components/student/Feed";
+import SuperFeed from "./components/supervisor/SuperFeed";
 import Setting from "./components/student/Setting";
 import AdminPage from "./pages/AdminPage";
+import Settings from "./components/supervisor/Settings";
+import FindProjects from "./components/supervisor/FindProjects";
 
 function App() {
   return (
@@ -27,7 +30,12 @@ function App() {
                 <Route path="findproject" element={<FindProject />} />
                 <Route path="settings" element={<Setting />} />
               </Route>
-              <Route path="supervisor" element={<SupervisorDashboard />} />
+              <Route path="supervisor" element={<SupervisorDashboard />}>
+                <Route index element={<Navigate to="homesuper" replace />} />
+                <Route path="homesuper" element={<SuperFeed />} />
+                <Route path="findprojects" element={<FindProjects />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
               <Route path="admin" element={<AdminPage />} />
             </Route>
           </Routes>
