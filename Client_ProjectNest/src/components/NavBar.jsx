@@ -8,7 +8,7 @@ import { useState } from "react";
 import NavBarItem from "./NavBarItem";
 import { useUser } from "../contexts/userContext";
 
-const iconColor = "#B4B4B8";
+const iconColor = "#dbdbdb";
 
 export default function NavBar() {
   const [isFullMenue, setIsFullMenue] = useState(true);
@@ -18,24 +18,37 @@ export default function NavBar() {
     <div className=" bg-background overflow-y-scroll w-fit flex flex-col justify-between h-full px-2 py-8 rounded-lg ">
       <div className="flex sticky -top-8 bg-inherit flex-row justify-between items-center px-5 py-4 gap-4">
         <RxHamburgerMenu
-          className="cursor-pointer"
+          className="cursor-pointer hidden sm:block"
           size={28}
           color={iconColor}
           onClick={() => setIsFullMenue((preState) => !preState)}
         />
-        {isFullMenue && <Logo />}
+        <img className="h-7 sm:hidden" alt="logo" src="/logo_light2.png"></img>
+        {isFullMenue && (
+          <div className="hidden sm:block">
+            <Logo />
+          </div>
+        )}
       </div>
       <div className="mb-20 flex flex-col gap-5 h-fit">
         {user.role === "student" && (
           <>
-            <NavBarItem isFullMenue={isFullMenue} name="home">
+            <NavBarItem navto="home" isFullMenue={isFullMenue} name="home">
               <GrHomeRounded color={iconColor} size={20} />
             </NavBarItem>
-            <NavBarItem isFullMenue={isFullMenue} name="find project">
+            <NavBarItem
+              navto="findproject"
+              isFullMenue={isFullMenue}
+              name="find project"
+            >
               <LuSearchCode color={iconColor} size={20} />
             </NavBarItem>
 
-            <NavBarItem isFullMenue={isFullMenue} name="settings">
+            <NavBarItem
+              navto="settings"
+              isFullMenue={isFullMenue}
+              name="settings"
+            >
               <FiSettings color={iconColor} size={20} />
             </NavBarItem>
           </>
@@ -53,7 +66,7 @@ export default function NavBar() {
         )}
       </div>
 
-      <NavBarItem isFullMenue={isFullMenue} name="logout">
+      <NavBarItem navto="logout" isFullMenue={isFullMenue} name="logout">
         <CiLogout color={iconColor} size={20} />
       </NavBarItem>
     </div>
