@@ -22,8 +22,7 @@ const Projects = () => {
         </div>
         <h3 className="text-lg font-semibold text-gray-200">RentNread</h3>
       </div>
-      <p className="mt-2 text-gray-400">Rent and read is book renting webapp</p>
-      <p className="mt-1 text-sm text-gray-500">3 months ago</p>
+      <p className="mt-2 text-gray-400">RentNread is book renting app</p>
     </div>
   );
 };
