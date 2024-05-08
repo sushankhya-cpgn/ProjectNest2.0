@@ -8,3 +8,12 @@
 .active {
   @apply bg-accent/60 rounded-lg;
 }
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
