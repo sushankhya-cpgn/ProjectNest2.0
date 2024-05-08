@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useUser } from "../contexts/userContext";
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import Calendar from "../components/supervisor/Calendar";
+import Calendar from "../components/Calendar";
 
 export default function StudentDashboard() {
   const { user, getUser } = useUser();
