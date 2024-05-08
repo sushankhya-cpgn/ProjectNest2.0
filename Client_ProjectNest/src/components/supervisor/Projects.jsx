@@ -2,9 +2,9 @@ import React from "react";
 
 const Projects = () => {
   return (
-    <div className="bg-secondary rounded-lg p-4 shadow-md h-30">
+    <div className="bg-secondary rounded-lg p-4 shadow-md h-28">
       <div className="flex items-center">
-        <div className="bg-indigo-500 rounded-full p-2 mr-2">
+        <div className="bg-indigo-500 rounded-full p-1 mr-2">
           <svg
             className="w-6 h-6 text-white"
             fill="none"
@@ -20,10 +20,9 @@ const Projects = () => {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-200">RentNread</h3>
+        <h3 className="text-lg font-semibold text-text">RentNread</h3>
       </div>
-      <p className="mt-2 text-gray-400">Rent and read is book renting webapp</p>
-      <p className="mt-1 text-sm text-gray-500">3 months ago</p>
+      <p className="mt-2 text-gray-400">RentNread is book renting app</p>
     </div>
   );
 };
