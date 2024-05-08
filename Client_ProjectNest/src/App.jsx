@@ -20,7 +20,12 @@ function App() {
               <Route index element={<Navigate to="student" replace />} />
               <Route path="student" element={<StudentDashboard />} />
               <Route path="supervisor" element={<SupervisorDashboard />} />
-              <Route path="admin" element={<AdminPage />} />
+              <Route path="admin" element={<AdminPage />}>
+                <Route
+                  path="projectrequests"
+                  element={<p>Project requests</p>}
+                />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
