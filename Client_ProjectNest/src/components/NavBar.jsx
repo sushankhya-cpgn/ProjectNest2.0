@@ -58,20 +58,36 @@ export default function NavBar() {
         )}
         {user.role === "admin" && (
           <>
-            <NavBarItem isFullMenue={isFullMenue} name="home">
+            <NavBarItem isFullMenue={isFullMenue} name="home" navto="home">
               <GrHomeRounded color={iconColor} size={20} />
             </NavBarItem>
-            <NavBarItem isFullMenue={isFullMenue} name="project requests">
+            <NavBarItem
+              isFullMenue={isFullMenue}
+              name="project requests"
+              navto="projectrequests"
+            >
               <MdAddCircle color={iconColor} size={20} />
             </NavBarItem>
-            <NavBarItem isFullMenue={isFullMenue} name="project details">
+            <NavBarItem
+              isFullMenue={isFullMenue}
+              name="project details"
+              navto="projectdetails"
+            >
               <LuSearchCode color={iconColor} size={20} />
             </NavBarItem>
 
-            <NavBarItem isFullMenue={isFullMenue} name="deleted projects">
+            <NavBarItem
+              isFullMenue={isFullMenue}
+              name="deleted projects"
+              navto="deletedprojects"
+            >
               <IoTrashBin color={iconColor} />
             </NavBarItem>
-            <NavBarItem isFullMenue={isFullMenue} name="project archives">
+            <NavBarItem
+              isFullMenue={isFullMenue}
+              name="project archives"
+              navto="archives"
+            >
               <FaArchive color={iconColor} />
             </NavBarItem>
           </>
