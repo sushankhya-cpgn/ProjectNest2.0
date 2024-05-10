@@ -4,7 +4,7 @@ import ProjectsCard from "../components/supervisor/ProjectsCard";
 import { useUser } from "../contexts/userContext";
 import Menu from "../components/supervisor/Menu";
 import { Outlet } from "react-router-dom";
-import Calendar from "../components/supervisor/Calendar";
+import Calendar from "../components/Calendar";
 
 export default function SupervisorDashboard() {
   const { user, getUser } = useUser();

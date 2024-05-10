@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function Settings() {
-  return <div>settings</div>;
+  return <div className="text-text">settings</div>;
 }
