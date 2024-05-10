@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useUser } from "../contexts/userContext";
-import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import Calendar from "../components/Calendar";
 
 export default function StudentDashboard() {
   const { user, getUser } = useUser();
@@ -10,11 +11,16 @@ export default function StudentDashboard() {
   }, []);
   if (!user) return <h1>Loading...</h1>;
   return (
-    <div className="bg-backgroundlight h-screen p-2 flex text-text">
-      <NavBar />
-      <div className="px-4 py-8 w-3/4 sm:w-3/5 md:px-10">
+    <div className="bg-backgroundlight h-dvh p-2 grid grid-cols-[auto_1fr_auto] text-text">
+      <div className="h-full">
+        <NavBar />
+      </div>
+      <div className="px-4 py-8 h-full md:px-10">
         <StudentFeedHeader />
         <Outlet />
+      </div>
+      <div className="py-8 px-4 w-full">
+        <Calendar />
       </div>
     </div>
   );
@@ -22,7 +28,7 @@ export default function StudentDashboard() {
 
 function StudentFeedHeader() {
   return (
-    <div className=" text-text">
+    <div className=" text-text  ">
       <div className="flex text-stone-100 justify-between ">
         <button className="bg-accent  px-5 py-3 rounded-xl flex items-center justify-center gap-2">
           <span className="text-xl">+</span>{" "}
@@ -30,7 +36,7 @@ function StudentFeedHeader() {
         </button>
         <Profile />
       </div>
-      <WelcomeMessage />
+      <GreetingMessage />
     </div>
   );
 }
@@ -48,10 +54,16 @@ function Profile() {
   );
 }
 
-function WelcomeMessage() {
+function GreetingMessage() {
+  const currentHours = new Date().getHours();
+  let greeting;
+  if (currentHours < 12) greeting = "Good morning";
+  else if (currentHours < 18) greeting = "Good afternoon";
+  else greeting = "Good evening";
+
   return (
-    <h1 className="my-6 text-[2.25rem]  ">
-      <span className="text-stone-400">Good morning, </span>John
+    <h1 className="my-6 sm:text-[2.25rem] text-2xl">
+      <span className="text-stone-400">{greeting}, </span>John
     </h1>
   );
 }
