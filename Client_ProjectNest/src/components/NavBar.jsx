@@ -33,7 +33,7 @@ export default function NavBar() {
           </div>
         )}
       </div>
-      <div className="mb-20 flex flex-col gap-5 h-fit">
+      <div className="flex overflow-y-scroll flex-col gap-5 h-auto">
         {user.role === "student" && (
           <>
             <NavBarItem navto="home" isFullMenue={isFullMenue} name="home">
