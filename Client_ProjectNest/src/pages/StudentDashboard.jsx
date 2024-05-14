@@ -9,18 +9,21 @@ export default function StudentDashboard() {
   useEffect(() => {
     getUser("student");
   }, []);
+
   if (!user) return <h1>Loading...</h1>;
   return (
-    <div className="bg-backgroundlight h-dvh p-2 grid grid-cols-[auto_1fr_auto] text-text">
-      <div className="h-full">
-        <NavBar />
-      </div>
-      <div className="px-4 py-8 h-full md:px-10">
-        <StudentFeedHeader />
-        <Outlet />
-      </div>
-      <div className="py-8 px-4 w-full">
-        <Calendar />
+    <div className="bg-backgroundlight h-screen p-2 text-text">
+      <div className="h-full grid grid-cols-[auto_1fr_auto]">
+        <div className="h-full ">
+          <NavBar />
+        </div>
+        <div className="px-4 py-8 h-full md:px-10">
+          <StudentFeedHeader />
+          <Outlet />
+        </div>
+        <div className="py-8 px-4 w-full">
+          <Calendar />
+        </div>
       </div>
     </div>
   );
@@ -28,7 +31,7 @@ export default function StudentDashboard() {
 
 function StudentFeedHeader() {
   return (
-    <div className=" text-text  ">
+    <div className=" text-text">
       <div className="flex text-stone-100 justify-between ">
         <button className="bg-accent  px-5 py-3 rounded-xl flex items-center justify-center gap-2">
           <span className="text-xl">+</span>{" "}

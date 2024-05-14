@@ -10,6 +10,11 @@ import Setting from "./components/student/Setting";
 import AdminPage from "./pages/AdminPage";
 import Settings from "./components/supervisor/Settings";
 import FindProjects from "./components/supervisor/FindProjects";
+import AdminHome from "./pages/AdminHome";
+import AdminProjectDetails from "./pages/AdminProjectDetails";
+import Archieves from "./pages/AdminProjectArchieves";
+import Deletedprojects from "./pages/AdminDeletedProjects";
+import ProjectRequests from "./pages/AdminProjectRequests";
 
 function App() {
   return (
@@ -36,7 +41,17 @@ function App() {
                 <Route path="findprojects" element={<FindProjects />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
-              <Route path="admin" element={<AdminPage />} />
+              <Route path="admin" element={<AdminPage />}>
+                <Route index element={<Navigate to="home" replace />} />
+                <Route path="home" element={<AdminHome />} />
+                <Route path="projectrequests" element={<ProjectRequests />} />
+                <Route
+                  path="projectdetails"
+                  element={<AdminProjectDetails />}
+                />
+                <Route path="deletedprojects" element={<Deletedprojects />} />
+                <Route path="archives" element={<Archieves />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
