@@ -13,12 +13,12 @@ export default function StudentDashboard() {
 
   if (!user) return <h1>Loading...</h1>;
   return (
-    <div className="bg-backgroundlight h-screen p-2 text-text">
-      <div className="h-full grid grid-cols-[auto_1fr_auto]">
-        <div className="h-full ">
+    <div className="bg-backgroundlight text-text">
+      <div className="h-dvh grid grid-cols-[auto_1fr_auto]">
+        <div className="">
           <NavBar />
         </div>
-        <div className="px-4 py-8 h-full md:px-10">
+        <div className="px-4 h-dvh py-8 md:px-10">
           <StudentFeedHeader />
           <Outlet />
         </div>
