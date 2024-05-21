@@ -10,12 +10,21 @@ import Setting from "./components/student/Setting";
 import AdminPage from "./pages/AdminPage";
 import Settings from "./components/supervisor/Settings";
 import FindProjects from "./components/supervisor/FindProjects";
-import AdminHome from "./pages/AdminHome";
 import AdminProjectDetails from "./pages/AdminProjectDetails";
 import Archieves from "./pages/AdminProjectArchieves";
 import Deletedprojects from "./pages/AdminDeletedProjects";
 import ProjectRequests from "./pages/AdminProjectRequests";
 import FindPorjectProjectDetail from "./components/student/FindPorjectProjectDetail";
+import ProjectPage from "./pages/ProjectPage";
+import Profile from "./components/Profile";
+import ProjectsPage from "./pages/ProjectsPage";
+
+import Task from "./components/supervisor/Task";
+import Logsheet from "./components/supervisor/Logsheet";
+import GanttChart from "./components/supervisor/GanttChart";
+import GroupChat from "./components/supervisor/GroupChat";
+import Documents from "./components/supervisor/Documents";
+
 function App() {
   return (
     <>
@@ -26,7 +35,7 @@ function App() {
               <Route index element={<Navigate to="/login" replace />} />
               <Route path="login" element={<LoginPage />} />
             </Route>
-
+            <Route path="profile" element={<Profile />} />
             <Route path="/app">
               <Route index element={<Navigate to="student" replace />} />
               <Route path="student" element={<StudentDashboard />}>
@@ -44,13 +53,25 @@ function App() {
                 <Route path="settings" element={<Settings />} />
               </Route>
               <Route path="admin" element={<AdminPage />}>
-                <Route index element={<Navigate to="home" replace />} />
-                <Route path="home" element={<AdminHome />} />
-                <Route path="projectrequests" element={<ProjectRequests />} />
                 <Route
-                  path="projectdetails"
-                  element={<AdminProjectDetails />}
+                  index
+                  element={<Navigate to="projectrequests" replace />}
                 />
+
+                <Route path="projectrequests" element={<ProjectRequests />} />
+                <Route path="project">
+                  <Route index element={<Navigate to="projectdetails" />} />
+                  <Route
+                    path="projectdetails"
+                    element={<AdminProjectDetails />}
+                  />
+
+                  <Route
+                    path="projectdetails/projectdetail/:projectID"
+                    element={<ProjectPage />}
+                  />
+                </Route>
+
                 <Route path="deletedprojects" element={<Deletedprojects />} />
                 <Route path="archives" element={<Archieves />} />
               </Route>
