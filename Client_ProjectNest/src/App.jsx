@@ -14,10 +14,8 @@ import AdminProjectDetails from "./pages/AdminProjectDetails";
 import Archieves from "./pages/AdminProjectArchieves";
 import Deletedprojects from "./pages/AdminDeletedProjects";
 import ProjectRequests from "./pages/AdminProjectRequests";
-<<<<<<< HEAD
 import ProjectPage from "./pages/ProjectPage";
 import Profile from "./components/Profile";
-=======
 import ProjectsPage from "./pages/ProjectsPage";
 
 import Task from "./components/supervisor/Task";
@@ -25,7 +23,6 @@ import Logsheet from "./components/supervisor/Logsheet";
 import GanttChart from "./components/supervisor/GanttChart";
 import GroupChat from "./components/supervisor/GroupChat";
 import Documents from "./components/supervisor/Documents";
->>>>>>> 41c523594ce0d28b544d145c66417c850841f50f
 
 function App() {
   return (
