@@ -58,9 +58,6 @@ export default function NavBar() {
         )}
         {user.role === "admin" && (
           <>
-            <NavBarItem isFullMenue={isFullMenue} name="home" navto="home">
-              <GrHomeRounded color={iconColor} size={20} />
-            </NavBarItem>
             <NavBarItem
               isFullMenue={isFullMenue}
               name="project requests"
@@ -71,7 +68,7 @@ export default function NavBar() {
             <NavBarItem
               isFullMenue={isFullMenue}
               name="project details"
-              navto="projectdetails"
+              navto="project"
             >
               <LuSearchCode color={iconColor} size={20} />
             </NavBarItem>

@@ -11,7 +11,7 @@ export function createRandomUser() {
     email: faker.internet.email(),
     password: faker.internet.password(),
     birthdate: faker.date.birthdate(),
-    registeredAt: faker.date.past(),
+    registered: "no",
   };
 }
 
