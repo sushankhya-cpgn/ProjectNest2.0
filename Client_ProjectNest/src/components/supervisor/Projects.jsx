@@ -1,8 +1,13 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
-const Projects = () => {
+const Projects = ({ project }) => {
+  console.log(project);
   return (
-    <div className="bg-secondary rounded-lg p-4 shadow-md h-28">
+    <NavLink
+      to={`/app/supervisor/projects/${project.id}`}
+      className="bg-secondary rounded-lg p-4 shadow-md h-24 cursor-pointer"
+    >
       <div className="flex items-center">
         <div className="bg-indigo-500 rounded-full p-1 mr-2">
           <svg
@@ -20,10 +25,20 @@ const Projects = () => {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-text">RentNread</h3>
+        <div className="namendate flex gap-6">
+          <h3 className="text-lg font-semibold text-text">
+            {project.projectName}
+          </h3>
+          <p className="mt-2 text-gray-400">{project.date_created}</p>
+        </div>
       </div>
-      <p className="mt-2 text-gray-400">RentNread is book renting app</p>
-    </div>
+      <div className="descnmem flex justify-between mt-2">
+        <p className=" text-gray-400">{project.desc}</p>
+        <h3 className="mem_num text-white bg-accent rounded-full flex items-center justify-center w-8 h-8 text-sm font-semibold">
+          {project.mem_num}
+        </h3>
+      </div>
+    </NavLink>
   );
 };
 

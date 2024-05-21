@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 /* eslint-disable react/prop-types */
-function NavBarItem({ children, isFullMenue, name, navto }) {
+function ProjectNavItem({ children, isFullMenue, name, navto }) {
   return (
     <NavLink to={navto}>
       <div
@@ -19,4 +19,4 @@ function NavBarItem({ children, isFullMenue, name, navto }) {
   );
 }
 
-export default NavBarItem;
+export default ProjectNavItem;

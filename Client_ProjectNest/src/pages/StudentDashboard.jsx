@@ -3,24 +3,28 @@ import { useUser } from "../contexts/userContext";
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Calendar from "../components/Calendar";
+import { IoCalendarOutline } from "react-icons/io5";
 
 export default function StudentDashboard() {
   const { user, getUser } = useUser();
   useEffect(() => {
     getUser("student");
   }, []);
+
   if (!user) return <h1>Loading...</h1>;
   return (
-    <div className="bg-backgroundlight h-dvh p-2 grid grid-cols-[auto_1fr_auto] text-text">
-      <div className="h-full">
-        <NavBar />
-      </div>
-      <div className="px-4 py-8 h-full md:px-10">
-        <StudentFeedHeader />
-        <Outlet />
-      </div>
-      <div className="py-8 px-4 w-full">
-        <Calendar />
+    <div className="bg-backgroundlight h-screen p-2 text-text">
+      <div className="h-full grid grid-cols-[auto_1fr_auto]">
+        <div className="h-full ">
+          <NavBar />
+        </div>
+        <div className="px-4 py-8 h-full md:px-10">
+          <StudentFeedHeader />
+          <Outlet />
+        </div>
+        <div className="py-8 px-4 w-full">
+          <Calendar />
+        </div>
       </div>
     </div>
   );
@@ -28,13 +32,16 @@ export default function StudentDashboard() {
 
 function StudentFeedHeader() {
   return (
-    <div className=" text-text  ">
+    <div className=" text-text">
       <div className="flex text-stone-100 justify-between ">
         <button className="bg-accent  px-5 py-3 rounded-xl flex items-center justify-center gap-2">
           <span className="text-xl">+</span>{" "}
           <span className="hidden sm:block sm:text-sm">Create Project</span>
         </button>
         <Profile />
+        <div className="flex justify-center items-center lg:hidden cursor-pointer hover:bg-slate-500/20 px-3 rounded-full">
+          <IoCalendarOutline size={24} />
+        </div>
       </div>
       <GreetingMessage />
     </div>
