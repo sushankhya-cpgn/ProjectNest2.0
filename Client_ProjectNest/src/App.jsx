@@ -15,6 +15,13 @@ import AdminProjectDetails from "./pages/AdminProjectDetails";
 import Archieves from "./pages/AdminProjectArchieves";
 import Deletedprojects from "./pages/AdminDeletedProjects";
 import ProjectRequests from "./pages/AdminProjectRequests";
+import ProjectsPage from "./pages/ProjectsPage";
+
+import Task from "./components/supervisor/Task";
+import Logsheet from "./components/supervisor/Logsheet";
+import GanttChart from "./components/supervisor/GanttChart";
+import GroupChat from "./components/supervisor/GroupChat";
+import Documents from "./components/supervisor/Documents";
 
 function App() {
   return (
@@ -40,6 +47,16 @@ function App() {
                 <Route path="homesuper" element={<SuperFeed />} />
                 <Route path="findprojects" element={<FindProjects />} />
                 <Route path="settings" element={<Settings />} />
+              </Route>
+              <Route
+                path="supervisor/projects/:projectId"
+                element={<ProjectsPage />}
+              >
+                <Route path="tasks" element={<Task />} />
+                <Route path="logsheets" element={<Logsheet />} />
+                <Route path="gantts" element={<GanttChart />} />
+                <Route path="chats" element={<GroupChat />} />
+                <Route path="documents" element={<Documents />} />
               </Route>
               <Route path="admin" element={<AdminPage />}>
                 <Route index element={<Navigate to="home" replace />} />

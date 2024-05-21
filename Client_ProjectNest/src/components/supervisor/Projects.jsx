@@ -1,9 +1,13 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Projects = ({ project }) => {
   console.log(project);
   return (
-    <div className="bg-secondary rounded-lg p-4 shadow-md h-24 cursor-pointer">
+    <NavLink
+      to={`/app/supervisor/projects/${project.id}`}
+      className="bg-secondary rounded-lg p-4 shadow-md h-24 cursor-pointer"
+    >
       <div className="flex items-center">
         <div className="bg-indigo-500 rounded-full p-1 mr-2">
           <svg
@@ -34,7 +38,7 @@ const Projects = ({ project }) => {
           {project.mem_num}
         </h3>
       </div>
-    </div>
+    </NavLink>
   );
 };
 

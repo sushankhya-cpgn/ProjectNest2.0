@@ -18,7 +18,7 @@ export default function NavBar() {
   const { user } = useUser();
   if (!user) return <h1>Loading..</h1>;
   return (
-    <div className=" bg-background overflow-y-scroll w-fit flex flex-col justify-between h-full px-2 py-8 rounded-lg ">
+    <div className=" bg-background overflow-y-scroll w-fit flex flex-col justify-between h-full px-2 py-8 rounded-lg flex-shrink-0">
       <div className="flex sticky -top-8 bg-inherit flex-row justify-between items-center px-5 py-4 gap-4">
         <RxHamburgerMenu
           className="cursor-pointer hidden sm:block"
