@@ -3,6 +3,7 @@ import { useUser } from "../contexts/userContext";
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Calendar from "../components/Calendar";
+import { IoCalendarOutline } from "react-icons/io5";
 
 export default function StudentDashboard() {
   const { user, getUser } = useUser();
@@ -38,6 +39,9 @@ function StudentFeedHeader() {
           <span className="hidden sm:block sm:text-sm">Create Project</span>
         </button>
         <Profile />
+        <div className="flex justify-center items-center lg:hidden cursor-pointer hover:bg-slate-500/20 px-3 rounded-full">
+          <IoCalendarOutline size={24} />
+        </div>
       </div>
       <GreetingMessage />
     </div>

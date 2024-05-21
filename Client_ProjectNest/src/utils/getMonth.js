@@ -13,6 +13,24 @@ const months = [
   "December",
 ];
 
-export default function getMonth(monthIndex = 0) {
+const shortMonths = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+export default function getMonth(monthIndex = 0, short) {
+  if (short) {
+    return shortMonths[monthIndex];
+  }
   return months[monthIndex];
 }
