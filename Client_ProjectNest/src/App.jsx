@@ -52,6 +52,16 @@ function App() {
                 <Route path="findprojects" element={<FindProjects />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
+              <Route
+                path="supervisor/projects/:projectId"
+                element={<ProjectsPage />}
+              >
+                <Route path="tasks" element={<Task />} />
+                <Route path="logsheets" element={<Logsheet />} />
+                <Route path="gantts" element={<GanttChart />} />
+                <Route path="chats" element={<GroupChat />} />
+                <Route path="documents" element={<Documents />} />
+              </Route>
               <Route path="admin" element={<AdminPage />}>
                 <Route
                   index

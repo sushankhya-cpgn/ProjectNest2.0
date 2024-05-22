@@ -25,7 +25,7 @@ const CreateTable = ({ columns, data, globalFilter, setGlobalFilter }) => {
 
   return (
     <div className="w-full">
-      <div className="p-2 max-w-5xl mx-auto text-white fill-gray-400">
+      <div className="p-2 max-w-5xl mx-auto text-white">
         <div className="flex justify-between">
           <input
             value={globalFilter ?? ""}
