@@ -37,15 +37,15 @@ export default function ProjectNav({ projectDetails, isLoading }) {
       </div>
       <div className="flex overflow-y-scroll flex-col gap-5 h-auto">
         <>
-          <ProjectNavItem
-            navto="homesuper"
-            isFullMenue={isFullMenue}
-            name="dashboard"
-          >
-            <GrHomeRounded color={iconColor} size={20} />
-          </ProjectNavItem>
           <ProjectNavItem navto="tasks" isFullMenue={isFullMenue} name="Task">
             <GoTasklist color={iconColor} size={20} />
+          </ProjectNavItem>
+          <ProjectNavItem
+            navto="member"
+            isFullMenue={isFullMenue}
+            name="memebers"
+          >
+            <GrHomeRounded color={iconColor} size={20} />
           </ProjectNavItem>
           <ProjectNavItem
             navto="chats"

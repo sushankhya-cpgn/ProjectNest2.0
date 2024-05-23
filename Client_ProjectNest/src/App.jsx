@@ -24,6 +24,7 @@ import Logsheet from "./components/supervisor/Logsheet";
 import GanttChart from "./components/supervisor/GanttChart";
 import GroupChat from "./components/supervisor/GroupChat";
 import Documents from "./components/supervisor/Documents";
+import Members from "./components/supervisor/Members";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
                 element={<ProjectsPage />}
               >
                 <Route path="tasks" element={<Task />} />
+                <Route path="member" element={<Members />} />
                 <Route path="logsheets" element={<Logsheet />} />
                 <Route path="gantts" element={<GanttChart />} />
                 <Route path="chats" element={<GroupChat />} />
