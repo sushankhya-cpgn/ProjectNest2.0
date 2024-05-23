@@ -37,7 +37,7 @@ export default function SupervisorDashboard() {
   if (!user) return <h1 className="text-text">Loading...</h1>;
   if (projectId) return <ProjectsPage projects={projects} />;
   return (
-    <div className="bg-backgroundlight w-full h-screen p-2 flex  gap-3">
+    <div className="bg-backgroundlight w-full h-screen  flex  gap-3">
       <NavBar />
       <div className="menuandfeed w-2/3 px-4 py-8 h-screen flex flex-col gap-3">
         <Menu />
