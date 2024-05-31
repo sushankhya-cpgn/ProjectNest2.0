@@ -21,5 +21,137 @@
       "desc": "place to review movie",
       "id": 98443197
     }
+  ],
+  "createdProjects": [
+    {
+      "id": "124",
+      "title": "Web3 GoFundMe - Transparent Donation Matching",
+      "techTags": ["react", "node", "html"],
+      "description": "Organizing donation matching campaigns can be a complex and rewarding endeavor that requires careful planning and coordination.",
+      "user": {
+        "name": "Mohit Shahi",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Traditional donation platforms lack transparency in matching donations.",
+      "possibleSolution": "Implement a blockchain-based system for transparent tracking of donations and matches.",
+      "resources": "React documentation, Node.js documentation, Blockchain tutorials"
+    },
+    {
+      "id": "125",
+      "title": "Realtime Chat App - Angular & Express",
+      "techTags": ["angular", "express", "css"],
+      "description": "Developing a real-time chat application with Angular and Express provides a robust and dynamic platform for usercommunication.",
+      "user": {
+        "name": "Sushankhya Chapagain",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Existing chat applications are not fully optimized for real-time interactions.",
+      "possibleSolution": "Develop a real-time chat app using WebSocket for instant messaging capabilities.",
+      "resources": "Angular documentation, Express.js documentation, WebSocket tutorials"
+    },
+    {
+      "id": "126",
+      "title": "E-commerce Platform - Vue & Django",
+      "techTags": ["vue", "django", "javascript"],
+      "description": "Creating an e-commerce site using Vue and Django involves integrating a seamless userinterface with a powerful backend.",
+      "user": {
+        "name": "Ravi Pajiyar",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Many e-commerce platforms struggle with scalability and userengagement.",
+      "possibleSolution": "Develop a scalable e-commerce platform with interactive UI using Vue and robust backend with Django.",
+      "resources": "Vue.js documentation, Django documentation, E-commerce design patterns"
+    },
+    {
+      "id": "127",
+      "title": "Project Management Tool - Svelte & Flask",
+      "techTags": ["svelte", "flask", "typescript"],
+      "description": "Building a project management tool with Svelte and Flask can streamline workflows and enhance productivity.",
+      "user": {
+        "name": "Arun Bhandari",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Current project management tools lack customization and flexibility.",
+      "possibleSolution": "Create a customizable project management tool using Svelte for front-end and Flask for back-end.",
+      "resources": "Svelte documentation, Flask documentation, TypeScript tutorials"
+    },
+    {
+      "id": "128",
+      "title": "Social Media Platform - React & Rails",
+      "techTags": ["react", "ruby on rails", "scss"],
+      "description": "A social media platform developed with React and Ruby on Rails can foster community engagement and connectivity.",
+      "user": {
+        "name": "Vikram Singh",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Existing social media platforms do not provide adequate privacy controls.",
+      "possibleSolution": "Develop a social media platform with advanced privacy settings using React and Ruby on Rails.",
+      "resources": "React documentation, Ruby on Rails documentation, Privacy design principles"
+    },
+    {
+      "id": "129",
+      "title": "Blogging Platform - Next.js & Node.js",
+      "techTags": ["next.js", "node", "tailwindcss"],
+      "description": "A blogging platform built with Next.js and Node.js offers performance optimization and a modern userexperience.",
+      "user": {
+        "name": "Anil Mehta",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Traditional blogging platforms are slow and not mobile-friendly.",
+      "possibleSolution": "Create a high-performance blogging platform with Next.js and Node.js, optimized for mobile use.",
+      "resources": "Next.js documentation, Node.js documentation, TailwindCSS documentation"
+    },
+    {
+      "id": "130",
+      "title": "Portfolio Website - Gatsby & Express",
+      "techTags": ["gatsby", "express", "sass"],
+      "description": "Creating a portfolio website with Gatsby and Express allows for a fast and stylish presentation of personal projects.",
+      "user": {
+        "name": "Kiran Singh",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Many portfolio websites suffer from slow load times and poor design.",
+      "possibleSolution": "Build a fast-loading and visually appealing portfolio site using Gatsby and Express.",
+      "resources": "Gatsby documentation, Express.js documentation, Sass tutorials"
+    },
+    {
+      "id": "131",
+      "title": "Online Learning Platform - Nuxt.js & Laravel",
+      "techTags": ["nuxt.js", "laravel", "bootstrap"],
+      "description": "An online learning platform using Nuxt.js and Laravel can provide interactive and scalable educational content.",
+      "user": {
+        "name": "Piyush Agarwal",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Current online learning platforms lack engagement and scalability.",
+      "possibleSolution": "Develop an engaging and scalable online learning platform using Nuxt.js and Laravel.",
+      "resources": "Nuxt.js documentation, Laravel documentation, Bootstrap tutorials"
+    },
+    {
+      "id": "132",
+      "title": "CRM System - Ember.js & Spring Boot",
+      "techTags": ["ember.js", "spring boot", "less"],
+      "description": "Developing a customer relationship management (CRM) system with Ember.js and Spring Boot can enhance business-client interactions.",
+      "user": {
+        "name": "Manish Ghimire",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Existing CRM systems are often not user-friendly and lack integration capabilities.",
+      "possibleSolution": "Create a user-friendly and integrative CRM system using Ember.js and Spring Boot.",
+      "resources": "Ember.js documentation, Spring Boot documentation, CRM design guidelines"
+    },
+    {
+      "id": "133",
+      "title": "Data Visualization Tool - React & Python",
+      "techTags": ["react", "python", "bulma"],
+      "description": "A scientific data visualization tool using React and Python enables researchers to analyze and present their findings effectively.",
+      "user": {
+        "name": "Neha Sharma",
+        "image": "default-avatar.png"
+      },
+      "problemStatement": "Researchers need better tools for visualizing complex data sets.",
+      "possibleSolution": "Develop a data visualization tool using React for the front-end and Python for data processing.",
+      "resources": "React documentation, Python documentation, Data visualization best practices"
+    }
   ]
 }

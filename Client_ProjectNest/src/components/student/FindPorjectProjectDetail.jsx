@@ -1,8 +1,41 @@
-import getTechIcon from "../../utils/getTechIcon";
-
+// import { useParams } from "react-router-dom";
+import TechnologyTag from "./TechnologyTag";
+import PersonItem from "./PersonItem";
+import Button from "../Button";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Spinner from "../Spinner";
 function FindPorjectProjectDetail() {
   //fetch the project proposal from backend
+  const { id } = useParams();
+  const [createdProject, setCreatedProject] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
+  useEffect(
+    function () {
+      async function fetchProject() {
+        try {
+          setLoading(true);
+          setError("");
+          const { data } = await axios.get(
+            `http://localhost:9000/createdProjects/${id}`
+          );
+
+          setCreatedProject(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+      if (id) {
+        fetchProject();
+      }
+    },
+    [id]
+  );
   const interestedPeopel = [
     {
       name: "Mohit Shahi",
@@ -17,96 +50,81 @@ function FindPorjectProjectDetail() {
       image: "default-avatar.png",
     },
   ];
-  const techTags = ["React", "Node", "ML/AI"];
+
+  function handleJoinRequest() {
+    console.log("requestion to join project...");
+  }
+  if (loading) {
+    return (
+      <div className="h-4/5 flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="h-4/5 flex items-center justify-center">
+        Something went wrong, try again later.
+      </div>
+    );
+  }
+
   return (
     <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
       <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
-        <h1 className=" text-2xl">
-          Web3 GoFundMe - Transparent Donation Matching
-        </h1>
-        <button className=" transition-all duration-200 ring-2 rounded-md hover:bg-backgroundlight ring-accent/70 p-2 bg-accent/70">
+        <h1 className=" text-2xl">{createdProject.title}</h1>
+        <Button onClick={handleJoinRequest}>
           Request <span className="hidden xl:inline">to join</span>
-        </button>
+        </Button>
       </div>
       <div className="flex justify-between">
-        <Profile name={"Mohit Shahi"} image={"default-avatar.png"} />
-        <div className="hidden  text-sm md:flex flex-row justify-between items-center gap-2">
-          {techTags.map((tag) => (
-            <TechnologyTag key={tag} tech={tag} />
-          ))}
-        </div>
+        <PersonItem
+          name={createdProject.user.name}
+          image={createdProject.user.image}
+        />
+        {createdProject.techTags && (
+          <div className="hidden flex-wrap  text-sm md:flex flex-row justify-between items-center gap-2">
+            {createdProject.techTags.map((tag) => (
+              <TechnologyTag key={tag} tech={tag} />
+            ))}
+          </div>
+        )}
       </div>
 
       <div>
         <h2 className="text-lg">Problem to solve</h2>
         <p className=" text-gray-400 text-sm">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti
-          voluptates ipsum quibusdam porro numquam sapiente. Molestiae dicta
-          placeat quisquam veritatis.
+          {createdProject.problemStatement}
         </p>
       </div>
+
       <div>
         <h2 className="text-lg">Possible solution</h2>
 
-        <p className=" text-gray-400">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore,
-          earum ratione, temporibus quo laborum animi aut est inventore,
-          cupiditate fuga cumque accusamus necessitatibus sed praesentium
-          accusantium commodi similique voluptatum doloremque illum. Vel, minima
-          fuga! Vel, minima fuga! Lorem ipsum dolor sit amet, consectetur
-          adipisicing elit. Tempore, earum ratione, temporibus quo laborum animi
-          aut est inventore, cupiditate fuga cumque accusamus necessitatibus sed
-          praesentium accusantium commodi similique voluptatum doloremque illum.
-          Vel, minima fuga! Lorem ipsum dolor sit amet, consectetur adipisicing
-          elit. Tempore, earum ratione, temporibus quo laborum animi aut est
-          inventore, cupiditate fuga cumque accusamus necessitatibus sed
-          praesentium accusantium commodi similique voluptatum doloremque illum.
-          Vel, minima fuga!
+        <p className=" text-gray-400 text-sm">
+          {createdProject.possibleSolution || "Lets discuss this together!"}
         </p>
       </div>
+      {createdProject.resources && (
+        <div>
+          <h2 className="text-lg">Resources</h2>
+          <p className=" text-gray-400 text-sm">{createdProject.resources}</p>
+        </div>
+      )}
+
       <div>
-        <h2 className="text-lg">Resources</h2>
-        <p className=" text-gray-400">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore,
-          earum ratione, temporibus quo laborum animi aut est inventore,
-          cupiditate fuga cumque accusamus necessitatibus sed praesentium
-          accusantium commodi similique voluptatum doloremque illum. Vel, minima
-          fuga! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Tempore, earum ratione, temporibus quo laborum animi aut est
-          inventore, cupiditate fuga cumque accusamus necessitatibus sed
-          praesentium accusantium commodi similique voluptatum doloremque illum.
-        </p>
-      </div>
-      <div>
-        <h2>These people are interested in the project:</h2>
+        <h2 className="mb-4">These people are interested in the project:</h2>
         <div>
           <ul className="flex flex-col gap-2 mt-2">
             {interestedPeopel.map((person, i) => (
               <li key={i}>
-                <Profile name={person.name} image={person.image} />
+                <PersonItem name={person.name} image={person.image} />
               </li>
             ))}
           </ul>
         </div>
       </div>
     </div>
-  );
-}
-
-function Profile({ name, image }) {
-  return (
-    <div className="flex gap-4  items-center">
-      <img className="rounded-full w-8" alt="display" src={`/${image}`}></img>
-      <span>{name}</span>
-    </div>
-  );
-}
-function TechnologyTag({ tech }) {
-  return (
-    <span className="rounded-2xl bg-slate-800 px-3 py-1 flex justify-center items-center gap-2">
-      {getTechIcon(tech)}
-      {tech}
-    </span>
   );
 }
 

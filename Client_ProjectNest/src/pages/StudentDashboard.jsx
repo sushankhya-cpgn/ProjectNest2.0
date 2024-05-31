@@ -1,76 +1,48 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../contexts/userContext";
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Calendar from "../components/Calendar";
-import { IoCalendarOutline } from "react-icons/io5";
-
+import StudentCreateProjectForm from "../components/student/StudentCreateProjectForm";
+import StudentFeedHeader from "../components/student/StudentFeedHeader";
 export default function StudentDashboard() {
   const { user, getUser } = useUser();
   useEffect(() => {
     getUser("student");
   }, []);
 
+  const [isCreateProjectFormShown, setIsCreateProjectFormShown] =
+    useState(false);
+
+  function handleCreateProject() {
+    setIsCreateProjectFormShown((curr) => !curr);
+  }
   if (!user) return <h1>Loading...</h1>;
   return (
-    <div className="bg-backgroundlight text-text">
-      <div className="h-dvh grid grid-cols-[auto_1fr_auto]">
-        <div className="">
-          <NavBar />
-        </div>
-        <div className="px-4 h-dvh py-8 md:px-10">
-          <StudentFeedHeader />
-          <Outlet />
-        </div>
-        <div className="py-8 px-4 w-full">
-          <Calendar />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StudentFeedHeader() {
-  return (
-    <div className=" text-text">
-      <div className="flex text-stone-100 justify-between ">
-        <button className="bg-accent  px-5 py-3 rounded-xl flex items-center justify-center gap-2">
-          <span className="text-xl">+</span>{" "}
-          <span className="hidden sm:block sm:text-sm">Create Project</span>
-        </button>
-        <Profile />
-        <div className="flex justify-center items-center lg:hidden cursor-pointer hover:bg-slate-500/20 px-3 rounded-full">
-          <IoCalendarOutline size={24} />
+    <>
+      {isCreateProjectFormShown && (
+        <>
+          <div
+            onClick={() => setIsCreateProjectFormShown(false)}
+            className="fixed top-0 bottom-0 left-0 right-0 backdrop-blur-sm z-10"
+          ></div>
+          <StudentCreateProjectForm />
+        </>
+      )}
+      <div className="bg-backgroundlight text-text">
+        <div className="h-dvh grid grid-cols-[auto_1fr_auto]">
+          <div className="">
+            <NavBar />
+          </div>
+          <div className="px-4 h-dvh py-8 md:px-10">
+            <StudentFeedHeader onCreateProject={handleCreateProject} />
+            <Outlet />
+          </div>
+          <div className="py-8 px-4 w-full">
+            <Calendar />
+          </div>
         </div>
       </div>
-      <GreetingMessage />
-    </div>
-  );
-}
-
-function Profile() {
-  return (
-    <div className="flex items-center justify-center gap-3 ">
-      <h2 className="font-semibold">John Doe</h2>
-      <img
-        className="rounded-full w-12 "
-        alt="display"
-        src="/default-avatar.png"
-      ></img>
-    </div>
-  );
-}
-
-function GreetingMessage() {
-  const currentHours = new Date().getHours();
-  let greeting;
-  if (currentHours < 12) greeting = "Good morning";
-  else if (currentHours < 18) greeting = "Good afternoon";
-  else greeting = "Good evening";
-
-  return (
-    <h1 className="my-6 sm:text-[2.25rem] text-2xl">
-      <span className="text-stone-400">{greeting}, </span>John
-    </h1>
+    </>
   );
 }
