@@ -1,6 +1,6 @@
 import Profile from "./Profile";
 import WelcomeMessage from "./WelcomeMessage";
-import SearchBar from "./SearchBar";
+import SearchBar from "../SearchBar";
 
 export default function Menu() {
   return (

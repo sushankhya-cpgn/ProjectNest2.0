@@ -5,7 +5,7 @@ import { FaVideo } from "react-icons/fa";
 
 export default function Message() {
   return (
-    <div className=" w-full text-text p-2  flex flex-col h-full justify-between">
+    <div className=" w-full text-text p-1  flex flex-col h-full justify-between">
       <div className="title text-center font-medium text-lg text-gray-500">
         ProjectNest
       </div>

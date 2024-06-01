@@ -1,16 +1,27 @@
 import React, { useState } from "react";
 import TaskItem from "./TaskItem";
 import TaskForm from "./TaskForm";
+import { IoMdNotifications } from "react-icons/io";
+import TaskNotifications from "./TaskNotifications";
 
 export default function Task() {
-  const [open, setOpen] = useState(false);
+  const [openTask, setOpenTask] = useState(false);
+  const [openNoti, setOpenNoti] = useState(false);
 
   const handleClick = () => {
-    setOpen(!open);
+    setOpenTask(!openTask);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenTask(false);
+  };
+
+  const handleNotiClick = () => {
+    setOpenNoti(!openNoti);
+  };
+
+  const handleNotiClose = () => {
+    setOpenNoti(false);
   };
 
   return (
@@ -23,8 +34,11 @@ export default function Task() {
           <span className="text-xl">+</span>
           <span className="hidden sm:block sm:text-sm">Create Task</span>
         </button>
-        <span className="notifications text-text bg-accent h-10">
-          Task notifications
+        <span className="notifications text-accent mr-2">
+          <IoMdNotifications
+            className="text-2xl cursor-pointer"
+            onClick={handleNotiClick}
+          />
         </span>
       </div>
       <div className="w-full h-fit flex flex-col mt-2">
@@ -33,7 +47,7 @@ export default function Task() {
           <TaskItem />
         </div>
       </div>
-      {open && (
+      {openTask && (
         <>
           <div className="fixed inset-0 backdrop-blur-sm"></div>
           <div className="fixed inset-0 flex justify-center items-center">
@@ -46,6 +60,22 @@ export default function Task() {
               </button>
               {/* Render TaskForm component */}
               <TaskForm />
+            </div>
+          </div>
+        </>
+      )}
+      {openNoti && (
+        <>
+          <div className="fixed inset-0 backdrop-blur-sm"></div>
+          <div className="fixed inset-0 flex justify-end mr-4 items-center">
+            <div className="bg-secondary w-2/5 h-3/4 rounded-lg p-6 relative overflow-scroll">
+              <button
+                className="absolute top-2 right-3 text-text font-bold text-xl hover:text-gray-400"
+                onClick={handleNotiClose}
+              >
+                X
+              </button>
+              <TaskNotifications />
             </div>
           </div>
         </>
