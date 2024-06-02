@@ -36,7 +36,7 @@ export default function Message() {
         <input
           type="text"
           placeholder="message"
-          className="rounded-md h-9 w-full flex-grow p-2 "
+          className="rounded-md h-9 w-full flex-grow p-2 border-none focus:outline-none focus:ring-0"
         />
         <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text text-xl">
           <IoIosSend />

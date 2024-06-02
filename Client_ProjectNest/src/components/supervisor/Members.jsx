@@ -70,7 +70,7 @@ export default function Members() {
   ];
   return (
     <div className="w-full flex justify-center items-center">
-      <div className="memcontainer bg-secondary w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
+      <div className="memcontainer w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
         <table>
           <thead>
             <tr>
