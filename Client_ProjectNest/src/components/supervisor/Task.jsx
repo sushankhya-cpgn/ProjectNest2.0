@@ -51,7 +51,7 @@ export default function Task() {
         <>
           <div className="fixed inset-0 backdrop-blur-sm"></div>
           <div className="fixed inset-0 flex justify-center items-center">
-            <div className="bg-secondary w-1/3 h-3/4 rounded-lg p-6 relative">
+            <div className="bg-secondary w-1/3 h-4/5 rounded-lg p-6 relative">
               <button
                 className="absolute top-2 right-3 text-text font-bold text-xl hover:text-gray-400"
                 onClick={handleClose}

@@ -43,8 +43,24 @@ const options = {
 };
 
 export default function TaskForm() {
+  const initialData = [
+    {
+      id: 1,
+      name: "",
+      members: "",
+    },
+  ];
+  const projectOptions = ["rentNread"];
+  const memberOptions = ["Ravi", "Mohit", "Arun", "Sushankhya"];
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [data, setData] = useState(initialData);
+
+  const handleSelectChange = (id, field, value) => {
+    setData((prevData) =>
+      prevData.map((row) => (row.id === id ? { ...row, [field]: value } : row))
+    );
+  };
 
   const handleChange = (date) => {
     setSelectedDate(date);
@@ -58,9 +74,24 @@ export default function TaskForm() {
     <div className="taskform flex flex-col text-base gap-4 mt-4 px-8">
       <div className="section1 flex justify-between">
         <span className="text-text font-medium">Projects</span>
-        <span className="text-text ">
-          <DropDown />
-        </span>
+        {data.map((row) => (
+          <span className="text-text" key={row.id}>
+            <select
+              value={row.name}
+              onChange={(e) =>
+                handleSelectChange(row.id, "name", e.target.value)
+              }
+              className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
+            >
+              <option value="">project</option>
+              {projectOptions.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </span>
+        ))}
       </div>
       <div className="section2 flex flex-col p-2 bg-primary rounded-lg gap-1.5">
         <span className="text-text font-medium">Tasks</span>
@@ -68,7 +99,7 @@ export default function TaskForm() {
           <input
             type="text"
             placeholder="task"
-            className="rounded-md px-2 py-0.5 border-none"
+            className="rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
           />
           <span className="text-accent cursor-pointer text-2xl  text-center ">
             +
@@ -77,9 +108,24 @@ export default function TaskForm() {
       </div>
       <div className="section3 flex justify-between">
         <span className="text-text font-medium">Members</span>
-        <span className="text-text ">
-          <DropDown />
-        </span>
+        {data.map((row) => (
+          <span className="text-text" key={row.id}>
+            <select
+              value={row.members}
+              onChange={(e) =>
+                handleSelectChange(row.id, "members", e.target.value)
+              }
+              className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
+            >
+              <option value="">member</option>
+              {memberOptions.map((members) => (
+                <option key={members} value={members}>
+                  {members}
+                </option>
+              ))}
+            </select>
+          </span>
+        ))}
       </div>
       <div className="section4 flex justify-between">
         <span className="text-text font-medium">Due date</span>
@@ -98,7 +144,7 @@ export default function TaskForm() {
           <input
             type="text"
             placeholder="remark"
-            className="rounded-md px-2 py-0.5"
+            className="rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
           />
         </div>
       </div>
