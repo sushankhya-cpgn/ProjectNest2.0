@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import DateBox from "../DateBox";
 
 export default function Logsheet() {
   const initialData = [
@@ -65,8 +66,11 @@ export default function Logsheet() {
   };
 
   return (
-    <div className="w-full flex justify-center items-center p-4">
-      <div className="memcontainer bg-secondary w-full h-5/6 rounded-lg p-4 relative overflow-scroll">
+    <div className="w-full flex flex-col  items-center px-4 gap-5 py-3">
+      <div className="datebox">
+        <DateBox />
+      </div>
+      <div className="memcontainer bg-secondary w-full h-3/4 rounded-lg p-4 relative overflow-scroll">
         <table>
           <thead>
             <tr>
@@ -101,7 +105,7 @@ export default function Logsheet() {
                     onChange={(e) =>
                       handleSelectChange(row.id, "status", e.target.value)
                     }
-                    className="bg-primary border-none rounded-md p-1.5"
+                    className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
                   >
                     <option value="">status</option>
                     {statusOptions.map((status) => (
@@ -118,7 +122,7 @@ export default function Logsheet() {
                     onChange={(e) =>
                       handleSelectChange(row.id, "grade", e.target.value)
                     }
-                    className="bg-primary border-none rounded-md p-1.5"
+                    className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
                   >
                     <option value="">grade</option>
                     {gradeOptions.map((grade) => (
@@ -134,7 +138,7 @@ export default function Logsheet() {
                     onChange={(e) =>
                       handleSelectChange(row.id, "attendance", e.target.value)
                     }
-                    className="bg-primary border-none rounded-md p-1.5"
+                    className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
                   >
                     <option value="">attendance</option>
                     {attendanceOptions.map((attendance) => (
@@ -148,6 +152,14 @@ export default function Logsheet() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="nextnprevbtn w-full flex justify-between">
+        <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
+          Previous
+        </button>
+        <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
+          Next
+        </button>
       </div>
     </div>
   );

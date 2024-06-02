@@ -1,4 +1,11 @@
 import React from "react";
+const data = [
+  {
+    id: 1,
+    name: "Mohit Shahi",
+    task: "frontend task ui complete",
+  },
+];
 
 export default function TaskNotiItem() {
   return (
@@ -15,10 +22,12 @@ export default function TaskNotiItem() {
             className="w-9 h-9 rounded-full mr-2"
           />
         </span>
-        <div className="namencontent flex flex-col">
-          <span>Ravi Pajiyar</span>
-          <span className="text-gray-500">frontend task complete</span>
-        </div>
+        {data.map((row) => (
+          <div className="namencontent flex flex-col" key={row.id}>
+            <span>{row.name}</span>
+            <span className="text-gray-500">{row.task}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
