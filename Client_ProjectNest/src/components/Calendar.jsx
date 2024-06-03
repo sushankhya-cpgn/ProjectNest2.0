@@ -5,6 +5,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import generateDate from "../utils/generateDate";
 import getMonth from "../utils/getMonth";
 
+
 export default function Calendar({ height, width }) {
   //get events from api call
   const eventDates = [dayjs(new Date("2024-06-01")).toDate().toDateString()];

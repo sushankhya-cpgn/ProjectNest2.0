@@ -8,7 +8,7 @@ import OverlappingProfiles from "./OverlappingProfiles";
 export default function GroupChat() {
   return (
     <div className="w-full flex justify-center items-center p-2">
-      <div className="bg-secondary  w-full h-full rounded-lg p-6 relative overflow-scroll flex flex-col justify-between">
+      <div className="  w-full h-full rounded-lg p-6 relative overflow-scroll flex flex-col justify-between">
         <div className="title text-center font-medium text-lg text-gray-200">
           ProjectNest
         </div>
@@ -31,7 +31,7 @@ export default function GroupChat() {
           <input
             type="text"
             placeholder="message"
-            className="rounded-md h-9 w-full flex-grow p-2 "
+            className="rounded-md h-9 w-full flex-grow p-2 border-none focus:outline-none focus:ring-0 "
           />
           <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text text-xl">
             <IoIosSend />

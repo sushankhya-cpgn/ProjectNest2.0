@@ -70,7 +70,7 @@ export default function Members() {
   ];
   return (
     <div className="w-full flex justify-center items-center">
-      <div className="memcontainer bg-secondary w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
+      <div className="memcontainer w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
         <table>
           <thead>
             <tr>
@@ -115,7 +115,7 @@ export default function Members() {
         <>
           <div className="fixed inset-0 backdrop-blur-sm"></div>
           <div className="fixed inset-0 flex justify-center items-center">
-            <div className="bg-gray-700 dark:bg-gray-800 w-2/5 h-2/3 rounded-lg p-6 relative">
+            <div className="bg-gray-700 dark:bg-gray-800 w-2/5 h-2/3 rounded-lg p-4 relative">
               <button
                 className="absolute top-2 right-3 text-text font-bold text-xl hover:text-gray-400"
                 onClick={handleClose}

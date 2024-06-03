@@ -6,14 +6,15 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --env-file config.env server.js",
+    "dev": "nodemon --ext js,json --watch ./ --env-file config.env server.js",
     "startt": "NODE_ENV=production nodemon --env-file config.env server.js",
     "start": "SET NODE_ENV=production nodemon --env-file config.env server.js"
   },
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
-    "mongoose": "^8.3.3"
+    "mongoose": "^8.3.3",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
