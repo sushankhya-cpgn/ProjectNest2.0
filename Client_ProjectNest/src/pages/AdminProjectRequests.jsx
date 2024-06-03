@@ -12,25 +12,29 @@ function ProjectRequests() {
       header: "S.No",
     }),
     columnHelper.accessor("ProjectName", {
+      id: "ProjectName",
       cell: (info) => <span>{info.getValue()}</span>,
       header: "Project Name",
     }),
     columnHelper.accessor("Members", {
+      id: "Members",
       cell: (info) => <span>{info.getValue()}</span>,
       header: "Team Members",
     }),
     columnHelper.accessor("ProjectDescription", {
+      id: "ProjectDescription",
       cell: (info) => <span>{info.getValue()}</span>,
       header: "Project Description",
     }),
     columnHelper.accessor("registered", {
-      cell: (info) => <span>✅{"      "} ❌</span>,
+      id: "registered",
+      cell: (info) => <span>✅ ❌</span>,
       header: "Registration Action",
     }),
   ];
 
   const [data] = useState(() => [...USERS]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [columnFilters, setColumnFilters] = useState([]);
 
   return (
     <div className="w-full">
@@ -38,8 +42,8 @@ function ProjectRequests() {
       <CreateTable
         columns={columns}
         data={data}
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
+        columnFilters={columnFilters}
+        setColumnFilters={setColumnFilters}
       />
     </div>
   );

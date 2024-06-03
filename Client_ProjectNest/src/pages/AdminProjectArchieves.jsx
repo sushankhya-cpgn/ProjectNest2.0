@@ -20,6 +20,7 @@ function Archieves() {
 
   const [data] = useState(() => [...USERS]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [columnFilters, setColumnFilters] = useState("");
   return (
     <div>
       <CreateTable
@@ -27,6 +28,8 @@ function Archieves() {
         data={data}
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
+        columnFilters={columnFilters}
+        setColumnFilters={setColumnFilters}
       />
     </div>
   );

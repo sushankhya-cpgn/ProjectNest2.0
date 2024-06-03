@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   getCoreRowModel,
   useReactTable,
@@ -8,16 +8,26 @@ import {
 } from "@tanstack/react-table";
 import { Link, useLocation } from "react-router-dom";
 
-const CreateTable = ({ columns, data, globalFilter, setGlobalFilter }) => {
+const CreateTable = ({ columns, data, columnFilters, setColumnFilters }) => {
+  const [selectedFilter, setSelectedFilter] = useState("ProjectName");
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {
-      globalFilter,
+      columnFilters,
     },
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    globalFilter: (row) => {
+      const value = row.getValue(selectedFilter);
+      return value
+        ?.toString()
+        .toLowerCase()
+        .includes(columnFilters[0]?.value?.toLowerCase() || "");
+    },
   });
 
   const location = useLocation();
@@ -28,18 +38,26 @@ const CreateTable = ({ columns, data, globalFilter, setGlobalFilter }) => {
       <div className="p-2 max-w-5xl mx-auto text-white">
         <div className="flex justify-between">
           <input
-            value={globalFilter ?? ""}
-            onChange={(e) => setGlobalFilter(String(e.target.value))}
+            value={columnFilters[0]?.value || ""}
+            onChange={(e) =>
+              setColumnFilters([{ id: selectedFilter, value: e.target.value }])
+            }
             placeholder="Search In Table"
             type="text"
-            className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-accent/60 mb-4"
+            className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-accent/60 mb-4 "
           />
           <div className="w-2/6">
             <span className="mr-5">Filter by</span>
-            <select className="bg-slate-300 outline-none text-blue-950 w-200 h-10">
-              <option>Project Name</option>
-              <option>Team Member Name</option>
-              <option>Project Description</option>
+            <select
+              className=" bg-primary outline-none  w-200 h-10 px-2"
+              value={selectedFilter}
+              onChange={(e) => setSelectedFilter(e.target.value)}
+            >
+              <option value="ProjectName">Project Name</option>
+              <option value="Members">Team Member Name</option>
+              {path === "/projectrequests" && (
+                <option value="ProjectDescription">Project Description</option>
+              )}
             </select>
           </div>
         </div>
@@ -90,7 +108,7 @@ const CreateTable = ({ columns, data, globalFilter, setGlobalFilter }) => {
         <div className="flex items-center justify-end mt-2 gap-2">
           <select
             value={table.getState().pagination.pageIndex + 1}
-            className="text-black bg-slate-300 w-10 text-center outline-none"
+            className="text-white bg-primary w-10 text-center outline-none"
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
