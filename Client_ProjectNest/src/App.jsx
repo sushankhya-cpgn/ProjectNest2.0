@@ -21,7 +21,6 @@ import ProjectsPage from "./pages/ProjectsPage";
 
 import Task from "./components/supervisor/Task";
 import Logsheet from "./components/supervisor/Logsheet";
-import GanttChart from "./components/supervisor/GanttChart";
 import GroupChat from "./components/supervisor/GroupChat";
 import Documents from "./components/supervisor/Documents";
 import Members from "./components/supervisor/Members";
@@ -57,10 +56,10 @@ function App() {
                 path="supervisor/projects/:projectId"
                 element={<ProjectsPage />}
               >
+                <Route index element={<Navigate to="tasks" replace />} />
                 <Route path="tasks" element={<Task />} />
                 <Route path="member" element={<Members />} />
                 <Route path="logsheets" element={<Logsheet />} />
-                <Route path="gantts" element={<GanttChart />} />
                 <Route path="chats" element={<GroupChat />} />
                 <Route path="documents" element={<Documents />} />
               </Route>

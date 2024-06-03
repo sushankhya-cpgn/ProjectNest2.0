@@ -31,7 +31,7 @@ export default function Message() {
       <div className="header w-full h-5/6"></div>
       <div className="footer w-full h-fit flex gap-3">
         <span className="link text-xl cursor-pointer">
-          <HiMiniLink className="text-accent font-bold mt-2" />
+          <HiMiniLink className="text-accent font-bold mt-2" type="file" />
         </span>
         <input
           type="text"
