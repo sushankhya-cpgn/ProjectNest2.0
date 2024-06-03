@@ -28,6 +28,18 @@ function FindProject() {
   }
 
   //fetch projects
+  // useEffect(function () {
+  //   async function fetchtest() {
+  //     try {
+  //       const res = await fetch("http://127.0.0.1:8000/api/v2/user");
+  //       const data = await res.json();
+  //       console.log(data);
+  //     } catch (e) {
+  //       console.log(e.message);
+  //     }
+  //   }
+  //   fetchtest();
+  // });
   useEffect(function () {
     async function fetchProject() {
       try {
@@ -55,19 +67,21 @@ function FindProject() {
 
   return (
     <div className="h-4/5 flex flex-col gap-2 ">
-      <div className="flex justify-between ">
+      <div className="flex justify-between mb-2">
         <h3 className="text-lg">Find projects that need your skills</h3>
-        <div className="relative">
-          <div className="absolute left-2 top-1/2 -translate-y-1/2">
-            <FiSearch className=" text-gray-500" size={18} />
+        {!id && (
+          <div className="relative">
+            <div className="absolute left-2 top-1/2 -translate-y-1/2">
+              <FiSearch className=" text-gray-500" size={18} />
+            </div>
+            <input
+              value={searchTerm}
+              onChange={onSearch}
+              placeholder="Search title, tags..."
+              className=" text-gray-300 text-sm bg-background focus:outline-none focus:ring-slate-500 transition-all duration-300 ring-1 ring-slate-800 rounded-lg py-1 px-2 pl-8"
+            />
           </div>
-          <input
-            value={searchTerm}
-            onChange={onSearch}
-            placeholder="Search title, tags..."
-            className=" text-gray-300 text-sm bg-background focus:outline-none focus:ring-slate-500 transition-all duration-300 ring-1 ring-slate-800 rounded-lg py-1 px-2 pl-8"
-          />
-        </div>
+        )}
       </div>
       {id ? (
         <Outlet />
