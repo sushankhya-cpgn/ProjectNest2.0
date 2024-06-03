@@ -31,12 +31,12 @@ export default function Message() {
       <div className="header w-full h-5/6"></div>
       <div className="footer w-full h-fit flex gap-3">
         <span className="link text-xl cursor-pointer">
-          <HiMiniLink className="text-accent font-bold mt-2" />
+          <HiMiniLink className="text-accent font-bold mt-2" type="file" />
         </span>
         <input
           type="text"
           placeholder="message"
-          className="rounded-md h-9 w-full flex-grow p-2 "
+          className="rounded-md h-9 w-full flex-grow p-2 border-none focus:outline-none focus:ring-0"
         />
         <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text text-xl">
           <IoIosSend />

@@ -70,7 +70,7 @@ export default function Logsheet() {
       <div className="datebox">
         <DateBox />
       </div>
-      <div className="memcontainer bg-secondary w-full h-3/4 rounded-lg p-4 relative overflow-scroll">
+      <div className="memcontainer w-full h-3/4 rounded-lg p-4 relative overflow-scroll">
         <table>
           <thead>
             <tr>

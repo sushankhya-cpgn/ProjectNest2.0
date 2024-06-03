@@ -62,13 +62,6 @@ export default function ProjectNav({ projectDetails, isLoading }) {
             <SiGooglesheets color={iconColor} size={20} />
           </ProjectNavItem>
           <ProjectNavItem
-            navto="gantts"
-            isFullMenue={isFullMenue}
-            name="Gantt Chart"
-          >
-            <FaChartGantt color={iconColor} size={20} />
-          </ProjectNavItem>
-          <ProjectNavItem
             navto="documents"
             isFullMenue={isFullMenue}
             name="Documents"
