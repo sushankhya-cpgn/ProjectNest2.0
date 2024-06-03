@@ -24,6 +24,7 @@ function AdminProjectDetails() {
 
   const [data] = useState(() => [...USERS]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [columnFilters, setColumnFilters] = useState([]);
   return (
     <div>
       <CreateTable
@@ -31,6 +32,8 @@ function AdminProjectDetails() {
         data={data}
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
+        columnFilters={columnFilters}
+        setColumnFilters={setColumnFilters}
       />
     </div>
   );
