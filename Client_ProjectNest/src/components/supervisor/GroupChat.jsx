@@ -1,11 +1,50 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { HiMiniLink } from "react-icons/hi2";
 import { IoIosSend } from "react-icons/io";
 import { IoCall } from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
 import OverlappingProfiles from "./OverlappingProfiles";
+import { useSocket } from "../../contexts/socketContext";
+import { useParams } from "react-router-dom";
 
 export default function GroupChat() {
+  const { projectId } = useParams();
+  const hasJoined = useRef(false);
+  const [message, setMessage] = useState("");
+  const [messageHistory, setMessageHistory] = useState([]);
+  const { socket } = useSocket();
+  useEffect(
+    function () {
+      if (hasJoined.current) return;
+      socket.emit("join-room", { projectId });
+      hasJoined.current = true;
+    },
+    [projectId, socket]
+  );
+
+  function handleMessageReceived(data) {
+    console.log("message received", data);
+    setMessageHistory((curr) => [...curr, data]);
+  }
+  useEffect(
+    function () {
+      socket.on("receive-message", handleMessageReceived);
+      return () => {
+        socket.off("receive-message", handleMessageReceived);
+      };
+    },
+    [socket]
+  );
+  function handleSendMessage(e) {
+    e.preventDefault();
+    socket.emit("send-message", {
+      roomId: projectId,
+      user: "mohit",
+      content: message,
+    });
+    setMessage("");
+  }
+
   return (
     <div className="w-full flex justify-center items-center p-2">
       <div className="  w-full h-full rounded-lg p-6 relative overflow-scroll flex flex-col justify-between">
@@ -23,19 +62,34 @@ export default function GroupChat() {
             </span>
           </div>
         </div>
-        <div className="messagebox w-full h-5/6"></div>
+        <div className="messagebox w-full h-5/6 text-white">
+          {messageHistory.map(({ user, content }, i) => (
+            <div key={i} className="">
+              <div className=" bg-slate-700">
+                <span>{user}:</span>
+                <span>{content}</span>
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="footer w-full h-fit flex gap-3">
           <span className="link text-xl cursor-pointer">
             <HiMiniLink className="text-accent font-bold mt-2" />
           </span>
-          <input
-            type="text"
-            placeholder="message"
-            className="rounded-md h-9 w-full flex-grow p-2 border-none focus:outline-none focus:ring-0 "
-          />
-          <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text text-xl">
-            <IoIosSend />
-          </button>
+          <form className="flex w-full" onSubmit={handleSendMessage}>
+            <input
+              value={message}
+              type="text"
+              placeholder="message"
+              className="rounded-md h-9 w-full flex-grow p-2 border-none focus:outline-none focus:ring-0 "
+              onChange={(e) => {
+                setMessage(e.target.value);
+              }}
+            />
+            <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text text-xl">
+              <IoIosSend />
+            </button>
+          </form>
         </div>
       </div>
     </div>

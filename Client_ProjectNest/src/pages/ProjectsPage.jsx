@@ -26,7 +26,6 @@ export default function ProjectsPage() {
     },
     [projectId]
   );
-  console.log(projectDetails);
   return (
     <div className="bg-backgroundlight w-full h-screen p-2 flex  gap-3  ">
       <ProjectNav />

@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Projects = ({ project }) => {
-  console.log(project);
   return (
     <NavLink
       to={`/app/supervisor/projects/${project.id}`}

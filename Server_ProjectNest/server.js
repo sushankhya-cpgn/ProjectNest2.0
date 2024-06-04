@@ -8,33 +8,22 @@ const io = new Server({
   cors: true,
 });
 
-const rooms = [];
 const roomMessages = {};
+
+const rooms = {
+  73930385: [],
+};
 
 io.on("connection", (socket) => {
   console.log("a user connected");
   socket.on("join-room", (data) => {
-    const { roomId, username } = data;
-    console.log("request to join rooom: ", roomId, username);
-    if (!rooms.includes(roomId)) {
-      rooms.push(roomId);
-      roomMessages[roomId] = [];
-      socket.emit("room-joined", {
-        roomId,
-        username,
-        date: new Date().toDateString(),
-      });
-    }
+    const { projectId } = data;
+    socket.join(projectId);
+    console.log("user joined the room", projectId);
   });
   socket.on("send-message", (data) => {
-    const messageObject = {
-      username: data.username,
-      message: data.message,
-      data: new Date(),
-    };
-    roomMessages[data.roomId].push(messageObject);
-    // console.log(roomMessages);
-    socket.emit("message-sent", messageObject);
+    console.log(data);
+    io.to(data.roomId).emit("receive-message", data);
   });
 });
 

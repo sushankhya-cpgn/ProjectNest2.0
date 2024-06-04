@@ -12,7 +12,6 @@ import ProjectLogo from "./ProjectLogo";
 const iconColor = "#dbdbdb";
 
 export default function ProjectNav({ projectDetails, isLoading }) {
-  console.log(projectDetails);
   const [isFullMenue, setIsFullMenue] = useState(true);
   //   const { user } = useUser();
   //   if (!user) return <h1>Loading..</h1>;
