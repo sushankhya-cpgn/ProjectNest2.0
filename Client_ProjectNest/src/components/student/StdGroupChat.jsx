@@ -5,7 +5,7 @@ import { IoCall } from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
 import OverlappingProfiles from "../OverlappingProfiles";
 
-export default function GroupChat() {
+export default function StdGroupChat() {
   return (
     <div className="w-full flex justify-center items-center p-2">
       <div className="  w-full h-full rounded-lg p-6 relative overflow-scroll flex flex-col justify-between">
