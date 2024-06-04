@@ -3,9 +3,9 @@ import { HiMiniLink } from "react-icons/hi2";
 import { IoIosSend } from "react-icons/io";
 import { IoCall } from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
-import OverlappingProfiles from "./OverlappingProfiles";
 import { useSocket } from "../../contexts/socketContext";
 import { useParams } from "react-router-dom";
+import OverlappingProfiles from "../OverlappingProfiles";
 
 export default function GroupChat() {
   const { projectId } = useParams();

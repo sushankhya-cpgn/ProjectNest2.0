@@ -41,31 +41,27 @@ const options = {
   },
 };
 
-export default function TaskForm() {
+export default function StdDocForm() {
   const initialData = [
     {
       id: 1,
       name: "",
+      type: "",
       members: "",
     },
   ];
   const projectOptions = ["rentNread"];
-  const memberOptions = ["Ravi", "Mohit", "Arun", "Sushankhya"];
+  const memberOptions = [
+    "Ravi Pajiyar",
+    "Mohit Shahi",
+    "Arun Bhandari",
+    "Sushankhya Chapa",
+  ];
+  const resultOptions = ["Weekly", "Final"];
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [data, setData] = useState(initialData);
   const [inputs, setInputs] = useState([""]);
-
-  const addInput = () => {
-    if (inputs.length < 3) {
-      // Initial input plus two more
-      setInputs([...inputs, ""]);
-    }
-  };
-
-  const removeInput = (index) => {
-    setInputs(inputs.filter((_, i) => i !== index));
-  };
 
   const handleSelectChange = (id, field, value) => {
     setData((prevData) =>
@@ -79,12 +75,6 @@ export default function TaskForm() {
 
   const handleClose = (state) => {
     setShow(state);
-  };
-
-  const handleInputChange = (index, event) => {
-    const newInputs = [...inputs];
-    newInputs[index] = event.target.value;
-    setInputs(newInputs);
   };
 
   return (
@@ -110,37 +100,26 @@ export default function TaskForm() {
           </span>
         ))}
       </div>
-      <div className="section2 flex flex-col p-2 bg-primary rounded-lg gap-1.5">
-        <span className="text-text font-medium">Tasks</span>
-        <div className="inputs flex flex-col gap-1.5 overflow-auto max-h-[4.5rem]">
-          {inputs.map((input, index) => (
-            <div key={index} className="flex items-center">
-              <input
-                type="text"
-                placeholder="task"
-                value={input}
-                className="task-input w-full rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
-                onChange={(event) => handleInputChange(index, event)}
-              />
-              {index !== 0 && (
-                <button
-                  className="ml-2 text-red-500"
-                  onClick={() => removeInput(index)}
-                >
-                  &times;
-                </button>
-              )}
-            </div>
-          ))}
-          {inputs.length < 2 && (
-            <span
-              className="text-accent cursor-pointer text-2xl text-center"
-              onClick={addInput}
+      <div className="section2 flex justify-between">
+        <span className="text-text font-medium">Result Type</span>
+        {data.map((row) => (
+          <span className="text-text" key={row.id}>
+            <select
+              value={row.type}
+              onChange={(e) =>
+                handleSelectChange(row.id, "type", e.target.value)
+              }
+              className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
             >
-              +
-            </span>
-          )}
-        </div>
+              <option value="">result</option>
+              {resultOptions.map((result) => (
+                <option key={result} value={result}>
+                  {result}
+                </option>
+              ))}
+            </select>
+          </span>
+        ))}
       </div>
       <div className="section3 flex justify-between">
         <span className="text-text font-medium">Members</span>
@@ -164,7 +143,7 @@ export default function TaskForm() {
         ))}
       </div>
       <div className="section4 flex justify-between">
-        <span className="text-text font-medium">Due date</span>
+        <span className="text-text font-medium">Created on</span>
         <span className="w-3/5">
           <Datepicker
             options={options}
@@ -175,6 +154,15 @@ export default function TaskForm() {
         </span>
       </div>
       <div className="section5 flex flex-col p-2 bg-primary rounded-lg gap-2">
+        <span className="text-text font-medium">Result</span>
+        <div className="inputs flex flex-col">
+          <input
+            type="file"
+            className="rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
+          />
+        </div>
+      </div>
+      <div className="section6 flex flex-col p-2 bg-primary rounded-lg gap-2">
         <span className="text-text font-medium">Remarks</span>
         <div className="inputs flex flex-col">
           <input

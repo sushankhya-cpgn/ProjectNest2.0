@@ -24,6 +24,12 @@ import Logsheet from "./components/supervisor/Logsheet";
 import GroupChat from "./components/supervisor/GroupChat";
 import Documents from "./components/supervisor/Documents";
 import Members from "./components/supervisor/Members";
+import StdTask from "./components/student/StdTask";
+import StdLogsheet from "./components/student/StdLogsheet";
+import StdGroupChat from "./components/student/StdGroupChat";
+import StdDocuments from "./components/student/StdDocuments";
+import StdMembers from "./components/student/StdMembers";
+import StudentProjectPage from "./pages/StudentProjectPage";
 
 function App() {
   return (
@@ -63,6 +69,17 @@ function App() {
                   <Route path="logsheets" element={<Logsheet />} />
                   <Route path="chats" element={<GroupChat />} />
                   <Route path="documents" element={<Documents />} />
+                </Route>
+                <Route
+                  path="student/project/:projectId"
+                  element={<StudentProjectPage />}
+                >
+                  <Route index element={<Navigate to="stdtasks" replace />} />
+                  <Route path="stdtasks" element={<StdTask />} />
+                  <Route path="stdmember" element={<StdMembers />} />
+                  <Route path="stdlogsheets" element={<StdLogsheet />} />
+                  <Route path="stdchats" element={<StdGroupChat />} />
+                  <Route path="stddocuments" element={<StdDocuments />} />
                 </Route>
                 <Route path="admin" element={<AdminPage />}>
                   <Route
