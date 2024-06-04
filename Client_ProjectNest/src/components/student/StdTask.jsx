@@ -4,16 +4,7 @@ import { IoMdNotifications } from "react-icons/io";
 import StdTaskNotification from "./StdTaskNotification";
 
 export default function StdTask() {
-  const [openTask, setOpenTask] = useState(false);
   const [openNoti, setOpenNoti] = useState(false);
-
-  const handleClick = () => {
-    setOpenTask(!openTask);
-  };
-
-  const handleClose = () => {
-    setOpenTask(false);
-  };
 
   const handleNotiClick = () => {
     setOpenNoti(!openNoti);

@@ -6,6 +6,8 @@ import { FaVideo } from "react-icons/fa";
 import { useSocket } from "../../contexts/socketContext";
 import { useParams } from "react-router-dom";
 import OverlappingProfiles from "../OverlappingProfiles";
+import ReactScrollToBottom from "react-scroll-to-bottom";
+import ChatMessage from "./ChatMessage";
 
 export default function GroupChat() {
   const { projectId } = useParams();
@@ -13,6 +15,7 @@ export default function GroupChat() {
   const [message, setMessage] = useState("");
   const [messageHistory, setMessageHistory] = useState([]);
   const { socket } = useSocket();
+  const currentUser = "ravi";
   useEffect(
     function () {
       if (hasJoined.current) return;
@@ -62,16 +65,22 @@ export default function GroupChat() {
             </span>
           </div>
         </div>
-        <div className="messagebox w-full h-5/6 text-white">
+        <ReactScrollToBottom className="messagebox w-full h-5/6 overflow-y-scroll p-4 ">
           {messageHistory.map(({ user, content }, i) => (
-            <div key={i} className="">
-              <div className=" bg-slate-700">
-                <span>{user}:</span>
-                <span>{content}</span>
-              </div>
-            </div>
+            // <div key={i} className="">
+            //   <div className=" bg-slate-700">
+            //     <span>{user}:</span>
+            //     <span>{content}</span>
+            //   </div>
+            // </div>
+            <ChatMessage
+              key={i}
+              user={user}
+              message={content}
+              classs={user === currentUser ? "left" : "right"}
+            />
           ))}
-        </div>
+        </ReactScrollToBottom>
         <div className="footer w-full h-fit flex gap-3">
           <span className="link text-xl cursor-pointer">
             <HiMiniLink className="text-accent font-bold mt-2" />
