@@ -54,10 +54,6 @@ const userSchema = new mongoose.Schema(
         message: "password and confirm password did not match",
       },
     },
-    isGoogleSignUp: {
-      type: Boolean,
-      default: false,
-    },
     projects: [
       {
         type: mongoose.Schema.ObjectId,
@@ -66,6 +62,10 @@ const userSchema = new mongoose.Schema(
     ],
     passwordChangedAt: Date,
     active: {
+      type: Boolean,
+      default: true,
+    },
+    firstLogin: {
       type: Boolean,
       default: true,
     },

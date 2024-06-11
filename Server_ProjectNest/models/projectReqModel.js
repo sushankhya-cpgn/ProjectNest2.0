@@ -1,52 +1,50 @@
 const mongoose = require("mongoose");
 
-const projectReqSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: [true, "A project must have an id"],
-  },
+const projectReqSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "A project request must have a project name"],
+    },
+    problemStatement: {
+      type: String,
+      required: [true, "A project request must have a problem statement"],
+    },
+    solution: {
+      type: String,
+    },
+    techtags: {
+      type: [String],
+    },
+    joinrequests: {
+      type: [String],
+    },
+    teamMembers: {
+      type: [String], // Array of team member names or IDs
+    },
 
-  title: {
-    type: String,
-    required: [true, "A project request must have a project name"],
-  },
-  problemStatement: {
-    type: String,
-    required: [true, "A project request must have a problem statement"],
-  },
-  solution: {
-    type: String,
-    required: [true, "A project request must have a solution"],
-  },
-  techtags: {
-    type: [String],
-  },
-  joinrequests: {
-    type: [String],
-  },
-  teamMembers: {
-    type: [String], // Array of team member names or IDs
-  },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+    resources: {
+      type: String,
+    },
 
-  status: {
-    type: String,
-    enum: ["pending", "approved", "rejected"],
-    default: "pending",
-  },
+    proposalPDF: {
+      type: String,
+    },
 
-  proposal: {
-    type: String,
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
   },
-
-  createdBy: {
-    type: String,
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const ProjectReq = mongoose.model("ProjectReq", projectReqSchema);
 

@@ -68,6 +68,7 @@ exports.updateMyPassword = catchAsync(async (req, res, next) => {
   }
   user.password = password;
   user.confirmPassword = confirmPassword;
+  user.firstLogin = false;
   await user.save();
 
   createSendToken(201, user, res);
@@ -184,3 +185,43 @@ exports.getUserFromToken = catchAsync(async (req, res, next) => {
     user,
   });
 });
+
+exports.signup = catchAsync(async (req, res, next) => {
+  const userData = filterObject(
+    req.body,
+    "email",
+    "firstName",
+    "lastName",
+    "middleName",
+    "password",
+    "confirmPassword",
+    "role"
+  );
+
+  const user = await User.create(userData);
+  if (!user) {
+    return next(new AppError(500, "something went wrong, please try again"));
+  }
+
+  const token = signJWT(user.id);
+  user.password = undefined;
+  res.status(201).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
+});
+
+exports.restrictTo = (...roles) => {
+  // this returned function will have access to roles array due to closure property of js functions
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError(403, "you do not have permission to perform this action")
+      );
+    }
+    next();
+  };
+};

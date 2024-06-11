@@ -19,6 +19,14 @@ router.route("/login").post(authController.login);
 
 router.route("/token/:authtoken").get(authController.getUserFromToken);
 
+router
+  .route("/signup")
+  .post(
+    authController.protect,
+    authController.restrictTo("admin"),
+    authController.signup
+  );
+
 router.route("/:id/assign-role").post(
   authController.protect,
 
