@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ProjectReq = require("./projectReqModel");
 
 const projectSchema = new mongoose.Schema(
   {
@@ -17,7 +18,7 @@ const projectSchema = new mongoose.Schema(
       },
     },
     report: String,
-    proposal: String,
+    proposalFile: String,
     description: String,
     technologyUsed: [String],
     supervisor: {
@@ -35,6 +36,10 @@ const projectSchema = new mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
+    },
+    proposal: {
+      type: mongoose.Schema.ObjectId,
+      ref: "ProjectReq",
     },
     // rooms: [
     //   {

@@ -11,26 +11,70 @@ router
 router
   .route("/my-project-proposal")
   .get(authController.protect, projectreqController.getMyProjectProposal);
-
 router
-  .route("/joinrequest/:id")
-  .patch(authController.protect, projectreqController.projectJoinRequest);
-
+  .route("/my-join-requests")
+  .get(authController.protect, projectreqController.myJoinRequestsProjects);
 router
-  .route("/acceptjoinrequest/:id")
-  .patch(authController.protect, projectreqController.acceptProjectJoinRequest);
-
-router
-  .route("/:id/proposal")
+  .route("/:id/send-join-request")
   .patch(
     authController.protect,
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.projectJoinRequest
+  );
+
+router
+  .route("/:id/accept-join-request")
+  .patch(
+    authController.protect,
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.acceptProjectJoinRequest
+  );
+
+router
+  .route("/:id/reject-join-request")
+  .patch(
+    authController.protect,
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.rejectProjectJoinRequest
+  );
+
+router
+  .route("/:id/cancel-join-request")
+  .patch(
+    authController.protect,
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.cancelProjectJoinRequest
+  );
+
+router
+  .route("/:id/proposal-pdf")
+  .patch(
+    authController.protect,
+    projectreqController.restrictToStatus("draft"),
     projectreqController.uploadProposalPdf,
     projectreqController.uploadProjectProposal
   );
+
+router
+  .route("/:id/send")
+  .patch(
+    authController.protect,
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.sendProjectPropoal
+  );
+
+router
+  .route("/:id/accept")
+  .patch(
+    authController.protect,
+    authController.restrictTo("admin"),
+    projectreqController.restrictToStatus("pending"),
+    projectreqController.acceptProjectProposal
+  );
+
 router
   .route("/:id")
   .get(projectreqController.getProject)
-  .patch(projectreqController.updateProject)
-  .delete(projectreqController.deleteProject);
+  .delete(authController.protect, projectreqController.deleteProject);
 
 module.exports = router;

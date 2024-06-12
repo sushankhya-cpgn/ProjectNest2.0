@@ -15,7 +15,7 @@ const rooms = {
 };
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  // console.log("a user connected");
   socket.on("join-room", (data) => {
     const { projectId } = data;
     socket.join(projectId);

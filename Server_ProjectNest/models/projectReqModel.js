@@ -16,17 +16,23 @@ const projectReqSchema = new mongoose.Schema(
     techtags: {
       type: [String],
     },
-    joinrequests: {
-      type: [String],
-    },
-    teamMembers: {
-      type: [String], // Array of team member names or IDs
-    },
+    joinrequests: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
+    teamMembers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
 
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
+      enum: ["draft", "pending", "approved", "rejected"],
+      default: "draft",
     },
     resources: {
       type: String,

@@ -1,7 +1,8 @@
 const express = require("express");
 const userRouter = require("./router/userRoute");
-const projectreqRoutes = require("./router/projectreqRouter");
+const projectreqRouter = require("./router/projectreqRouter");
 const projectRouter = require("./router/projectRouter");
+const eventRouter = require("./router/eventRouter");
 const errorController = require("./controller/errorController");
 const cors = require("cors");
 
@@ -12,8 +13,9 @@ app.use(express.json());
 app.use("/api/v2/project", projectRouter);
 
 app.use("/api/v2/user", userRouter);
+app.use("/api/v2/event", userRouter);
 
-app.use("/api/v2/projectreq", projectreqRoutes);
+app.use("/api/v2/projectreq", projectreqRouter);
 app.get("*", (req, res) => {
   res.status(404).json({
     status: "fail",

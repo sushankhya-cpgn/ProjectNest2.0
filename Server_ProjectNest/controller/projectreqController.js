@@ -4,8 +4,26 @@ const filterObject = require("../utils/filterObject");
 const AppError = require("../utils/appError");
 const multer = require("multer");
 
-// Get all project requests
 
+exports.restrictToStatus = function (status) {
+  return async (req, res, next) => {
+    const isProjectProposalStatus = await ProjectReq.exists({
+      _id: req.params.id,
+      status: status,
+    });
+    if (!isProjectProposalStatus) {
+      return next(
+        new AppError(
+          400,
+          "Cannot perform any activity on this projecta as this project is on going!"
+        )
+      );
+    }
+    next();
+  };
+};
+
+// Get all project requests
 exports.getAllProjectsProposals = catchAsync(async (req, res, next) => {
   const allProjectProposals = await ProjectReq.find();
 
@@ -41,7 +59,7 @@ exports.projectJoinRequest = catchAsync(async (req, res, next) => {
     return next(new AppError(400, "no project proposal with that id"));
 
   if (projectProposal.createdBy.toString() === req.user.id)
-    next(new AppError(400, "cannot join request your own proposal"));
+    return next(new AppError(400, "cannot join request your own proposal"));
   if (!projectProposal.joinrequests.includes(req.user.id)) {
     projectProposal.joinrequests.push(req.user.id);
     await projectProposal.save();
@@ -79,9 +97,23 @@ exports.acceptProjectJoinRequest = catchAsync(async (req, res, next) => {
         "provided requestor user has not requested to join the project"
       )
     );
+  //checking if requestor has already joined a project
+  const requestorProject = await ProjectReq.find({
+    teamMembers: requestorUserId,
+  });
+  if (requestorProject.length > 0) {
+    return next(new AppError(400, "requestor has already joind a project"));
+  }
+  //checking if requestor has created a project
+  const projectCreatedByRequestor = await ProjectReq.exists({
+    createdBy: requestorUserId,
+  });
+  if (projectCreatedByRequestor) {
+    return next(new AppError(400, "requestor is already in a project"));
+  }
 
   const newProjectRequestList = projectProposal.joinrequests.filter(
-    (rqstor) => rqstor !== requestorUserId
+    (rqstor) => rqstor.toString() !== requestorUserId
   );
   projectProposal.joinrequests = newProjectRequestList;
   projectProposal.teamMembers.push(requestorUserId);
@@ -114,10 +146,13 @@ const multerStorage = multer.diskStorage({
 
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 exports.uploadProposalPdf = upload.single("proposal");
-
+//by creator
 exports.uploadProjectProposal = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const projectProposal = await ProjectReq.findById(id);
+  if (!projectProposal) {
+    return next(new AppError(400, "no proposal with that id"));
+  }
   if (projectProposal.createdBy.toString() !== req.user.id)
     return next(
       new AppError(400, "only project crator can upload the proposal")
@@ -133,8 +168,72 @@ exports.uploadProjectProposal = catchAsync(async (req, res, next) => {
   });
 });
 
-// Add a new project request
+//reject project join request
+//by the creator
+exports.rejectProjectJoinRequest = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { requestorUserId } = req.body;
+  if (!requestorUserId)
+    return next(new AppError(400, "no requestor id is provided"));
+  const projectProposal = await ProjectReq.findById(id);
+  if (!projectProposal)
+    return next(new AppError(400, "no project proposal with that id"));
 
+  if (projectProposal.createdBy.toString() !== req.user.id)
+    return next(
+      new AppError(
+        400,
+        "this project propoal is not created by you so you cannot reject the proposal"
+      )
+    );
+
+  if (!projectProposal.joinrequests.includes(requestorUserId))
+    return next(
+      new AppError(
+        400,
+        "provided requestor user has not requested to join the project"
+      )
+    );
+
+  //removing from the join request list
+  const newProjectRequestList = projectProposal.joinrequests.filter(
+    (rqstor) => rqstor.toString() !== requestorUserId
+  );
+
+  projectProposal.joinrequests = newProjectRequestList;
+
+  await projectProposal.save();
+  res.status(200).json({
+    status: "success",
+    data: {
+      projectProposal,
+    },
+  });
+});
+
+//cancel join request
+//by requstor
+exports.cancelProjectJoinRequest = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const projectProposal = await ProjectReq.findById(id);
+  if (!projectProposal)
+    return next(new AppError(400, "no project proposal with that id"));
+  if (projectProposal.joinrequests.includes(req.user.id)) {
+    const newProjectRequestList = projectProposal.joinrequests.filter(
+      (rqstor) => rqstor.toString() !== req.user.id
+    );
+    projectProposal.joinrequests = newProjectRequestList;
+    await projectProposal.save();
+  }
+  res.status(200).json({
+    status: "success",
+    data: {
+      projectProposal,
+    },
+  });
+});
+
+// Add a new project request
 exports.addProject = catchAsync(async (req, res, next) => {
   const projectData = filterObject(
     req.body,
@@ -159,6 +258,7 @@ exports.addProject = catchAsync(async (req, res, next) => {
     });
   }
   projectData.createdBy = req.user.id;
+  projectData.teamMembers = [req.user.id];
   const newProject = await ProjectReq.create(projectData);
   res.status(200).json({
     status: "success",
@@ -167,23 +267,6 @@ exports.addProject = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-async (req, res) => {
-  try {
-    const newProject = await ProjectReq.create(req.body);
-    res.status(201).json({
-      status: "success",
-      data: {
-        project: newProject,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
-};
 
 // Get a single project request by ID
 exports.getProject = async (req, res) => {
@@ -240,8 +323,39 @@ exports.updateProject = async (req, res) => {
   }
 };
 
+//join requests projects
+exports.myJoinRequestsProjects = catchAsync(async (req, res, next) => {
+  const projectPorposals = await ProjectReq.find({ joinrequests: req.user.id });
+  res.status(200).json({
+    status: "success",
+    projectPorposals,
+  });
+});
+
 // Delete a project request by ID
-exports.deleteProject = async (req, res) => {
+//user
+exports.deleteProject = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const projectProposal = await ProjectReq.findById(id);
+  if (!projectProposal) {
+    return next(new AppError(400, "cannot find project proposal with that id"));
+  }
+  if (projectProposal.createdBy.toString() !== req.user.id) {
+    return next(
+      new AppError(
+        401,
+        "you are not the crator of the project so you are not authorized to delete the project proposal"
+      )
+    );
+  }
+  await ProjectReq.findByIdAndDelete(id);
+
+  res.status(200).json({
+    status: "success",
+    data: [],
+  });
+});
+async (req, res) => {
   try {
     const project = await ProjectReq.findByIdAndDelete(req.params.id);
     if (!project) {
@@ -261,3 +375,34 @@ exports.deleteProject = async (req, res) => {
     });
   }
 };
+
+//only project creator can send the proposal for apporval
+exports.sendProjectPropoal = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const projectProposal = await ProjectReq.findById(id);
+  if (!projectProposal) {
+    return next(new AppError(400, "no project proposal with that id"));
+  }
+  if (projectProposal.createdBy.toString() !== req.user.id) {
+    return next(
+      new AppError(400, "only project creator can send proposal this request")
+    );
+  }
+  if (!projectProposal.proposalPDF) {
+    return next(
+      new AppError(
+        400,
+        "no proposal file is attached with this project proposal"
+      )
+    );
+  }
+  projectProposal.status = "pending";
+  await projectProposal.save();
+  res.status(200).json({
+    status: "success",
+    projectProposal,
+  });
+});
+
+//only admin can accept the project propsal
+exports.acceptProjectProposal = catchAsync((req, res, next) => {});
