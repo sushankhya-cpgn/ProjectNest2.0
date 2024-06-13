@@ -21,7 +21,7 @@ export default function StdGroupChat() {
 
   return (
     <div className="w-full flex justify-center items-center p-2">
-      <div className="w-full h-full rounded-lg p-6 relative overflow-hidden flex flex-col justify-between bg-gray-800">
+      <div className="w-full h-full rounded-lg p-6 relative overflow-hidden flex flex-col justify-between">
         <div className="title text-center font-medium text-lg text-gray-200">
           ProjectNest
         </div>

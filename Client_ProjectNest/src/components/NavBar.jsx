@@ -9,6 +9,7 @@ import { FiSettings } from "react-icons/fi";
 import Logo from "./Logo";
 import { useState } from "react";
 import NavBarItem from "./NavBarItem";
+import { AiTwotoneProject } from "react-icons/ai";
 import { useUser } from "../contexts/userContext";
 
 const iconColor = "#dbdbdb";
@@ -46,7 +47,13 @@ export default function NavBar() {
             >
               <LuSearchCode color={iconColor} size={20} />
             </NavBarItem>
-
+            <NavBarItem
+              navto="myprojects"
+              isFullMenue={isFullMenue}
+              name="my projects"
+            >
+              <AiTwotoneProject color={iconColor} size={20} />
+            </NavBarItem>
             <NavBarItem
               navto="settings"
               isFullMenue={isFullMenue}

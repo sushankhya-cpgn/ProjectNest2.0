@@ -30,6 +30,8 @@ import StdGroupChat from "./components/student/StdGroupChat";
 import StdDocuments from "./components/student/StdDocuments";
 import StdMembers from "./components/student/StdMembers";
 import StudentProjectPage from "./pages/StudentProjectPage";
+import MyProject from "./components/student/MyProject";
+import MyProjectDetail from "./components/student/MyProjectDetail";
 
 function App() {
   return (
@@ -50,6 +52,9 @@ function App() {
                   <Route path="home" element={<Feed />} />
                   <Route path="findproject" element={<FindProject />}>
                     <Route path=":id" element={<FindPorjectProjectDetail />} />
+                  </Route>
+                  <Route path="myprojects" element={<MyProject />}>
+                    <Route path=":id" element={<MyProjectDetail />} />
                   </Route>
                   <Route path="settings" element={<Setting />} />
                 </Route>
