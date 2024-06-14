@@ -60,6 +60,16 @@ const userSchema = new mongoose.Schema(
         ref: "Project",
       },
     ],
+    semester: {
+      type: Number,
+      validate: {
+        validator: function (val) {
+          if (!Number.isInteger(val)) return false;
+          return !(val < 1 || val > 8);
+        },
+        message: "{VALUE} is not a valid semester number",
+      },
+    },
     passwordChangedAt: Date,
     active: {
       type: Boolean,

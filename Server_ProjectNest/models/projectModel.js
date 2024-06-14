@@ -3,7 +3,7 @@ const ProjectReq = require("./projectReqModel");
 
 const projectSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: [true, "Project must have a name"],
     },

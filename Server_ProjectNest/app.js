@@ -13,7 +13,7 @@ app.use(express.json());
 app.use("/api/v2/project", projectRouter);
 
 app.use("/api/v2/user", userRouter);
-app.use("/api/v2/event", userRouter);
+app.use("/api/v2/event", eventRouter);
 
 app.use("/api/v2/projectreq", projectreqRouter);
 app.get("*", (req, res) => {

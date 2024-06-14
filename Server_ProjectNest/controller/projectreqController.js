@@ -3,7 +3,8 @@ const catchAsync = require("../utils/catchAsync");
 const filterObject = require("../utils/filterObject");
 const AppError = require("../utils/appError");
 const multer = require("multer");
-
+const Project = require("../models/projectModel");
+const User = require("../models/userModel");
 
 exports.restrictToStatus = function (status) {
   return async (req, res, next) => {
@@ -25,7 +26,15 @@ exports.restrictToStatus = function (status) {
 
 // Get all project requests
 exports.getAllProjectsProposals = catchAsync(async (req, res, next) => {
-  const allProjectProposals = await ProjectReq.find();
+  let query = {};
+  if (req.query.semester) {
+    query.semester = req.query.semester;
+  }
+  const allProjectProposals = await ProjectReq.find(query).populate({
+    path: "createdBy",
+    model: "User",
+    select: "firstName lastName email photo",
+  });
 
   let filteredProjectProposals = allProjectProposals.filter(
     (projProps) => projProps.teamMembers.length < 4
@@ -41,7 +50,17 @@ exports.getAllProjectsProposals = catchAsync(async (req, res, next) => {
 });
 
 exports.getMyProjectProposal = catchAsync(async (req, res, next) => {
-  const projectProposal = await ProjectReq.findOne({ createdBy: req.user.id });
+  const projectProposal = await ProjectReq.findOne({ createdBy: req.user.id })
+    .populate({
+      path: "createdBy",
+      model: "User",
+      select: "firstName lastName email photo",
+    })
+    .populate({
+      path: "teamMembers",
+      model: "User",
+      select: "firstName lastName email photo",
+    });
   res.status(200).json({
     status: "success",
     data: {
@@ -146,6 +165,7 @@ const multerStorage = multer.diskStorage({
 
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 exports.uploadProposalPdf = upload.single("proposal");
+
 //by creator
 exports.uploadProjectProposal = catchAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -246,7 +266,7 @@ exports.addProject = catchAsync(async (req, res, next) => {
 
   const proposal = await ProjectReq.findOne({
     createdBy: req.user.id,
-    status: "pending",
+    status: "draft",
   });
   if (proposal) {
     return res.status(400).json({
@@ -259,6 +279,7 @@ exports.addProject = catchAsync(async (req, res, next) => {
   }
   projectData.createdBy = req.user.id;
   projectData.teamMembers = [req.user.id];
+  projectData.semester = req.user.semester;
   const newProject = await ProjectReq.create(projectData);
   res.status(200).json({
     status: "success",
@@ -333,7 +354,7 @@ exports.myJoinRequestsProjects = catchAsync(async (req, res, next) => {
 });
 
 // Delete a project request by ID
-//user
+//creator
 exports.deleteProject = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const projectProposal = await ProjectReq.findById(id);
@@ -355,26 +376,6 @@ exports.deleteProject = catchAsync(async (req, res, next) => {
     data: [],
   });
 });
-async (req, res) => {
-  try {
-    const project = await ProjectReq.findByIdAndDelete(req.params.id);
-    if (!project) {
-      return res.status(404).json({
-        status: "fail",
-        message: "No project found with that ID",
-      });
-    }
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
-  }
-};
 
 //only project creator can send the proposal for apporval
 exports.sendProjectPropoal = catchAsync(async (req, res, next) => {
@@ -404,5 +405,57 @@ exports.sendProjectPropoal = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getProposalsForApproval = catchAsync(async (req, res, next) => {
+  let query = {};
+  if (req.query.semester) {
+    query.semester = req.query.semester;
+  }
+  query.status = "pending";
+  const proposals = await ProjectReq.find(query);
+
+  res.status(200).json({
+    status: "success",
+    proposals,
+  });
+});
+
 //only admin can accept the project propsal
-exports.acceptProjectProposal = catchAsync((req, res, next) => {});
+exports.acceptProjectProposal = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { supervisor } = req.body;
+  const proposal = await ProjectReq.findById(id);
+  if (!proposal || proposal.status !== "pending")
+    return next(new AppError(400, "no proposal exists"));
+
+  if (!supervisor) {
+    return next(new AppError(400, "no supervisor provided"));
+  }
+
+  const supervisorExists = await User.exists({
+    _id: supervisor,
+    role: "supervisor",
+  });
+  if (!supervisorExists) {
+    return next(new AppError(400, "no supervisor with that id"));
+  }
+
+  const newProjectData = {
+    title: proposal.title,
+    semester: proposal.semester,
+    proposalFile: proposal.proposalPDF,
+    technologyUsed: [...proposal.techtags],
+    members: [...proposal.teamMembers],
+    proposal: proposal.id,
+    supervisor,
+  };
+  const newProject = await Project.create(newProjectData);
+  if (newProject) {
+    proposal.status = "approved";
+    await proposal.save();
+  }
+
+  res.status(200).json({
+    status: "success",
+    project: newProject,
+  });
+});

@@ -9,6 +9,21 @@ router
   .post(authController.protect, projectreqController.addProject);
 
 router
+  .route("/proposals")
+  .get(
+    authController.protect,
+    authController.restrictTo("admin"),
+    projectreqController.getProposalsForApproval
+  );
+
+router
+  .route("/:id/accept-proposal")
+  .patch(
+    authController.protect,
+    authController.restrictTo("admin"),
+    projectreqController.acceptProjectProposal
+  );
+router
   .route("/my-project-proposal")
   .get(authController.protect, projectreqController.getMyProjectProposal);
 router
@@ -64,7 +79,7 @@ router
   );
 
 router
-  .route("/:id/accept")
+  .route("/:id/accept-proposal")
   .patch(
     authController.protect,
     authController.restrictTo("admin"),
@@ -75,6 +90,10 @@ router
 router
   .route("/:id")
   .get(projectreqController.getProject)
-  .delete(authController.protect, projectreqController.deleteProject);
+  .delete(
+    authController.protect,
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.deleteProject
+  );
 
 module.exports = router;

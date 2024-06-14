@@ -41,6 +41,9 @@ const projectReqSchema = new mongoose.Schema(
     proposalPDF: {
       type: String,
     },
+    semester: {
+      type: Number,
+    },
 
     createdBy: {
       type: mongoose.Schema.ObjectId,
