@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import getTechIcon from "../../utils/getTechIcon";
 import Button from "../Button";
 
@@ -32,63 +33,81 @@ export default function StudentCreateProjectForm() {
   const [techTagSuggestions, setTechTagSuggestions] = useState([]);
   const [availableTechTags, setAvailableTechTags] = useState([]);
 
-  //fetch availabe tech stack from backend here
-  useEffect(function () {
+  useEffect(() => {
+    // Set available tech tags
     setAvailableTechTags([...techStackOptions]);
   }, []);
 
-  useEffect(
-    function () {
-      const searchTerm = techTagSearchTerm.trim().toLocaleLowerCase();
-      if (searchTerm.length < 2) {
-        setTechTagSuggestions([]);
-        return;
-      }
-      const filteredOptions = availableTechTags.filter(
-        (tag) =>
-          tag.toLowerCase().includes(searchTerm) &&
-          !formData.techTags.includes(tag)
-      );
-      setTechTagSuggestions([...filteredOptions]);
-    },
-    [techTagSearchTerm, availableTechTags, formData.techTags]
-  );
+  useEffect(() => {
+    const searchTerm = techTagSearchTerm.trim().toLocaleLowerCase();
+    if (searchTerm.length < 2) {
+      setTechTagSuggestions([]);
+      return;
+    }
+    const filteredOptions = availableTechTags.filter(
+      (tag) =>
+        tag.toLowerCase().includes(searchTerm) &&
+        !formData.techTags.includes(tag)
+    );
+    setTechTagSuggestions([...filteredOptions]);
+  }, [techTagSearchTerm, availableTechTags, formData.techTags]);
 
-  function handleFormInputChange(e) {
+  const handleFormInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((curr) => ({ ...curr, [name]: value }));
-  }
+  };
 
-  function handleSelectTechTag(selectedTag) {
+  const handleSelectTechTag = (selectedTag) => {
     setTechTagSearchTerm("");
-
     setFormData((cur) => ({
       ...cur,
       techTags: [...cur.techTags, selectedTag],
     }));
     setTechTagSuggestions([]);
-  }
-  //submit logic here
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log(formData);
-  }
+  };
 
-  function handleRemoveTechTag(tag) {
+  const handleRemoveTechTag = (tag) => {
     setFormData((curr) => ({
       ...curr,
       techTags: curr.techTags.filter((techTag) => techTag !== tag),
     }));
-  }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    console.log("Token retrieved:", token);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/v2/projectreq",
+        {
+          title: formData.title,
+          problemStatement: formData.problem,
+          solution: formData.solutions,
+          techtags: formData.techTags,
+          resources: formData.resources,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Project created successfully:", response.data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   return (
-    <div className="fixed  bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
+    <div className="fixed bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
       <form
-        className=" max-w-md p-2 flex flex-col gap-5 overflow-auto text-slate-300"
+        className="max-w-md p-2 flex flex-col gap-5 overflow-auto text-slate-300"
         onSubmit={handleSubmit}
       >
         <div>
-          <label className=" text-slate-300">Title</label>
+          <label className="text-slate-300">Title</label>
           <input
             required={true}
             onChange={handleFormInputChange}
@@ -105,6 +124,7 @@ export default function StudentCreateProjectForm() {
             onChange={handleFormInputChange}
             type="text"
             name="problem"
+            value={formData.problem}
             className="py-2 px-3 outline-none text-whitef w-full bg-slate-600 rounded-md"
           ></textarea>
         </div>
@@ -114,6 +134,7 @@ export default function StudentCreateProjectForm() {
             onChange={handleFormInputChange}
             type="text"
             name="solutions"
+            value={formData.solutions}
             className="py-2 px-3 outline-none text-whitef w-full bg-slate-600 rounded-md"
           ></textarea>
         </div>
@@ -123,6 +144,7 @@ export default function StudentCreateProjectForm() {
             onChange={handleFormInputChange}
             type="text"
             name="resources"
+            value={formData.resources}
             className="py-2 px-3 outline-none text-whitef w-full bg-slate-600 rounded-md"
           ></textarea>
         </div>
@@ -130,11 +152,10 @@ export default function StudentCreateProjectForm() {
           <label>Tags:</label>
           <input
             type="text"
-            className="py-2 px-3 outline-none  w-full bg-slate-600 rounded-md"
+            className="py-2 px-3 outline-none w-full bg-slate-600 rounded-md"
             onChange={(e) => setTechTagSearchTerm(e.target.value)}
             value={techTagSearchTerm}
           />
-
           <ul className="max-h-24 overflow-auto bg-slate-600 rounded-lg absolute w-full transition-all duration-200">
             {techTagSuggestions.map((tag) => (
               <SuggestionListItem
@@ -144,7 +165,6 @@ export default function StudentCreateProjectForm() {
               />
             ))}
           </ul>
-
           <div className="grid gap-2 grid-cols-3">
             {formData.techTags.map((tag) => (
               <TagPill
@@ -155,7 +175,7 @@ export default function StudentCreateProjectForm() {
             ))}
           </div>
         </div>
-        <Button onClick={() => {}}>Create</Button>
+        <Button type="submit">Create</Button>
       </form>
     </div>
   );
@@ -178,7 +198,7 @@ function TagPill({ tag, onClick }) {
     <div className="flex items-center gap-2 bg-slate-800 p-2 rounded-md mt-2">
       {getTechIcon(tag)}
       {tag}
-      <span className=" text-red-600/70 cursor-pointer hover:text-red-500 transition-colors duration-200">
+      <span className="text-red-600/70 cursor-pointer hover:text-red-500 transition-colors duration-200">
         <span onClick={onClick}>&#10005;</span>
       </span>
     </div>

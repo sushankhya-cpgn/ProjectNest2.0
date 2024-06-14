@@ -1,50 +1,62 @@
 import { FiSearch } from "react-icons/fi";
-import { Outlet, useParams } from "react-router-dom";
-import ProjectDetailCard from "./ProjectDetailCard";
+// import ProjectDetailCard from "./ProjectDetailCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../Spinner";
+import Button from "../Button";
+import PersonItem from "./PersonItem";
+import TechnologyTag from "./TechnologyTag";
 
 function MyProject() {
-  const { id } = useParams();
-  const [allProjects, setAllProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState({});
+  // const [allProjects, setAllProjects] = useState([]);
 
-  function onSearch(e) {
-    setSearchTerm(e.target.value);
-    // if (e.target.value.length < 2) return;
+  console.log(projects);
 
-    const search = e.target.value.toLowerCase().trim();
-    //search here
-    setProjects(
-      allProjects.filter((proj) =>
-        `${proj.title} ${proj.techTags.join(" ")}`
-          .toLowerCase()
-          .includes(search)
-      )
-    );
-  }
-
-  useEffect(function () {
-    async function fetchProject() {
+  // function onSearch(e) {
+  //   setSearchTerm(e.target.value);
+  //   const search = e.target.value.toLowerCase().trim();
+  //   // setProjects(
+  //   //   allProjects.filter((proj) =>
+  //   //     `${proj.title} ${proj.techtags.join(" ")}`
+  //   //       .toLowerCase()
+  //   //       .includes(search)
+  //   //   )
+  //   );
+  // }
+  useEffect(() => {
+    async function fetchProjects() {
       try {
         setIsLoading(true);
+        const token = localStorage.getItem("token");
+        console.log("Token retrieved:", token);
+
         const { data } = await axios.get(
-          `http://localhost:9000/createdProjects`
+          `http://127.0.0.1:8000/api/v2/projectreq/my-project-proposal`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setAllProjects(data);
-        setProjects(data);
+        // console.log(data);
+        // setAllProjects(data.data.projectProposal);
+        console.log("sdfsdfsfsadf");
+        setProjects(data.data.projectProposal);
+        console.log(data);
       } catch (err) {
-        new Error(err.message);
+        console.error("Error fetching projects:", err.message);
       } finally {
         setIsLoading(false);
       }
     }
-    fetchProject();
+    fetchProjects();
   }, []);
 
+  if (!isLoading) {
+    console.log(projects.problemStatement);
+  }
   if (isLoading)
     return (
       <div className="h-4/5 flex items-center justify-center">
@@ -53,40 +65,61 @@ function MyProject() {
     );
 
   return (
-    <div className="h-4/5 flex flex-col gap-2 ">
-      <div className="flex justify-between mb-2">
-        <h3 className="text-lg">Find projects that need your skills</h3>
-        {!id && (
-          <div className="relative">
-            <div className="absolute left-2 top-1/2 -translate-y-1/2">
-              <FiSearch className=" text-gray-500" size={18} />
-            </div>
-            <input
-              value={searchTerm}
-              onChange={onSearch}
-              placeholder="Search title, tags..."
-              className=" text-gray-300 text-sm bg-background focus:outline-none focus:ring-slate-500 transition-all duration-300 ring-1 ring-slate-800 rounded-lg py-1 px-2 pl-8"
-            />
+    <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
+      <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
+        <h1 className=" text-2xl">{projects.title}</h1>
+        <Button onClick={() => {}}>
+          Request <span className="hidden xl:inline">to join</span>
+        </Button>
+      </div>
+      <div className="flex justify-between">
+        <PersonItem
+        // name={projects.createdBy.firstName}
+        // image={projects.user.image}
+        />
+        {projects.techtags && (
+          <div className="hidden flex-wrap  text-sm md:flex flex-row justify-between items-center gap-2">
+            {projects.techtags.map((tag) => (
+              <TechnologyTag key={tag} tech={tag} />
+            ))}
           </div>
         )}
       </div>
-      {id ? (
-        <Outlet />
-      ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 overflow-auto">
-          {projects.map((project) => (
-            <ProjectDetailCard
-              key={project.id}
-              id={project.id}
-              tags={project.techTags}
-              user={project.user}
-              description={project.description}
-              title={project.title}
-            />
-          ))}
+
+      <div>
+        <h2 className="text-lg">Problem to solve</h2>
+        <p className=" text-gray-400 text-sm">{projects.problemStatement}</p>
+      </div>
+
+      <div>
+        <h2 className="text-lg">Possible solution</h2>
+
+        <p className=" text-gray-400 text-sm">
+          {projects.solution || "Lets discuss this together!"}
+        </p>
+      </div>
+      {projects.resources && (
+        <div>
+          <h2 className="text-lg">Resources</h2>
+          <p className=" text-gray-400 text-sm">{projects.resources}</p>
         </div>
       )}
+
+      <div>
+        <h2 className="mb-4">These people are interested in the project:</h2>
+        <div>
+          <ul className="flex flex-col gap-2 mt-2">
+            {projects.joinrequests.map((person, i) => (
+              <li key={i}>
+                {/* <PersonItem name={person.firstName} image={person.photo} /> */}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
+
+    // <div className="h1">hello</div>
   );
 }
 

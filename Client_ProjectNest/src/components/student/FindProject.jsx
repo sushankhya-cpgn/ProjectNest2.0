@@ -14,10 +14,7 @@ function FindProject() {
 
   function onSearch(e) {
     setSearchTerm(e.target.value);
-    // if (e.target.value.length < 2) return;
-
     const search = e.target.value.toLowerCase().trim();
-    //search here
     setProjects(
       allProjects.filter((proj) =>
         `${proj.title} ${proj.techTags.join(" ")}`
@@ -27,31 +24,18 @@ function FindProject() {
     );
   }
 
-  //fetch projects
-  // useEffect(function () {
-  //   async function fetchtest() {
-  //     try {
-  //       const res = await fetch("http://127.0.0.1:8000/api/v2/user");
-  //       const data = await res.json();
-  //       console.log(data);
-  //     } catch (e) {
-  //       console.log(e.message);
-  //     }
-  //   }
-  //   fetchtest();
-  // });
   useEffect(function () {
     async function fetchProject() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `http://localhost:9000/createdProjects`
+          `http://127.0.0.1:8000/api/v2/projectreq`
         );
+        console.log(data); // Log the fetched data
         setAllProjects(data);
         setProjects(data);
       } catch (err) {
-        new Error(err.message);
-      } finally {
+        console.error(err.message);
         setIsLoading(false);
       }
     }

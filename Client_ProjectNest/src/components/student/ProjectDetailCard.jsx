@@ -10,7 +10,9 @@ export default function ProjectDetailCard({
   id,
   user,
 }) {
-  const trimmedDescription = trimText(description, 90);
+  console.log(title, tags, description, id, user);
+  // const trimmedDescription = trimText(description, 90);
+  const trimmedDescription = description;
   return (
     <Link to={id}>
       <div className="h-48 transition-all duration-300 bg-background p-4 rounded-md cursor-pointer flex flex-col justify-between hover:drop-shadow-[0_35px_35px_rgba(1,1,1,0.55)]">
