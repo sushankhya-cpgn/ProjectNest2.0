@@ -8,6 +8,10 @@ const User = require("../models/userModel");
 
 exports.restrictToStatus = function (status) {
   return async (req, res, next) => {
+    // const isProjectProposalStatus = await ProjectReq.exists({
+    //   _id: req.params.id,
+    //   status: status,
+    // });
     const isProjectProposalStatus = await ProjectReq.exists({
       _id: req.params.id,
       status: status,
@@ -16,7 +20,7 @@ exports.restrictToStatus = function (status) {
       return next(
         new AppError(
           400,
-          "Cannot perform any activity on this projecta as this project is on going!"
+          "Cannot perform any activity on this project as this project is on going!"
         )
       );
     }
@@ -269,13 +273,9 @@ exports.addProject = catchAsync(async (req, res, next) => {
     status: "draft",
   });
   if (proposal) {
-    return res.status(400).json({
-      status: "failed",
-      message: "user already has a pending project proposal",
-      data: {
-        pendingProposal: proposal,
-      },
-    });
+    return next(
+      new AppError(400, "user already has a pending project proposal")
+    );
   }
   projectData.createdBy = req.user.id;
   projectData.teamMembers = [req.user.id];
@@ -399,6 +399,7 @@ exports.sendProjectPropoal = catchAsync(async (req, res, next) => {
   }
   projectProposal.status = "pending";
   await projectProposal.save();
+
   res.status(200).json({
     status: "success",
     projectProposal,
@@ -449,6 +450,17 @@ exports.acceptProjectProposal = catchAsync(async (req, res, next) => {
     supervisor,
   };
   const newProject = await Project.create(newProjectData);
+  const ids = newProject.members.map((id) => id.toString());
+  ids.push(supervisor);
+  const members = await User.find({
+    _id: { $in: ids },
+  });
+
+  members.forEach(async (memb) => {
+    memb.projects.push(newProject.id);
+    await memb.save({ validateBeforeSave: false });
+  });
+
   if (newProject) {
     proposal.status = "approved";
     await proposal.save();
