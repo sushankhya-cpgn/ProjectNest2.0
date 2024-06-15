@@ -9,7 +9,7 @@ import TechnologyTag from "./TechnologyTag";
 
 function MyProject() {
   const [isLoading, setIsLoading] = useState(false);
-  const [projects, setProjects] = useState({});
+  const [projects, setProjects] = useState(null);
   // const [allProjects, setAllProjects] = useState([]);
 
   console.log(projects);
@@ -17,14 +17,15 @@ function MyProject() {
   // function onSearch(e) {
   //   setSearchTerm(e.target.value);
   //   const search = e.target.value.toLowerCase().trim();
-  //   // setProjects(
-  //   //   allProjects.filter((proj) =>
-  //   //     `${proj.title} ${proj.techtags.join(" ")}`
-  //   //       .toLowerCase()
-  //   //       .includes(search)
-  //   //   )
+  //   setProjects(
+  //     allProjects.filter((proj) =>
+  //       `${proj.title} ${proj.techtags.join(" ")}`
+  //         .toLowerCase()
+  //         .includes(search)
+  //     )
   //   );
   // }
+
   useEffect(() => {
     async function fetchProjects() {
       try {
@@ -40,9 +41,7 @@ function MyProject() {
             },
           }
         );
-        // console.log(data);
-        // setAllProjects(data.data.projectProposal);
-        console.log("sdfsdfsfsadf");
+        console.log("Projects fetched successfully");
         setProjects(data.data.projectProposal);
         console.log(data);
       } catch (err) {
@@ -54,15 +53,17 @@ function MyProject() {
     fetchProjects();
   }, []);
 
-  if (!isLoading) {
-    console.log(projects.problemStatement);
-  }
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="h-4/5 flex items-center justify-center">
         <Spinner />
       </div>
     );
+  }
+
+  if (!projects) {
+    return <div>No projects found.</div>;
+  }
 
   return (
     <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
@@ -74,11 +75,11 @@ function MyProject() {
       </div>
       <div className="flex justify-between">
         <PersonItem
-        // name={projects.createdBy.firstName}
-        // image={projects.user.image}
+          name={projects.createdBy?.firstName}
+          image={projects.createdBy?.image}
         />
         {projects.techtags && (
-          <div className="hidden flex-wrap  text-sm md:flex flex-row justify-between items-center gap-2">
+          <div className="hidden flex-wrap text-sm md:flex flex-row justify-between items-center gap-2">
             {projects.techtags.map((tag) => (
               <TechnologyTag key={tag} tech={tag} />
             ))}
@@ -93,11 +94,11 @@ function MyProject() {
 
       <div>
         <h2 className="text-lg">Possible solution</h2>
-
         <p className=" text-gray-400 text-sm">
-          {projects.solution || "Lets discuss this together!"}
+          {projects.solution || "Let's discuss this together!"}
         </p>
       </div>
+
       {projects.resources && (
         <div>
           <h2 className="text-lg">Resources</h2>
@@ -109,17 +110,15 @@ function MyProject() {
         <h2 className="mb-4">These people are interested in the project:</h2>
         <div>
           <ul className="flex flex-col gap-2 mt-2">
-            {projects.joinrequests.map((person, i) => (
+            {projects.joinrequests?.map((person, i) => (
               <li key={i}>
-                {/* <PersonItem name={person.firstName} image={person.photo} /> */}
+                <PersonItem name={person.firstName} image={person.photo} />
               </li>
             ))}
           </ul>
         </div>
       </div>
     </div>
-
-    // <div className="h1">hello</div>
   );
 }
 

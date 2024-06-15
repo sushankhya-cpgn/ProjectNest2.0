@@ -26,9 +26,23 @@ function ProjectRequests() {
       cell: (info) => <span>{info.getValue()}</span>,
       header: "Project Description",
     }),
+    columnHelper.accessor("Supervisor", {
+      id: "Supervisor",
+      cell: (info) => (
+        <select className="text-black  w-32">
+          <option>{info.getValue()}</option>
+        </select>
+      ),
+      header: "Allocate Supervisor",
+    }),
     columnHelper.accessor("registered", {
       id: "registered",
-      cell: (info) => <span>✅ ❌</span>,
+      cell: (info) => (
+        <div className="flex gap-2">
+          <button className="text-black bg-slate-200  w-24">Approve</button>{" "}
+          <button className="text-black bg-slate-200  w-24">Reject</button>
+        </div>
+      ),
       header: "Registration Action",
     }),
   ];

@@ -3,7 +3,6 @@ import { GrHomeRounded } from "react-icons/gr";
 import { LuSearchCode } from "react-icons/lu";
 import { CiLogout } from "react-icons/ci";
 import { MdAddCircle } from "react-icons/md";
-import { IoTrashBin } from "react-icons/io5";
 import { FaArchive } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import Logo from "./Logo";
@@ -80,13 +79,6 @@ export default function NavBar() {
               <LuSearchCode color={iconColor} size={20} />
             </NavBarItem>
 
-            <NavBarItem
-              isFullMenue={isFullMenue}
-              name="deleted projects"
-              navto="deletedprojects"
-            >
-              <IoTrashBin color={iconColor} />
-            </NavBarItem>
             <NavBarItem
               isFullMenue={isFullMenue}
               name="project archives"
