@@ -1,8 +1,8 @@
 import { FiSearch } from "react-icons/fi";
 import { Outlet, useParams } from "react-router-dom";
-import ProjectDetailCard from "./ProjectDetailCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ProjectDetailCard from "./ProjectDetailCard";
 import Spinner from "../Spinner";
 
 function FindProject() {
@@ -12,45 +12,56 @@ function FindProject() {
   const [searchTerm, setSearchTerm] = useState("");
   const [projects, setProjects] = useState([]);
 
+  const token = localStorage.getItem("token");
+  console.log("Token retrieved:", token);
+
   function onSearch(e) {
     setSearchTerm(e.target.value);
     const search = e.target.value.toLowerCase().trim();
     setProjects(
       allProjects.filter((proj) =>
-        `${proj.title} ${proj.techTags.join(" ")}`
+        `${proj.title} ${proj.techtags ? proj.techtags.join(" ") : ""}`
           .toLowerCase()
           .includes(search)
       )
     );
   }
 
-  useEffect(function () {
-    async function fetchProject() {
+  useEffect(() => {
+    async function fetchProjects() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `http://127.0.0.1:8000/api/v2/projectreq`
+          `http://127.0.0.1:8000/api/v2/projectreq`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        console.log(data); // Log the fetched data
-        setAllProjects(data);
-        setProjects(data);
+        console.log("Projects fetched successfully");
+        console.log(data); // Log the entire response to verify its structure
+        setAllProjects(data.data.projectsProposals); // Adjust based on API response
+        setProjects(data.data.projectsProposals); // Adjust based on API response
+        setIsLoading(false);
       } catch (err) {
-        console.error(err.message);
+        console.error("Error fetching projects:", err.message);
         setIsLoading(false);
       }
     }
-    fetchProject();
-  }, []);
+    fetchProjects();
+  }, [token]);
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="h-4/5 flex items-center justify-center">
         <Spinner />
       </div>
     );
+  }
 
   return (
-    <div className="h-4/5 flex flex-col gap-2 ">
+    <div className="h-4/5 flex flex-col gap-2">
       <div className="flex justify-between mb-2">
         <h3 className="text-lg">Find projects that need your skills</h3>
         {!id && (
@@ -62,7 +73,7 @@ function FindProject() {
               value={searchTerm}
               onChange={onSearch}
               placeholder="Search title, tags..."
-              className=" text-gray-300 text-sm bg-background focus:outline-none focus:ring-slate-500 transition-all duration-300 ring-1 ring-slate-800 rounded-lg py-1 px-2 pl-8"
+              className="text-gray-300 text-sm bg-background focus:outline-none focus:ring-slate-500 transition-all duration-300 ring-1 ring-slate-800 rounded-lg py-1 px-2 pl-8"
             />
           </div>
         )}
@@ -71,16 +82,22 @@ function FindProject() {
         <Outlet />
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 overflow-auto">
-          {projects.map((project) => (
-            <ProjectDetailCard
-              key={project.id}
-              id={project.id}
-              tags={project.techTags}
-              user={project.user}
-              description={project.description}
-              title={project.title}
-            />
-          ))}
+          {projects && projects.length > 0 ? (
+            projects.map((project) => (
+              <ProjectDetailCard
+                key={project._id}
+                id={project._id}
+                tags={project.techtags || []} // Provide an empty array if techtags is undefined
+                user={
+                  project.createdBy ? project.createdBy.firstName : "Unknown"
+                } // Handle case where createdBy is undefined
+                description={project.problemStatement}
+                title={project.title}
+              />
+            ))
+          ) : (
+            <div>No projects found.</div>
+          )}
         </div>
       )}
     </div>
