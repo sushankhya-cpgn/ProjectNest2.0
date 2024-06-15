@@ -1,4 +1,8 @@
+import { useUser } from "../../contexts/userContext";
+
 export default function GreetingMessage() {
+  const user = useUser();
+
   const currentHours = new Date().getHours();
   let greeting;
   if (currentHours < 12) greeting = "Good morning";
@@ -7,7 +11,8 @@ export default function GreetingMessage() {
 
   return (
     <h1 className="my-6 sm:text-[2.25rem] text-2xl">
-      <span className="text-stone-400">{greeting}, </span>John
+      <span className="text-stone-400">{greeting}, </span>
+      {user.user.firstName}
     </h1>
   );
 }

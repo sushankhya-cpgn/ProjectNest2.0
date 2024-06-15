@@ -16,6 +16,14 @@ export default function StudentDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const { projectId } = useParams();
   const { user, getUser } = useUser();
+  console.log(user);
+  useEffect(() => {
+    async function fetchUser() {
+      console.log("isfdf");
+      await getUser();
+    }
+    fetchUser();
+  }, []);
 
   useEffect(function () {
     async function fetchProjects() {
@@ -25,16 +33,12 @@ export default function StudentDashboard() {
         const data = await res.json();
         setProjects(data);
       } catch {
-        alert("There was some error loading the data.. ");
+        // alert("There was some error loading the data.. ");
       } finally {
         setIsLoading(false);
       }
     }
     fetchProjects();
-  }, []);
-
-  useEffect(() => {
-    getUser("student");
   }, []);
 
   const [isCreateProjectFormShown, setIsCreateProjectFormShown] =

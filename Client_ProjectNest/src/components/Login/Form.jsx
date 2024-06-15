@@ -5,12 +5,14 @@ import { Button } from "./Button";
 import { LoginHeader } from "./LoginHeader";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/userContext";
 
 export function Form() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useUser(); // use the login function from context
 
   const styleobj = [
     { inputtype: "text", placeholder: "Username or Email", margin: 12 },
@@ -29,14 +31,16 @@ export function Form() {
         }
       );
 
-      const role = response.data.data.user.role; // Corrected the path to access the role
+      const user = response.data.data.user;
       const token = response.data.token;
       localStorage.setItem("token", token);
       console.log("Token saved:", token);
 
-      if (role === "student") {
+      login(user); // update the context with the logged-in user
+
+      if (user.role === "student") {
         navigate("/app/student");
-      } else if (role === "supervisor") {
+      } else if (user.role === "supervisor") {
         navigate("/app/supervisor");
       } else {
         navigate("/app/admin");

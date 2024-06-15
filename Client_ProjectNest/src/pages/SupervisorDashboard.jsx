@@ -23,7 +23,7 @@ export default function SupervisorDashboard() {
         const data = await res.json();
         setProjects(data);
       } catch {
-        alert("There was some error loading the data.. ");
+        // alert("There was some error loading the data.. ");
       } finally {
         setIsLoading(false);
       }
