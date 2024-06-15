@@ -40,9 +40,9 @@ function FindProject() {
           }
         );
         console.log("Projects fetched successfully");
-        console.log(data); // Log the entire response to verify its structure
-        setAllProjects(data.data.projectsProposals); // Adjust based on API response
-        setProjects(data.data.projectsProposals); // Adjust based on API response
+        console.log(data);
+        setAllProjects(data.data.projectsProposals);
+        setProjects(data.data.projectsProposals);
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching projects:", err.message);

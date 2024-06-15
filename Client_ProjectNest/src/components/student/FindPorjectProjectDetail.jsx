@@ -7,12 +7,12 @@ import axios from "axios";
 import Spinner from "../Spinner";
 
 function FindProjectProjectDetail() {
-  // Fetch the project proposal from backend
   const { id } = useParams();
-  console.log(id);
   const [createdProject, setCreatedProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [joinLoading, setJoinLoading] = useState(false);
+  const [joinError, setJoinError] = useState("");
 
   useEffect(() => {
     async function fetchProject() {
@@ -35,7 +35,7 @@ function FindProjectProjectDetail() {
 
         if (data && data.data) {
           // Adjust based on the actual data structure
-          setCreatedProject(data.data);
+          setCreatedProject(data.data.project);
         } else {
           setError("Invalid data structure");
         }
@@ -50,23 +50,36 @@ function FindProjectProjectDetail() {
     }
   }, [id]);
 
-  const interestedPeople = [
-    {
-      name: "Mohit Shahi",
-      image: "default-avatar.png",
-    },
-    {
-      name: "Sushankhya Chapagain",
-      image: "default-avatar.png",
-    },
-    {
-      name: "Ravi Pajiyar",
-      image: "default-avatar.png",
-    },
-  ];
+  // Update interestedPeople to use the keys firstName and photo
+  const interestedPeople = [];
+  console.log(createdProject);
 
-  function handleJoinRequest() {
-    console.log("Requesting to join project...");
+  async function handleJoinRequest() {
+    try {
+      setJoinLoading(true);
+      setJoinError("");
+      const token = localStorage.getItem("token");
+      console.log("Requesting to join project...");
+
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/api/v2/projectreq/${id}/send-join-request`,
+        {}, // Assuming the PATCH request does not require a body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Join request sent successfully:", response.data);
+    } catch (err) {
+      console.log("Join request sent successfully errror:", err);
+
+      console.error("Error sending join request:", err.message);
+      setJoinError(err.response.data.message);
+    } finally {
+      setJoinLoading(false);
+    }
   }
 
   if (loading) {
@@ -89,10 +102,11 @@ function FindProjectProjectDetail() {
     <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
       <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
         <h1 className=" text-2xl">{createdProject.title}</h1>
-        <Button onClick={handleJoinRequest}>
-          Request <span className="hidden xl:inline">to join</span>
+        <Button onClick={handleJoinRequest} disabled={joinLoading}>
+          {joinLoading ? "Requesting..." : "Request to join"}
         </Button>
       </div>
+      {joinError && <p className="text-red-500">{joinError}</p>}
       <div className="flex justify-between">
         <PersonItem
           name={
@@ -102,7 +116,7 @@ function FindProjectProjectDetail() {
           }
           image={
             createdProject.createdBy
-              ? createdProject.createdBy.image
+              ? createdProject.createdBy.photo
               : "default-avatar.png"
           }
         />
@@ -139,9 +153,9 @@ function FindProjectProjectDetail() {
         <h2 className="mb-4">These people are interested in the project:</h2>
         <div>
           <ul className="flex flex-col gap-2 mt-2">
-            {interestedPeople.map((person, i) => (
+            {interestedPeople?.map((person, i) => (
               <li key={i}>
-                <PersonItem name={person.name} image={person.image} />
+                <PersonItem name={person.firstName} image={person.photo} />
               </li>
             ))}
           </ul>
