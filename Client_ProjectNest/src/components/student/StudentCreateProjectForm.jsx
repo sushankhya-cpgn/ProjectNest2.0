@@ -32,6 +32,7 @@ export default function StudentCreateProjectForm() {
   const [techTagSearchTerm, setTechTagSearchTerm] = useState("");
   const [techTagSuggestions, setTechTagSuggestions] = useState([]);
   const [availableTechTags, setAvailableTechTags] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false); // New state variable
 
   useEffect(() => {
     // Set available tech tags
@@ -95,10 +96,19 @@ export default function StudentCreateProjectForm() {
         }
       );
       console.log("Project created successfully:", response.data);
+      setFormSubmitted(true); // Set formSubmitted to true after successful submission
     } catch (error) {
       console.error(error.message);
     }
   };
+
+  if (formSubmitted) {
+    return (
+      <div className="fixed bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
+        <p className="text-slate-300">Project created successfully!</p>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
