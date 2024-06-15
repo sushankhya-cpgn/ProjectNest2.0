@@ -34,6 +34,7 @@ exports.getAllProjectsProposals = catchAsync(async (req, res, next) => {
   if (req.query.semester) {
     query.semester = req.query.semester;
   }
+  query.status = "draft";
   const allProjectProposals = await ProjectReq.find(query).populate({
     path: "createdBy",
     model: "User",
@@ -88,6 +89,17 @@ exports.projectJoinRequest = catchAsync(async (req, res, next) => {
 
   if (projectProposal.createdBy.toString() === req.user.id)
     return next(new AppError(400, "cannot join request your own proposal"));
+  if (projectProposal.teamMembers.includes(req.user.id)) {
+    return next(new AppError(400, "you are already a member of this project"));
+  }
+  if (req.user.projects.length > 0) {
+    return next(
+      new AppError(
+        400,
+        "cannot join request, you are already in an active project"
+      )
+    );
+  }
   if (!projectProposal.joinrequests.includes(req.user.id)) {
     projectProposal.joinrequests.push(req.user.id);
     await projectProposal.save();
@@ -295,29 +307,21 @@ exports.addProject = catchAsync(async (req, res, next) => {
 });
 
 // Get a single project request by ID
-exports.getProject = async (req, res) => {
-  try {
-    const project = await ProjectReq.findById(req.params.id);
-    if (!project) {
-      return res.status(404).json({
-        status: "fail",
-        message: "No project found with that ID",
-      });
-    }
-    res.status(200).json({
-      status: "success",
-      data: {
-        project,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
+exports.getProject = catchAsync(async (req, res, next) => {
+  const project = await ProjectReq.findById(req.params.id);
+  if (!project) {
+    return res.status(404).json({
       status: "fail",
-      message: err.message,
+      message: "No project found with that ID",
     });
   }
-};
-
+  res.status(200).json({
+    status: "success",
+    data: {
+      project,
+    },
+  });
+});
 // Update a project request by ID
 exports.updateProject = async (req, res) => {
   try {
@@ -349,7 +353,7 @@ exports.updateProject = async (req, res) => {
   }
 };
 
-//join requests projects
+//join requested projects
 exports.myJoinRequestsProjects = catchAsync(async (req, res, next) => {
   const projectPorposals = await ProjectReq.find({ joinrequests: req.user.id });
   res.status(200).json({
@@ -456,7 +460,6 @@ exports.acceptProjectProposal = catchAsync(async (req, res, next) => {
   };
   const newProject = await Project.create(newProjectData);
   const ids = newProject.members.map((id) => id.toString());
-  ids.push(supervisor);
   const members = await User.find({
     _id: { $in: ids },
   });

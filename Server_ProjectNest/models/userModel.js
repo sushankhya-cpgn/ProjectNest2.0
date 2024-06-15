@@ -79,6 +79,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    completedProjects: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Project",
+      },
+    ],
   },
   {
     timestamps: true,

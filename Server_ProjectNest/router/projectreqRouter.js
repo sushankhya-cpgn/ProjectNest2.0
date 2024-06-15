@@ -8,6 +8,7 @@ router
   .get(authController.protect, projectreqController.getAllProjectsProposals)
   .post(authController.protect, projectreqController.addProject);
 
+
 router
   .route("/proposals")
   .get(
@@ -89,7 +90,10 @@ router
 
 router
   .route("/:id")
-  .get(projectreqController.getProject)
+  .get(
+    projectreqController.restrictToStatus("draft"),
+    projectreqController.getProject
+  )
   .delete(
     authController.protect,
     projectreqController.restrictToStatus("draft"),

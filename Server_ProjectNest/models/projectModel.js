@@ -41,6 +41,11 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "ProjectReq",
     },
+    status: {
+      type: String,
+      enum: ["ongoing", "competed"],
+      default: "ongoing",
+    },
     // rooms: [
     //   {
     //     type: mongoose.Schema.ObjectId,
