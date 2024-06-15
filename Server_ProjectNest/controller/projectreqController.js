@@ -64,6 +64,11 @@ exports.getMyProjectProposal = catchAsync(async (req, res, next) => {
       path: "teamMembers",
       model: "User",
       select: "firstName lastName email photo",
+    })
+    .populate({
+      path: "joinrequests",
+      model: "User",
+      select: "firstName lastName email photo",
     });
   res.status(200).json({
     status: "success",

@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const userRouter = require("./router/userRoute");
 const projectreqRouter = require("./router/projectreqRouter");
 const projectRouter = require("./router/projectRouter");
@@ -7,6 +8,7 @@ const errorController = require("./controller/errorController");
 const cors = require("cors");
 
 const app = express();
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
