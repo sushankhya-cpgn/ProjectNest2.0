@@ -4,11 +4,29 @@ const projectController = require("../controller/projectController");
 // const ganttChartController = require("../controller/ganttChartController");
 const router = express.Router();
 
+
 router
   .route("/")
-  .get(authController.protect, projectController.getAllProjects)
-  .post(authController.protect, projectController.addProject);
+  .get(
+    authController.protect,
+    authController.restrictTo("admin"),
+    projectController.getAllProjects
+  );
 
+router
+  .route("/archived")
+  .get(
+    authController.protect,
+    projectController.getArchivedProjects,
+    projectController.getAllProjects
+  );
+
+router
+  .route("/my-projects")
+  .get(authController.protect, projectController.getAllMyProjects);
+router
+  .route("/my-projects/:id")
+  .get(authController.protect, projectController.getMyProject);
 router
   .route("/:id")
   .get(authController.protect, projectController.getProject)

@@ -14,6 +14,9 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
   if (req.query.name) {
     query.name = new RegExp(req.query.name, "i");
   }
+  if (req.query.status) {
+    query.status = req.query.status;
+  }
   const projects = await Project.find(query)
     .populate({
       path: "supervisor",
@@ -33,6 +36,55 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
     },
   });
 });
+//get archived projects by admin
+exports.getArchivedProjects = catchAsync(async (req, res, next) => {
+  req.query.status = "completed";
+  next();
+});
+
+//get requestor's project
+exports.getAllMyProjects = catchAsync(async (req, res, next) => {
+  const projects = await Project.find({
+    _id: { $in: req.user.projects },
+    status: "ongoing",
+  }).populate({
+    path: "supervisor",
+    model: "User",
+    select: "firstName lastName email photo",
+  });
+
+  res.status(200).json({
+    status: "success",
+    total: projects.length,
+    projects,
+  });
+});
+//get requestor's specific project
+exports.getMyProject = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const project = await Project.findById(id);
+  if (
+    !project.members.includes(req.user.id) &&
+    project.supervisor.toString() !== req.user.id
+  ) {
+    return next(new AppError(400, "you are not the member of this project"));
+  }
+  await project.populate({
+    path: "supervisor",
+    model: "User",
+    select: "firstName lastName email photo",
+  });
+  await project.populate({
+    path: "members",
+    model: "User",
+    select: "firstName lastName email photo",
+  });
+
+  res.status(200).json({
+    status: "success",
+    project,
+  });
+});
 
 exports.getProjectMembers = catchAsync(async (req, res, next) => {
   const { members } = await Project.findById(req.project).populate({
@@ -44,6 +96,28 @@ exports.getProjectMembers = catchAsync(async (req, res, next) => {
     status: "success",
     total: members.length,
     members,
+  });
+});
+
+exports.getProject = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const project = await Project.findById(id)
+    .populate({
+      path: "supervisor",
+      model: "User",
+      select: "firstName lastName email photo",
+    })
+    .populate({
+      path: "members",
+      model: "User",
+      select: "firstName lastName email photo",
+    });
+  if (!project) return next(new AppError(404, "project not found"));
+  res.status(200).json({
+    status: "success",
+    data: {
+      project,
+    },
   });
 });
 
@@ -116,27 +190,7 @@ exports.addProject = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getProject = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const project = await Project.findById(id)
-    .populate({
-      path: "supervisor",
-      model: "User",
-      select: "firstName lastName email photo",
-    })
-    .populate({
-      path: "members",
-      model: "User",
-      select: "firstName lastName email photo",
-    });
-  if (!project) return next(new AppError(404, "project not found"));
-  res.status(200).json({
-    status: "success",
-    data: {
-      project,
-    },
-  });
-});
+
 
 exports.deleteProject = catchAsync(async (req, res, next) => {
   const { id } = req.params;

@@ -1,4 +1,3 @@
-// import { useParams } from "react-router-dom";
 import TechnologyTag from "./TechnologyTag";
 import PersonItem from "./PersonItem";
 import Button from "../Button";
@@ -6,54 +5,83 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../Spinner";
-function FindPorjectProjectDetail() {
-  //fetch the project proposal from backend
+
+function FindProjectProjectDetail() {
   const { id } = useParams();
   const [createdProject, setCreatedProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [joinLoading, setJoinLoading] = useState(false);
+  const [joinError, setJoinError] = useState("");
 
-  useEffect(
-    function () {
-      async function fetchProject() {
-        try {
-          setLoading(true);
-          setError("");
-          const { data } = await axios.get(
-            `http://localhost:9000/createdProjects/${id}`
-          );
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        setLoading(true);
+        setError("");
+        const token = localStorage.getItem("token");
+        console.log("Token retrieved:", token);
 
-          setCreatedProject(data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
+        const { data } = await axios.get(
+          `http://127.0.0.1:8000/api/v2/projectreq/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Fetched data:", data); // Log the fetched data to inspect its structure
+
+        if (data && data.data) {
+          // Adjust based on the actual data structure
+          setCreatedProject(data.data.project);
+        } else {
+          setError("Invalid data structure");
         }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      if (id) {
-        fetchProject();
-      }
-    },
-    [id]
-  );
-  const interestedPeopel = [
-    {
-      name: "Mohit Shahi",
-      image: "default-avatar.png",
-    },
-    {
-      name: "Sushankhya Chapagain",
-      image: "default-avatar.png",
-    },
-    {
-      name: "Ravi Pajiyar",
-      image: "default-avatar.png",
-    },
-  ];
+    }
+    if (id) {
+      fetchProject();
+    }
+  }, [id]);
 
-  function handleJoinRequest() {
-    console.log("requestion to join project...");
+  // Update interestedPeople to use the keys firstName and photo
+  const interestedPeople = [];
+  console.log(createdProject);
+
+  async function handleJoinRequest() {
+    try {
+      setJoinLoading(true);
+      setJoinError("");
+      const token = localStorage.getItem("token");
+      console.log("Requesting to join project...");
+
+      const response = await axios.patch(
+        `http://127.0.0.1:8000/api/v2/projectreq/${id}/send-join-request`,
+        {}, // Assuming the PATCH request does not require a body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Join request sent successfully:", response.data);
+    } catch (err) {
+      console.log("Join request sent successfully errror:", err);
+
+      console.error("Error sending join request:", err.message);
+      setJoinError(err.response.data.message);
+    } finally {
+      setJoinLoading(false);
+    }
   }
+
   if (loading) {
     return (
       <div className="h-4/5 flex items-center justify-center">
@@ -61,6 +89,7 @@ function FindPorjectProjectDetail() {
       </div>
     );
   }
+
   if (error) {
     return (
       <div className="h-4/5 flex items-center justify-center">
@@ -73,18 +102,27 @@ function FindPorjectProjectDetail() {
     <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
       <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
         <h1 className=" text-2xl">{createdProject.title}</h1>
-        <Button onClick={handleJoinRequest}>
-          Request <span className="hidden xl:inline">to join</span>
+        <Button onClick={handleJoinRequest} disabled={joinLoading}>
+          {joinLoading ? "Requesting..." : "Request to join"}
         </Button>
       </div>
+      {joinError && <p className="text-red-500">{joinError}</p>}
       <div className="flex justify-between">
         <PersonItem
-          name={createdProject.user.name}
-          image={createdProject.user.image}
+          name={
+            createdProject.createdBy
+              ? createdProject.createdBy.firstName
+              : "Unknown"
+          }
+          image={
+            createdProject.createdBy
+              ? createdProject.createdBy.photo
+              : "default-avatar.png"
+          }
         />
-        {createdProject.techTags && (
-          <div className="hidden flex-wrap  text-sm md:flex flex-row justify-between items-center gap-2">
-            {createdProject.techTags.map((tag) => (
+        {createdProject.techtags && (
+          <div className="hidden flex-wrap text-sm md:flex flex-row justify-between items-center gap-2">
+            {createdProject.techtags.map((tag) => (
               <TechnologyTag key={tag} tech={tag} />
             ))}
           </div>
@@ -100,9 +138,8 @@ function FindPorjectProjectDetail() {
 
       <div>
         <h2 className="text-lg">Possible solution</h2>
-
         <p className=" text-gray-400 text-sm">
-          {createdProject.possibleSolution || "Lets discuss this together!"}
+          {createdProject.solution || "Let's discuss this together!"}
         </p>
       </div>
       {createdProject.resources && (
@@ -116,9 +153,9 @@ function FindPorjectProjectDetail() {
         <h2 className="mb-4">These people are interested in the project:</h2>
         <div>
           <ul className="flex flex-col gap-2 mt-2">
-            {interestedPeopel.map((person, i) => (
+            {interestedPeople?.map((person, i) => (
               <li key={i}>
-                <PersonItem name={person.name} image={person.image} />
+                <PersonItem name={person.firstName} image={person.photo} />
               </li>
             ))}
           </ul>
@@ -128,4 +165,4 @@ function FindPorjectProjectDetail() {
   );
 }
 
-export default FindPorjectProjectDetail;
+export default FindProjectProjectDetail;

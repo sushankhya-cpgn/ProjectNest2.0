@@ -120,7 +120,7 @@ function MyProject() {
       <div className="flex justify-between">
         <PersonItem
           name={projects.createdBy?.firstName}
-          image={projects.createdBy?.image}
+          image={projects.createdBy?.photo}
         />
         {projects.techtags && (
           <div className="hidden flex-wrap text-sm md:flex flex-row justify-between items-center gap-2">
