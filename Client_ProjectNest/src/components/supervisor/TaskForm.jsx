@@ -184,10 +184,7 @@ export default function TaskForm() {
           />
         </div>
       </div>
-      <div className="buttons flex justify-between">
-        <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
-          Edit
-        </button>
+      <div className="buttons flex justify-end ">
         <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
           Submit
         </button>
