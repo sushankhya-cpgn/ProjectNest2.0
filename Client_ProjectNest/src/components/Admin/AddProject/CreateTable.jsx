@@ -10,7 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const CreateTable = ({ columns, data, columnFilters, setColumnFilters }) => {
   const [selectedFilter, setSelectedFilter] = useState("ProjectName");
-
+  console.log("hi", data);
   const table = useReactTable({
     data,
     columns,

@@ -4,10 +4,17 @@ import Spinner from "../Spinner";
 import Button from "../Button";
 import PersonItem from "./PersonItem";
 import TechnologyTag from "./TechnologyTag";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function MyProject() {
   const [isLoading, setIsLoading] = useState(false);
   const [projects, setProjects] = useState(null);
+  const [file, setFile] = useState(null);
+  const [numPages, setNumPages] = useState(null);
 
   useEffect(() => {
     async function fetchProjects() {
@@ -26,7 +33,6 @@ function MyProject() {
         );
         console.log("Projects fetched successfully");
         setProjects(data.data.projectProposal);
-        console.log(data);
       } catch (err) {
         console.error("Error fetching projects:", err.message);
       } finally {
@@ -78,6 +84,30 @@ function MyProject() {
     }
   }
 
+  async function handleprojectreq() {
+    try {
+      const token = localStorage.getItem("token");
+      const projectId = projects._id;
+      console.log(projectId);
+      const { data } = await axios.patch(
+        `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/send`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setProjects((prevProjects) => ({
+        ...prevProjects,
+        status: "pending",
+      }));
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async function handleRejectRequest(person) {
     try {
       const token = localStorage.getItem("token");
@@ -107,29 +137,55 @@ function MyProject() {
       console.log(err.message);
     }
   }
-  async function handleSendProposal() {
-    // const token = localStorage.getItem("token");
-    // const projectId = projects._id;
 
-    // const { data } = await axios.post(
-    //   `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/send-proposal`,
-    //   {
-    //     // Include any necessary data for the proposal
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   }
-    // );
-    console.log("Proposal sent:");
+  async function handleSendProposal() {
+    try {
+      const token = localStorage.getItem("token");
+      const projectId = projects._id;
+
+      const formData = new FormData();
+      formData.append("proposal", file);
+
+      const { data } = await axios.patch(
+        `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/proposal-pdf`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Proposal sent:", data.data.propsal);
+
+      // Check if the proposal was successful,ly uploaded
+
+      // Update the local state to indicate that the proposal was uploaded
+      setProjects((prevProjects) => ({
+        ...prevProjects,
+        proposalPDF: data.data.propsal,
+      }));
+    } catch (err) {
+      console.error("Error sending proposal:", err.message);
+    }
   }
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
   return (
     <div className="p-3 pt-0 overflow-scroll flex flex-col gap-4 bg-backgroundlight ">
-      <div className="py-3 sticky top-0  flex justify-between items-center">
-        <h1 className=" text-2xl">{projects.title}</h1>
-        <Button onClick={() => handleSendProposal}>
-          Send <span className="hidden xl:inline">Proposal</span>
+      <div className="py-3 sticky top-0 flex justify-between items-center">
+        <h1 className="text-2xl">{projects.title}</h1>
+        <Button onClick={handleprojectreq}>
+          {/* {!projects.proposalPDF ? "Send Project" : "Request Sent"} */}
+          {projects.status !== "pending" ? "Send Request" : "Request Pending"}
         </Button>
       </div>
       <div className="flex justify-between">
@@ -148,19 +204,19 @@ function MyProject() {
 
       <div>
         <h2 className="text-lg">Problem to solve</h2>
-        <p className=" text-gray-400 text-sm">{projects.problemStatement}</p>
+        <p className="text-gray-400 text-sm">{projects.problemStatement}</p>
       </div>
 
       <div>
         <h2 className="text-lg">Possible solution</h2>
-        <p className=" text-gray-400 text-sm">
+        <p className="text-gray-400 text-sm">
           {projects.solution || "Let's discuss this together!"}
         </p>
       </div>
 
       <div>
-        <h2 className="text-lg"> Team Members</h2>
-        <p className=" text-gray-400 text-sm">
+        <h2 className="text-lg">Team Members</h2>
+        <p className="text-gray-400 text-sm">
           {projects.teamMembers.map((member) => {
             const fullName = member.firstName + " " + member.lastName + ", ";
             return fullName;
@@ -171,12 +227,36 @@ function MyProject() {
       {projects.resources && (
         <div>
           <h2 className="text-lg">Resources</h2>
-          <p className=" text-gray-400 text-sm">{projects.resources}</p>
+          <p className="text-gray-400 text-sm">{projects.resources}</p>
         </div>
       )}
       <div>
         <h2>Proposal</h2>
-        <input type="file"></input>
+
+        <>
+          <input type="file" onChange={handleFileChange}></input>
+          <button
+            className="bg-accent/70 transition-all duration-200 ring-2 rounded-md  h-10  w-40 text-white "
+            onClick={handleSendProposal}
+          >
+            {projects.proposalPDF ? "Reupload Report" : "Upload Report"}
+          </button>
+        </>
+
+        <div>
+          <p>{projects.proposalPDF}</p>
+          <p>
+            {" "}
+            <a
+              href={`../../public/${projects.proposalPDF}`}
+              alt="PDF"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View Proposal
+            </a>
+          </p>
+        </div>
       </div>
       <div>
         <h2 className="mb-4">These people are interested in the project:</h2>

@@ -1,7 +1,8 @@
 // ESM
 import { faker } from "@faker-js/faker";
+import axios from "axios";
 
-export function createRandomUser() {
+export function CreateRandomUser() {
   return {
     profile: faker.image.avatar(),
     projectId: faker.string.uuid(),
@@ -16,6 +17,7 @@ export function createRandomUser() {
   };
 }
 
-export const USERS = faker.helpers.multiple(createRandomUser, {
+export const USERS = faker.helpers.multiple(CreateRandomUser, {
   count: 30,
 });
+console.log(USERS);

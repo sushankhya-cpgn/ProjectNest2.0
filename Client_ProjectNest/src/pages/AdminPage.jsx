@@ -5,9 +5,7 @@ import { Outlet } from "react-router-dom";
 
 function AdminPage() {
   const { user, getUser } = useUser();
-  useEffect(() => {
-    getUser("admin");
-  }, [getUser]);
+
   if (!user) return <h1>Loading...</h1>;
   console.log(user);
   return (
