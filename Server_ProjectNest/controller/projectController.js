@@ -203,7 +203,7 @@ exports.reviewAssignedTasks = catchAsync(async (req, res, next) => {
   });
 });
 
-////////////////////////////////// ////////////////////////////////// ////////////////////////////////// ////////////////////////////////// //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////s////////////////////////////////// //////////////////////////////////
 exports.getAssignedTasks = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const project = await Project.findById(id);
@@ -742,7 +742,7 @@ const multerFilter = (req, file, cb) => {
 
 const multerStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/report");
+    cb(null, "./public/projectproposals");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now();
@@ -755,12 +755,20 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 exports.uploadReportPdf = upload.single("report");
 exports.uploadProposalPdf = upload.single("proposal");
 exports.uploadReport = catchAsync(async (req, res, next) => {
-  req.project.report = req.file.filename;
-  await req.project.save();
+  const { id } = req.params;
+  const project = await Project.findById(id);
+  if (!project) {
+    return next(new AppError(400, "no proposal with that id"));
+  }
+  if (!project.members.includes(req.user.id)) {
+    return next(new AppError(400, "you are not he member of this project"));
+  }
+  project.reportFile = req.file.filename;
+  await project.save();
   res.status(200).json({
     status: "success",
     data: {
-      repoet: req.project.report,
+      report: project.reportFile,
     },
   });
 });
@@ -777,12 +785,20 @@ exports.getProjectReport = catchAsync(async (req, res, next) => {
   });
 });
 exports.uploadProposal = catchAsync(async (req, res, next) => {
-  req.project.proposal = req.file.filename;
-  await req.project.save();
+  const { id } = req.params;
+  const project = await Project.findById(id);
+  if (!project) {
+    return next(new AppError(400, "no proposal with that id"));
+  }
+  if (!project.members.includes(req.user.id)) {
+    return next(new AppError(400, "you are not he member of this project"));
+  }
+  project.proposalFile = req.file.filename;
+  await project.save();
   res.status(200).json({
     status: "success",
     data: {
-      proopsal: req.project.proposal,
+      propsal: project.proposalFile,
     },
   });
 });

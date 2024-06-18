@@ -17,7 +17,7 @@ const projectSchema = new mongoose.Schema(
         message: "{VALUE} is not a valid semester number",
       },
     },
-    report: String,
+    reportFile: String,
     proposalFile: String,
     description: String,
     technologyUsed: [String],
