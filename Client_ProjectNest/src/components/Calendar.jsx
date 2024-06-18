@@ -1,13 +1,30 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import generateDate from "../utils/generateDate";
 import getMonth from "../utils/getMonth";
+import axios from "axios";
+import Spinner from "./Spinner";
+const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
-
-export default function Calendar({ height, width }) {
+export default function Calendar() {
   //get events from api call
+  const [isEventLoading, setIsEventLoading] = useState(false);
+  useEffect(function () {
+    async function fetchEvents() {
+      try {
+        setIsEventLoading(true);
+        const res = await axios.get(`${BASE_URL}/event`);
+        console.log("events date", res);
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+        setIsEventLoading(false);
+      }
+    }
+    fetchEvents();
+  }, []);
   const eventDates = [dayjs(new Date("2024-06-01")).toDate().toDateString()];
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -52,6 +69,16 @@ export default function Calendar({ height, width }) {
     dayjs(new Date()).toDate().toDateString()
   );
   // [${calendarWidth}rem]
+
+  if (isEventLoading) {
+    return (
+      <div
+        className={`w-72 h-72 p-2 text-text text-sm py-sm bg-background rounded-lg hidden lg:block`}
+      >
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <div
       className={`w-72 h-72 p-2 text-text text-sm py-sm bg-background rounded-lg hidden lg:block`}

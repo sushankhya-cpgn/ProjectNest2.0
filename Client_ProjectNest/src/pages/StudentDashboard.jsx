@@ -17,7 +17,6 @@ export default function StudentDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const { projectId } = useParams();
   const { user, getUser } = useUser();
-  console.log(user);
   useEffect(() => {
     async function fetchUser() {
       console.log("isfdf");

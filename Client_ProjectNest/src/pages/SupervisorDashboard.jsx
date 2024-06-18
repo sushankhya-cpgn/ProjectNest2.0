@@ -7,21 +7,35 @@ import Menu from "../components/supervisor/Menu";
 import { Outlet } from "react-router-dom";
 import Calendar from "../components/Calendar";
 import ProjectsPage from "./ProjectsPage";
+import axios from "axios";
+import Spinner from "../components/Spinner";
 
-const BASE_URL = "http://localhost:9000";
+const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
 export default function SupervisorDashboard() {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { projectId } = useParams();
-
+  const { user, getUser } = useUser();
+  useEffect(() => {
+    async function fetchUser() {
+      await getUser();
+    }
+    fetchUser();
+  }, []);
   useEffect(function () {
     async function fetchProjects() {
       try {
+        console.log("projects");
+        const token = localStorage.getItem("token");
         setIsLoading(true);
-        const res = await fetch(`${BASE_URL}/projects`);
-        const data = await res.json();
-        setProjects(data);
+        const res = await axios.get(`${BASE_URL}/project/my-projects`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setProjects([...res.data.projects]);
       } catch {
         // alert("There was some error loading the data.. ");
       } finally {
@@ -30,11 +44,14 @@ export default function SupervisorDashboard() {
     }
     fetchProjects();
   }, []);
-  const { user, getUser } = useUser();
-  useEffect(() => {
-    getUser("supervisor");
-  }, []);
-  if (!user) return <h1 className="text-text">Loading...</h1>;
+  console.log(projects);
+  if (!user) {
+    return (
+      <div className="bg-backgroundlight w-full h-screen  flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
+  }
   if (projectId) return <ProjectsPage projects={projects} />;
   return (
     <div className="bg-backgroundlight w-full h-screen  flex  gap-3">
