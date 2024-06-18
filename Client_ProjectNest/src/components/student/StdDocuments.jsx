@@ -3,7 +3,6 @@ import { FaFilter } from "react-icons/fa6";
 import { FaSortAmountUp } from "react-icons/fa";
 import StdDocForm from "./StdDocForm";
 import StdFile from "./StdFile";
-import StdRecentFile from "./StdRecentFile";
 import { useProject } from "../../contexts/ProjectContext";
 
 export default function StdDocuments() {
