@@ -42,9 +42,6 @@ export default function StdTaskItem() {
                 <tbody>
                   <tr>
                     <td className="py-2 px-4 text-md flex items-center gap-4 text-text">
-                      <button className="bg-accent text-white px-3 py-1 rounded">
-                        Done
-                      </button>
                       <span className="ml-2">{row.task}</span>
                     </td>
                   </tr>

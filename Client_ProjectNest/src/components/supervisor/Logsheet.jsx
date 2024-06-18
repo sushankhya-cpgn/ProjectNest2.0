@@ -10,7 +10,6 @@ export default function Logsheet() {
       status: "",
       remarks: "do it urgent",
       grade: "",
-      attendance: "",
     },
     {
       id: 2,
@@ -19,7 +18,6 @@ export default function Logsheet() {
       status: "",
       remarks: "do it urgent",
       grade: "",
-      attendance: "",
     },
     {
       id: 3,
@@ -28,7 +26,6 @@ export default function Logsheet() {
       status: "",
       remarks: "do it urgent",
       grade: "",
-      attendance: "",
     },
     {
       id: 4,
@@ -37,7 +34,6 @@ export default function Logsheet() {
       status: "",
       remarks: "do it urgent",
       grade: "",
-      attendance: "",
     },
   ];
 
@@ -55,7 +51,6 @@ export default function Logsheet() {
     "E",
     "F",
   ];
-  const attendanceOptions = ["present", "absent"];
 
   const [data, setData] = useState(initialData);
 
@@ -65,8 +60,13 @@ export default function Logsheet() {
     );
   };
 
+  const handleUpdate = (id) => {
+    // Implement the update functionality here
+    console.log("Update clicked for ID:", id);
+  };
+
   return (
-    <div className="w-full flex flex-col  items-center px-4 gap-5 py-3">
+    <div className="w-full flex flex-col items-center px-4 gap-5 py-3">
       <div className="datebox">
         <DateBox />
       </div>
@@ -90,7 +90,7 @@ export default function Logsheet() {
                 Grade
               </th>
               <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
-                Attendance
+                Actions
               </th>
             </tr>
           </thead>
@@ -133,20 +133,12 @@ export default function Logsheet() {
                   </select>
                 </td>
                 <td className="py-4 px-4 text-md">
-                  <select
-                    value={row.attendance}
-                    onChange={(e) =>
-                      handleSelectChange(row.id, "attendance", e.target.value)
-                    }
-                    className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
+                  <button
+                    className="bg-accent text-white px-3 py-1 rounded"
+                    onClick={() => handleUpdate(row.id)}
                   >
-                    <option value="">attendance</option>
-                    {attendanceOptions.map((attendance) => (
-                      <option key={attendance} value={attendance}>
-                        {attendance}
-                      </option>
-                    ))}
-                  </select>
+                    Update
+                  </button>
                 </td>
               </tr>
             ))}

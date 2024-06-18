@@ -9,7 +9,6 @@ export default function StdLogsheet() {
       status: "completed",
       remarks: "do it urgent",
       grade: "A",
-      attendance: "absent",
     },
     {
       id: 2,
@@ -18,7 +17,6 @@ export default function StdLogsheet() {
       status: "inprogress",
       remarks: "do it urgent",
       grade: "B+",
-      attendance: "",
     },
     {
       id: 3,
@@ -27,7 +25,6 @@ export default function StdLogsheet() {
       status: "inprogress",
       remarks: "do it urgent",
       grade: "A-",
-      attendance: "present",
     },
     {
       id: 4,
@@ -36,12 +33,11 @@ export default function StdLogsheet() {
       status: "completed",
       remarks: "do it urgent",
       grade: "A",
-      attendance: "present",
     },
   ];
 
   return (
-    <div className="w-full flex flex-col  items-center px-4 gap-5 py-3">
+    <div className="w-full flex flex-col items-center px-4 gap-5 py-3">
       <div className="datebox">
         <DateBox />
       </div>
@@ -64,9 +60,6 @@ export default function StdLogsheet() {
               <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Grade
               </th>
-              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
-                Attendance
-              </th>
             </tr>
           </thead>
           <tbody className="text-gray-500">
@@ -77,7 +70,6 @@ export default function StdLogsheet() {
                 <td className="py-4 px-4 text-md">{row.status}</td>
                 <td className="py-4 px-4 text-md">{row.remarks}</td>
                 <td className="py-4 px-4 text-md">{row.grade}</td>
-                <td className="py-4 px-4 text-md">{row.attendance}</td>
               </tr>
             ))}
           </tbody>
