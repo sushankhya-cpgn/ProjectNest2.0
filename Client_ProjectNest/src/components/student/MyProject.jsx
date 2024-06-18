@@ -110,8 +110,8 @@ function MyProject() {
   }
 
   return (
-    <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
-      <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
+    <div className="p-3 pt-0 overflow-scroll flex flex-col gap-4 bg-backgroundlight ">
+      <div className="py-3 sticky top-0  flex justify-between items-center">
         <h1 className=" text-2xl">{projects.title}</h1>
         <Button onClick={() => {}}>
           Send <span className="hidden xl:inline">Proposal</span>

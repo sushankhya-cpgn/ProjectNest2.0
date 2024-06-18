@@ -13,6 +13,7 @@ function FindProjectProjectDetail() {
   const [error, setError] = useState("");
   const [joinLoading, setJoinLoading] = useState(false);
   const [joinError, setJoinError] = useState("");
+  const [joinRequested, setJoinRequested] = useState(false);
 
   useEffect(() => {
     async function fetchProject() {
@@ -72,8 +73,9 @@ function FindProjectProjectDetail() {
         }
       );
       console.log("Join request sent successfully:", response.data);
+      setJoinRequested(true); // Set joinRequested to true after a successful request
     } catch (err) {
-      console.log("Join request sent successfully errror:", err);
+      console.log("Join request sent successfully error:", err);
 
       console.error("Error sending join request:", err.message);
       setJoinError(err.response.data.message);
@@ -102,8 +104,15 @@ function FindProjectProjectDetail() {
     <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
       <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
         <h1 className=" text-2xl">{createdProject.title}</h1>
-        <Button onClick={handleJoinRequest} disabled={joinLoading}>
-          {joinLoading ? "Requesting..." : "Request to join"}
+        <Button
+          onClick={handleJoinRequest}
+          disabled={joinLoading || joinRequested}
+        >
+          {joinLoading
+            ? "Requesting..."
+            : joinRequested
+            ? "Requested"
+            : "Request to join"}
         </Button>
       </div>
       {joinError && <p className="text-red-500">{joinError}</p>}
