@@ -7,7 +7,7 @@ export default function Profile() {
       <img
         className="rounded-full w-12 "
         alt="display"
-        src="/default-avatar.png"
+        src="/default-user-photo.jpg"
       ></img>
     </div>
   );
