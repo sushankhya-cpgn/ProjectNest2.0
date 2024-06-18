@@ -65,7 +65,6 @@ function MyProject() {
           },
         }
       );
-      console.log(data);
 
       // Update the local state to reflect the accepted request
       setProjects((prevProjects) => ({
@@ -108,12 +107,28 @@ function MyProject() {
       console.log(err.message);
     }
   }
+  async function handleSendProposal() {
+    // const token = localStorage.getItem("token");
+    // const projectId = projects._id;
 
+    // const { data } = await axios.post(
+    //   `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/send-proposal`,
+    //   {
+    //     // Include any necessary data for the proposal
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   }
+    // );
+    console.log("Proposal sent:");
+  }
   return (
     <div className="p-3 pt-0 overflow-auto flex flex-col gap-4">
       <div className="py-3 sticky top-0 bg-backgroundlight flex justify-between items-center">
         <h1 className=" text-2xl">{projects.title}</h1>
-        <Button onClick={() => {}}>
+        <Button onClick={() => handleSendProposal}>
           Send <span className="hidden xl:inline">Proposal</span>
         </Button>
       </div>
