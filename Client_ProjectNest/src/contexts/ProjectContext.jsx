@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import axios from "axios";
 
 const ProjectContext = createContext();
@@ -8,7 +8,7 @@ export function ProjectProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function fetchProjectData(projectId) {
+  const fetchProjectData = useCallback(async (projectId) => {
     try {
       setIsLoading(true);
       const token = localStorage.getItem("token");
@@ -27,7 +27,7 @@ export function ProjectProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   return (
     <ProjectContext.Provider

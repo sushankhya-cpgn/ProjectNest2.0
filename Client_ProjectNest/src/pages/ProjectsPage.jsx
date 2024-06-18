@@ -1,33 +1,38 @@
-import { useEffect, useState } from "react";
-import ProjectNav from "../components/supervisor/ProjectNav";
+import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
-
-const BASE_URL = "http://localhost:9000";
+import ProjectNav from "../components/supervisor/ProjectNav";
+import { useProject } from "../contexts/ProjectContext";
 
 export default function ProjectsPage() {
   const { projectId } = useParams();
-  const [projectDetails, setProjectDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(
-    function () {
-      async function fetchProjectData() {
-        try {
-          setIsLoading(true);
-          const res = await fetch(`${BASE_URL}/projects/${projectId}`);
-          const data = await res.json();
-          setProjectDetails(data);
-        } catch {
-          // alert("There was some error loading the data.. ");
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      fetchProjectData();
-    },
-    [projectId]
-  );
+  const { projectDetails, isLoading, error, fetchProjectData } = useProject();
+
+  useEffect(() => {
+    if (projectId) {
+      fetchProjectData(projectId);
+    }
+  }, [projectId, fetchProjectData]);
+
+  useEffect(() => {
+    if (projectDetails) {
+      console.log("Fetched Project Details:", projectDetails);
+    }
+  }, [projectDetails]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!projectDetails) {
+    return <div>No project details available</div>;
+  }
+
   return (
-    <div className="bg-backgroundlight w-full h-screen p-2 flex  gap-3  ">
+    <div className="bg-backgroundlight w-full h-screen p-2 flex gap-3">
       <ProjectNav />
       <Outlet />
     </div>
