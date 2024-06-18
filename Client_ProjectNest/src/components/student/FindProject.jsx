@@ -88,9 +88,10 @@ function FindProject() {
                 key={project._id}
                 id={project._id}
                 tags={project.techtags || []} // Provide an empty array if techtags is undefined
-                user={
-                  project.createdBy ? project.createdBy.firstName : "Unknown"
-                } // Handle case where createdBy is undefined
+                user={{
+                  name: `${project.createdBy.firstName} ${project.createdBy.lastName}`,
+                  photo: project.createdBy.photo,
+                }} // Handle case where createdBy is undefined
                 description={project.problemStatement}
                 title={project.title}
               />

@@ -69,20 +69,49 @@ exports.getMyProject = catchAsync(async (req, res, next) => {
   ) {
     return next(new AppError(400, "you are not the member of this project"));
   }
-  await project.populate({
-    path: "supervisor",
-    model: "User",
-    select: "firstName lastName email photo",
-  });
-  await project.populate({
-    path: "members",
-    model: "User",
-    select: "firstName lastName email photo",
-  });
+  await project.populate([
+    {
+      path: "supervisor",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+    {
+      path: "members",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+  ]);
 
   res.status(200).json({
     status: "success",
     project,
+  });
+});
+
+//get techtags
+exports.getTechTags = catchAsync(async (req, res, next) => {
+  const techTags = [
+    "React",
+    "Vue",
+    "Blockchain",
+    "ML/AI",
+    "NextJS",
+    "NodeJS",
+    "Tailwind",
+    "HTML",
+    "CSS",
+    "Python",
+    "Django",
+    "PyTorch",
+    "Pandas",
+    "Numpy",
+    "Php",
+    "Laravel",
+  ];
+  res.status(200).json({
+    statu: "success",
+    total: techTags.length,
+    techTags,
   });
 });
 

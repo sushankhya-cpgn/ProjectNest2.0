@@ -27,6 +27,8 @@ router
 router
   .route("/my-projects/:id")
   .get(authController.protect, projectController.getMyProject);
+
+router.route("/techtags").get(projectController.getTechTags);
 router
   .route("/:id")
   .get(authController.protect, projectController.getProject)

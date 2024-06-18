@@ -8,8 +8,9 @@ import StudentCreateProjectForm from "../components/student/StudentCreateProject
 import StudentFeedHeader from "../components/student/StudentFeedHeader";
 import ProjectCard from "../components/student/ProjectCard";
 import StudentProjectPage from "./StudentProjectPage";
+import axios from "axios";
 
-const BASE_URL = "http://localhost:9000";
+const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
 export default function StudentDashboard() {
   const [projects, setProjects] = useState([]);
@@ -28,10 +29,14 @@ export default function StudentDashboard() {
   useEffect(function () {
     async function fetchProjects() {
       try {
+        const token = localStorage.getItem("token");
         setIsLoading(true);
-        const res = await fetch(`${BASE_URL}/projects`);
-        const data = await res.json();
-        setProjects(data);
+        const res = await axios.get(`${BASE_URL}/project/my-projects`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProjects([...res.data.projects]);
       } catch {
         // alert("There was some error loading the data.. ");
       } finally {

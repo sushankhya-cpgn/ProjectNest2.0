@@ -43,7 +43,7 @@ const projectSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["ongoing", "competed"],
+      enum: ["ongoing", "completed"],
       default: "ongoing",
     },
     // rooms: [
