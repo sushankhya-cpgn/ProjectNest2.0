@@ -53,7 +53,8 @@ export default function StudentDashboard() {
     setIsCreateProjectFormShown((curr) => !curr);
   }
   if (!user) return <h1 className="text-text">Loading...</h1>;
-  if (projectId) return <StudentProjectPage projects={projects} />;
+  if (projectId) return;
+  <StudentProjectPage projects={projects} />;
   return (
     <>
       {isCreateProjectFormShown && (

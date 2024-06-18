@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import StdMessage from "./StdMessage";
+import { useProject } from "../../contexts/ProjectContext";
 
 export default function StdMembers() {
   const [open, setOpen] = useState(false);
@@ -10,95 +11,58 @@ export default function StdMembers() {
     setOpen(false);
   };
 
-  const data = [
-    {
-      id: 1,
-      name: "Mohit shahi",
-      project: "ProjectNest",
-      role: "Student",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-    {
-      id: 2,
-      name: "Ravi Pajiyar",
-      project: "ProjectNest",
-      role: "Student",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Sushankhya Chapagain",
-      project: "ProjectNest",
-      role: "Student",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-    {
-      id: 4,
-      name: "Arun Bhandari",
-      project: "ProjectNest",
-      role: "Student",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-    {
-      id: 5,
-      name: "Amrit dahal",
-      project: "ProjectNest",
-      role: "Supervisor",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-    {
-      id: 6,
-      name: "Sudan Jha",
-      project: "ProjectNest",
-      role: "Evaluator",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-    {
-      id: 7,
-      name: "Dhiraj Shrestha",
-      project: "ProjectNest",
-      role: "Coordinator",
-      skill: "frontend",
-      gmail: "pajiyargravi20011@gmail.com",
-    },
-  ];
+  const { projectDetails, isLoading, error } = useProject();
+  console.log(projectDetails?.project?.members); // Logging to verify the structure
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (
+    !projectDetails ||
+    !projectDetails.project ||
+    !projectDetails.project.members
+  ) {
+    return <div>No project details available</div>;
+  }
+
   return (
     <div className="w-full flex justify-center items-center">
       <div className="memcontainer w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
         <table>
           <thead>
             <tr>
-              <th className="py-4 px-4  border-b text-left text-md font-semibold text-text">
+              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Members
               </th>
-              <th className="py-4 px-4  border-b text-left text-md font-semibold text-text">
+              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Role
               </th>
-              <th className="py-4 px-4  border-b text-left text-md font-semibold text-text">
+              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Expertise
               </th>
-              <th className="py-4 px-4  border-b text-left text-md font-semibold text-text">
+              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Gmail
               </th>
-              <th className="py-4 px-4  border-b text-left text-md font-semibold text-text">
+              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Contact
               </th>
             </tr>
           </thead>
           <tbody className="text-gray-500">
-            {data.map((row) => (
-              <tr key={row.id} className="mt-3">
-                <td className="py-4 px-4  text-md">{row.name}</td>
-                <td className="py-4 px-4  text-md">{row.role}</td>
-                <td className="py-4 px-4  text-md">{row.skill}</td>
-                <td className="py-4 px-4  text-md">{row.gmail}</td>
-                <td className="py-4 px-4  text-md">
+            {projectDetails.project.members.map((member, index) => (
+              <tr key={index} className="mt-3">
+                <td className="py-4 px-4 text-md">
+                  {member.firstName} {member.lastName}
+                </td>
+                <td className="py-4 px-4 text-md">Student</td>
+                <td className="py-4 px-4 text-md">Frontend</td>
+                <td className="py-4 px-4 text-md">{member.email}</td>
+                <td className="py-4 px-4 text-md">
                   <button
                     className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text"
                     onClick={handleClick}
@@ -108,6 +72,27 @@ export default function StdMembers() {
                 </td>
               </tr>
             ))}
+            {projectDetails.project.supervisor && (
+              <tr className="mt-3">
+                <td className="py-4 px-4 text-md">
+                  {projectDetails.project.supervisor.firstName}{" "}
+                  {projectDetails.project.supervisor.lastName}
+                </td>
+                <td className="py-4 px-4 text-md">Supervisor</td>
+                <td className="py-4 px-4 text-md">Frontend</td>
+                <td className="py-4 px-4 text-md">
+                  {projectDetails.project.supervisor.email}
+                </td>
+                <td className="py-4 px-4 text-md">
+                  <button
+                    className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text"
+                    onClick={handleClick}
+                  >
+                    Message
+                  </button>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -122,8 +107,7 @@ export default function StdMembers() {
               >
                 X
               </button>
-              {/* Render TaskForm component */}
-
+              {/* Render StdMessage component */}
               <StdMessage />
             </div>
           </div>

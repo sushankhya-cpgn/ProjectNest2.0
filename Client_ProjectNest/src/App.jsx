@@ -32,85 +32,100 @@ import StdMembers from "./components/student/StdMembers";
 import StudentProjectPage from "./pages/StudentProjectPage";
 import MyProject from "./components/student/MyProject";
 import MyProjectDetail from "./components/student/MyProjectDetail";
+import { ProjectProvider } from "./contexts/ProjectContext";
 
 function App() {
   return (
     <>
-      <UserProvider>
-        <SocketProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/">
-                <Route index element={<Navigate to="/login" replace />} />
-                <Route path="login" element={<LoginPage />} />
-              </Route>
-              <Route path="profile" element={<Profile />} />
-              <Route path="/app">
-                <Route index element={<Navigate to="student" replace />} />
-                <Route path="student" element={<StudentDashboard />}>
-                  <Route index element={<Navigate to="home" replace />} />
-                  <Route path="home" element={<Feed />} />
-                  <Route path="findproject" element={<FindProject />}>
-                    <Route path=":id" element={<FindPorjectProjectDetail />} />
+      <ProjectProvider>
+        <UserProvider>
+          <SocketProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/">
+                  <Route index element={<Navigate to="/login" replace />} />
+                  <Route path="login" element={<LoginPage />} />
+                </Route>
+                <Route path="profile" element={<Profile />} />
+                <Route path="/app">
+                  <Route index element={<Navigate to="student" replace />} />
+                  <Route path="student" element={<StudentDashboard />}>
+                    <Route index element={<Navigate to="home" replace />} />
+                    <Route path="home" element={<Feed />} />
+                    <Route path="findproject" element={<FindProject />}>
+                      <Route
+                        path=":id"
+                        element={<FindPorjectProjectDetail />}
+                      />
+                    </Route>
+                    <Route path="myprojects" element={<MyProject />}>
+                      <Route path=":id" element={<MyProjectDetail />} />
+                    </Route>
+                    <Route path="settings" element={<Setting />} />
                   </Route>
-                  <Route path="myprojects" element={<MyProject />}>
-                    <Route path=":id" element={<MyProjectDetail />} />
+                  <Route path="supervisor" element={<SupervisorDashboard />}>
+                    <Route
+                      index
+                      element={<Navigate to="homesuper" replace />}
+                    />
+                    <Route path="homesuper" element={<SuperFeed />} />
+                    <Route path="findprojects" element={<FindProjects />} />
+                    <Route path="settings" element={<Settings />} />
                   </Route>
-                  <Route path="settings" element={<Setting />} />
-                </Route>
-                <Route path="supervisor" element={<SupervisorDashboard />}>
-                  <Route index element={<Navigate to="homesuper" replace />} />
-                  <Route path="homesuper" element={<SuperFeed />} />
-                  <Route path="findprojects" element={<FindProjects />} />
-                  <Route path="settings" element={<Settings />} />
-                </Route>
-                <Route
-                  path="supervisor/projects/:projectId"
-                  element={<ProjectsPage />}
-                >
-                  <Route index element={<Navigate to="tasks" replace />} />
-                  <Route path="tasks" element={<Task />} />
-                  <Route path="member" element={<Members />} />
-                  <Route path="logsheets" element={<Logsheet />} />
-                  <Route path="chats" element={<GroupChat />} />
-                  <Route path="documents" element={<Documents />} />
-                </Route>
-                <Route
-                  path="student/project/:projectId"
-                  element={<StudentProjectPage />}
-                >
-                  <Route index element={<Navigate to="stdtasks" replace />} />
-                  <Route path="stdtasks" element={<StdTask />} />
-                  <Route path="stdmember" element={<StdMembers />} />
-                  <Route path="stdlogsheets" element={<StdLogsheet />} />
-                  <Route path="stdchats" element={<StdGroupChat />} />
-                  <Route path="stddocuments" element={<StdDocuments />} />
-                </Route>
-                <Route path="admin" element={<AdminPage />}>
                   <Route
-                    index
-                    element={<Navigate to="projectrequests" replace />}
-                  />
-                  <Route path="projectrequests" element={<ProjectRequests />} />
-                  <Route path="project">
-                    <Route index element={<Navigate to="projectdetails" />} />
-                    <Route
-                      path="projectdetails"
-                      element={<AdminProjectDetails />}
-                    />
-                    <Route
-                      path="projectdetails/projectdetail/:projectID"
-                      element={<ProjectPage />}
-                    />
+                    path="supervisor/projects/:projectId"
+                    element={<ProjectsPage />}
+                  >
+                    <Route index element={<Navigate to="tasks" replace />} />
+                    <Route path="tasks" element={<Task />} />
+                    <Route path="member" element={<Members />} />
+                    <Route path="logsheets" element={<Logsheet />} />
+                    <Route path="chats" element={<GroupChat />} />
+                    <Route path="documents" element={<Documents />} />
                   </Route>
-                  <Route path="deletedprojects" element={<Deletedprojects />} />
-                  <Route path="archives" element={<Archieves />} />
+                  <Route
+                    path="student/project/:projectId"
+                    element={<StudentProjectPage />}
+                  >
+                    <Route index element={<Navigate to="stdtasks" replace />} />
+                    <Route path="stdtasks" element={<StdTask />} />
+                    <Route path="stdmember" element={<StdMembers />} />
+                    <Route path="stdlogsheets" element={<StdLogsheet />} />
+                    <Route path="stdchats" element={<StdGroupChat />} />
+                    <Route path="stddocuments" element={<StdDocuments />} />
+                  </Route>
+                  <Route path="admin" element={<AdminPage />}>
+                    <Route
+                      index
+                      element={<Navigate to="projectrequests" replace />}
+                    />
+                    <Route
+                      path="projectrequests"
+                      element={<ProjectRequests />}
+                    />
+                    <Route path="project">
+                      <Route index element={<Navigate to="projectdetails" />} />
+                      <Route
+                        path="projectdetails"
+                        element={<AdminProjectDetails />}
+                      />
+                      <Route
+                        path="projectdetails/projectdetail/:projectID"
+                        element={<ProjectPage />}
+                      />
+                    </Route>
+                    <Route
+                      path="deletedprojects"
+                      element={<Deletedprojects />}
+                    />
+                    <Route path="archives" element={<Archieves />} />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </SocketProvider>
-      </UserProvider>
+              </Routes>
+            </BrowserRouter>
+          </SocketProvider>
+        </UserProvider>
+      </ProjectProvider>
     </>
   );
 }
