@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const Projects = ({ project }) => {
   return (
     <NavLink
-      to={`/app/student/project/${project._id}`}
+      to={`/app/supervisor/projects/${project._id}`}
       className="bg-secondary rounded-lg p-4 shadow-md cursor-pointer"
     >
       <div className="flex items-center">
