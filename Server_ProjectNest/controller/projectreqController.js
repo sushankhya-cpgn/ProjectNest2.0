@@ -35,6 +35,7 @@ exports.getAllProjectsProposals = catchAsync(async (req, res, next) => {
     query.semester = req.query.semester;
   }
   query.status = "draft";
+  query.createdBy = { $ne: req.user.id };
   const allProjectProposals = await ProjectReq.find(query).populate({
     path: "createdBy",
     model: "User",
@@ -84,13 +85,17 @@ exports.projectJoinRequest = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const projectProposal = await ProjectReq.findById(id);
 
-  if (!projectProposal)
+  if (!projectProposal) {
     return next(new AppError(400, "no project proposal with that id"));
-
-  if (projectProposal.createdBy.toString() === req.user.id)
+  }
+  if (projectProposal.createdBy.toString() === req.user.id) {
     return next(new AppError(400, "cannot join request your own proposal"));
+  }
   if (projectProposal.teamMembers.includes(req.user.id)) {
     return next(new AppError(400, "you are already a member of this project"));
+  }
+  if (projectProposal.joinrequests.includes(req.user.id)) {
+    return next(new AppError(400, "request already sent to this project"));
   }
   if (req.user.projects.length > 0) {
     return next(
@@ -158,6 +163,22 @@ exports.acceptProjectJoinRequest = catchAsync(async (req, res, next) => {
   projectProposal.joinrequests = newProjectRequestList;
   projectProposal.teamMembers.push(requestorUserId);
   await projectProposal.save();
+  await projectProposal
+    .populate({
+      path: "createdBy",
+      model: "User",
+      select: "firstName lastName email photo",
+    })
+    .populate({
+      path: "teamMembers",
+      model: "User",
+      select: "firstName lastName email photo",
+    })
+    .populate({
+      path: "joinrequests",
+      model: "User",
+      select: "firstName lastName email photo",
+    });
   res.status(200).json({
     status: "success",
     data: {
@@ -315,10 +336,39 @@ exports.getProject = catchAsync(async (req, res, next) => {
       message: "No project found with that ID",
     });
   }
+  const projectExists = await ProjectReq.exists({ createdBy: req.user.id });
+  let canSendRequest = true;
+  if (
+    project.joinrequests.includes(req.user.id) ||
+    project.teamMembers.includes(req.user.id) ||
+    projectExists
+  ) {
+    canSendRequest = false;
+  }
+
+  await project.populate([
+    {
+      path: "createdBy",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+    {
+      path: "teamMembers",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+    {
+      path: "joinrequests",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+  ]);
+
   res.status(200).json({
     status: "success",
     data: {
       project,
+      canSendRequest,
     },
   });
 });

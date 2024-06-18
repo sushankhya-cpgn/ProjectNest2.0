@@ -10,7 +10,7 @@ export default function ProjectDetailCard({
   id,
   user,
 }) {
-  console.log(title, tags, description, id, user);
+  console.log("projet details", title, tags, description, id, user);
   const trimmedDescription = trimText(description, 90);
   // const trimmedDescription = description;
   return (
@@ -22,7 +22,7 @@ export default function ProjectDetailCard({
         </div>
         <div className="flex justify-between">
           <div className="text-sm flex flex-row justify-between items-center gap-4">
-            <PersonItem name={user.name} image={user.image} />
+            <PersonItem name={user.name} image={user.photo} />
           </div>
           <div className="hidden  text-sm md:flex flex-row justify-between items-center gap-2">
             {tags.map((tag, i) => (

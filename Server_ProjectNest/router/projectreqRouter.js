@@ -64,6 +64,7 @@ router
 
 router
   .route("/:id/proposal-pdf")
+  // .get(authController.protect, projectreqController.getProposalPdf)
   .patch(
     authController.protect,
     projectreqController.restrictToStatus("draft"),
@@ -91,6 +92,7 @@ router
 router
   .route("/:id")
   .get(
+    authController.protect,
     projectreqController.restrictToStatus("draft"),
     projectreqController.getProject
   )
