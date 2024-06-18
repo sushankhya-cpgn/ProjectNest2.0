@@ -9,7 +9,7 @@ export default function ProjectCard({ projects, isLoading }) {
       <h1 className="text-text text-lg py-3 font-bold sticky">Projects</h1>
       <div className=" flex flex-col gap-2 ">
         {projects.map((project) => (
-          <StudentProject project={project} key={project.id} />
+          <StudentProject project={project} key={project._id} />
         ))}
       </div>
     </div>

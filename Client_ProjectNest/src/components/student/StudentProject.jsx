@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const StudentProject = ({ project }) => {
-  console.log(project);
   return (
     <NavLink
       to={`/app/student/project/${project._id}`}
