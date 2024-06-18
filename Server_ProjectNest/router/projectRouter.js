@@ -34,15 +34,26 @@ router
   .get(authController.protect, projectController.getProject)
   .patch(
     authController.protect,
-    // authController.restrictTo("admin", "supervisor"),
+
     projectController.updateProject
   )
   .delete(
     authController.protect,
-    // authController.restrictTo("admin"),
+    authController.restrictTo("admin"),
     projectController.deleteProject
   );
 
+router
+  .route("/:id/task")
+  .get(authController.protect, projectController.getAssignedTasks)
+  .post(authController.protect, projectController.assignTask);
+router
+  .route("/:id/task/review")
+  .patch(authController.protect, projectController.reviewAssignedTasks);
+
+router
+  .route("/:id/my-task")
+  .get(authController.protect, projectController.getMyAssignedTasks);
 router
   .route("/:id/members")
   .get(

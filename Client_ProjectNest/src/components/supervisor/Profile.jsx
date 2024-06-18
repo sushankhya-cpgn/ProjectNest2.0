@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useUser } from "../../contexts/userContext";
 
 const Profile = () => {
+  const { user, getUser } = useUser();
+
+  if (!user) {
+    getUser();
+  }
   return (
     <div className="relative  mr-1.5">
       <button className="flex items-center text-white focus:outline-none">
         <img
-          src="https://via.placeholder.com/32"
+          src="/default-user-photo.jpg"
           alt="Profile"
           className="w-8 h-8 rounded-full mr-2"
         />
-        <span>Ravi Pajiyar</span>
+        <span>{`${user.firstName} ${user.lastName}`}</span>
       </button>
 
       {/* {isOpen && (

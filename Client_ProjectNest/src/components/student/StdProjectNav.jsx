@@ -28,7 +28,7 @@ export default function StdProjectNav({ projectDetails, isLoading }) {
         {isFullMenue && (
           <div className="hidden sm:block">
             <StdProjectLogo
-              projectDetails={projectDetails}
+              // projectDetails={projectDetails}
               isLoading={isLoading}
             />
           </div>

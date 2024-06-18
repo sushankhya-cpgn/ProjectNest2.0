@@ -1,12 +1,10 @@
 const Project = require("../models/projectModel");
 const User = require("../models/userModel");
-// const Room = require("../models/roomModel");
+
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const filterObject = require("../utils/filterObject");
-// const GanttChart = require("../models/ganttChartModel");
-// const Week = require("../models/weekModel");
-// const Log = require("../models/logModel");
+const Task = require("../models/taskModel");
 const multer = require("multer");
 
 exports.getAllProjects = catchAsync(async (req, res, next) => {
@@ -115,6 +113,120 @@ exports.getTechTags = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.assignTask = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const project = await Project.findById(id);
+  const { assignedTo, task, dueDate, remarks } = req.body;
+  if (!assignedTo || !task || !dueDate) {
+    return next(
+      new AppError(400, "assignedTo, taks, dueDate all are required")
+    );
+  }
+  if (!project) {
+    return next(new AppError(400, "cannot find project with that id"));
+  }
+  if (project.supervisor.toString() !== req.user.id) {
+    return next(new AppError(400, "you are not the super of this project"));
+  }
+  if (!project.members.includes(assignedTo)) {
+    return next(
+      new AppError(
+        400,
+        "assigning to student other that project member is not allowed"
+      )
+    );
+  }
+
+  const newTask = await Task.create({
+    assignedTo,
+    task,
+    dueDate,
+    project: project.id,
+    remarks,
+  });
+
+  project.tasks.push(newTask);
+
+  await project.save();
+  res.status(200).json({
+    status: "success",
+    newTask,
+  });
+});
+
+exports.getMyAssignedTasks = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const project = await Project.findById(id);
+  if (!project) {
+    return next(new AppError(400, "cannot find project with that id"));
+  }
+  const myTasks = await Task.find({
+    assignedTo: req.user.id,
+    status: "progress",
+  });
+
+  res.status(200).json({
+    status: "success",
+    myTasks,
+  });
+});
+
+exports.reviewAssignedTasks = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { taskId, status, grade } = req.body;
+  if (!taskId || !status || !grade) {
+    return next(new AppError(400, "taskId, status, grade are required fields"));
+  }
+  const task = await Task.findById(taskId);
+  if (!task) {
+    return next(new AppError(400, "cannot find task with that id"));
+  }
+  const project = await Project.findById(id);
+  if (!project) {
+    return next(new AppError(400, "cannot find project with that id"));
+  }
+  if (task.project.toString() !== project.id) {
+    return next(new AppError(400, "this task does not belong to this project"));
+  }
+  if (project.supervisor.toString() !== req.user.id) {
+    return next(new AppError(400, "you are not the super of this project"));
+  }
+
+  task.status = status;
+  task.grade = grade;
+
+  await task.save();
+
+  res.status(200).json({
+    status: "success",
+    task,
+  });
+});
+
+////////////////////////////////// ////////////////////////////////// ////////////////////////////////// ////////////////////////////////// //////////////////////////////////
+exports.getAssignedTasks = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const project = await Project.findById(id);
+  let query = {};
+  if (req.query.date) {
+    query.dueDate = req.query.date;
+  }
+  if (req.query.status) {
+    query.status = req.query.status;
+  }
+  if (!project) {
+    return next(new AppError(400, "cannot find project with that id"));
+  }
+  if (project.supervisor.toString() !== req.user.id) {
+    return next(new AppError(400, "you are not the super of this project"));
+  }
+  const tasks = await Task.find(query);
+  res.status(200).json({
+    status: "success",
+    total: tasks.length,
+    tasks,
+  });
+});
 exports.getProjectMembers = catchAsync(async (req, res, next) => {
   const { members } = await Project.findById(req.project).populate({
     path: "supervisor",

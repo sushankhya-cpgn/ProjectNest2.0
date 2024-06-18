@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 const Projects = ({ project }) => {
   return (
     <NavLink
-      to={`/app/supervisor/projects/${project.id}`}
-      className="bg-secondary rounded-lg p-4 shadow-md h-24 cursor-pointer"
+      to={`/app/supervisor/projects/${project._id}`}
+      className="bg-secondary rounded-lg p-4 shadow-md cursor-pointer"
     >
       <div className="flex items-center">
         <div className="bg-indigo-500 rounded-full p-1 mr-2">
@@ -24,18 +24,30 @@ const Projects = ({ project }) => {
             />
           </svg>
         </div>
-        <div className="namendate flex gap-6">
-          <h3 className="text-lg font-semibold text-text">
-            {project.projectName}
+        <div className="flex gap-8">
+          <h3 className="text-lg flex justify-center items-center font-semibold text-text">
+            {project.title}
           </h3>
-          <p className="mt-2 text-gray-400">{project.date_created}</p>
+          <h3 className=" text-white flex justify-center items-center p-2 bg-accent rounded-full text-sm font-semibold">
+            {project.semester}
+            {project.semester === 1
+              ? "st"
+              : project.semester === 2
+              ? "nd"
+              : project.semester === 3
+              ? "rd"
+              : "th"}
+          </h3>
         </div>
       </div>
-      <div className="descnmem flex justify-between mt-2">
-        <p className=" text-gray-400">{project.desc}</p>
-        <h3 className="mem_num text-white bg-accent rounded-full flex items-center justify-center w-8 h-8 text-sm font-semibold">
-          {project.mem_num}
-        </h3>
+      <div className="mt-2">
+        {/* <p className=" text-gray-400">
+          Supervisor:{" "}
+          {`${project.supervisor.firstName} ${project.supervisor.lastName}`}
+        </p> */}
+        <p className="mt-2 text-gray-400">
+          Created on: {new Date(project.createdAt).toLocaleDateString()}
+        </p>
       </div>
     </NavLink>
   );
