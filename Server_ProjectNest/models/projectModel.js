@@ -46,6 +46,12 @@ const projectSchema = new mongoose.Schema(
       enum: ["ongoing", "completed"],
       default: "ongoing",
     },
+    tasks: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Task",
+      },
+    ],
     // rooms: [
     //   {
     //     type: mongoose.Schema.ObjectId,
