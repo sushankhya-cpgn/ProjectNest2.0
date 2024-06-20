@@ -9,8 +9,6 @@ import Feed from "./components/student/Feed";
 import SuperFeed from "./components/supervisor/SuperFeed";
 import Setting from "./components/student/Setting";
 import AdminPage from "./pages/AdminPage";
-import Settings from "./components/supervisor/Settings";
-import FindProjects from "./components/supervisor/FindProjects";
 import AdminProjectDetails from "./pages/AdminProjectDetails";
 import Archieves from "./pages/AdminProjectArchieves";
 import Deletedprojects from "./pages/AdminDeletedProjects";
@@ -98,8 +96,6 @@ function App() {
                           element={<Navigate to="homesuper" replace />}
                         />
                         <Route path="homesuper" element={<SuperFeed />} />
-                        <Route path="findprojects" element={<FindProjects />} />
-                        <Route path="settings" element={<Settings />} />
                       </Route>
                       <Route
                         path="supervisor/projects/:projectId"

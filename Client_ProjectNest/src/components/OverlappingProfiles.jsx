@@ -6,17 +6,17 @@ const OverlappingProfiles = () => {
       <div className="relative flex -space-x-4 px-2">
         <img
           className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
-          src="https://via.placeholder.com/150"
+          src="/public/default-user-photo.jpg"
           alt="Profile 1"
         />
         <img
           className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
-          src="https://via.placeholder.com/150"
+          src="/public/default-user-photo.jpg"
           alt="Profile 2"
         />
         <img
           className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
-          src="https://via.placeholder.com/150"
+          src="/public/default-user-photo.jpg"
           alt="Profile 3"
         />
       </div>

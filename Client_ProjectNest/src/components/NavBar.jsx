@@ -93,20 +93,6 @@ export default function NavBar() {
             <NavBarItem navto="homesuper" isFullMenue={isFullMenue} name="home">
               <GrHomeRounded color={iconColor} size={20} />
             </NavBarItem>
-            <NavBarItem
-              navto="findprojects"
-              isFullMenue={isFullMenue}
-              name="find project"
-            >
-              <LuSearchCode color={iconColor} size={20} />
-            </NavBarItem>
-            <NavBarItem
-              navto="settings"
-              isFullMenue={isFullMenue}
-              name="settings"
-            >
-              <FiSettings color={iconColor} size={20} />
-            </NavBarItem>
           </>
         )}
       </div>

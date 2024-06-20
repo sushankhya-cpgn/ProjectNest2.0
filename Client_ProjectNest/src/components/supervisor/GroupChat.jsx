@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HiMiniLink } from "react-icons/hi2";
+// import { HiMiniLink } from "react-icons/hi2";
 import { IoIosSend } from "react-icons/io";
-import { IoCall } from "react-icons/io5";
-import { FaVideo } from "react-icons/fa";
+// import { IoCall } from "react-icons/io5";
+// import { FaVideo } from "react-icons/fa";
 import { useSocket } from "../../contexts/socketContext";
 import { useParams } from "react-router-dom";
 import OverlappingProfiles from "../OverlappingProfiles";
@@ -56,14 +56,6 @@ export default function GroupChat() {
         </div>
         <div className="header flex justify-between mt-5">
           <OverlappingProfiles />
-          <div className="audionvideo flex gap-10 text-accent mx-4">
-            <span className="name">
-              <IoCall className="text-xl" />
-            </span>
-            <span className="name">
-              <FaVideo className="text-xl" />
-            </span>
-          </div>
         </div>
         <ReactScrollToBottom className="messagebox w-full h-5/6 overflow-y-scroll p-4 ">
           {messageHistory.map(({ user, content }, i) => (
@@ -82,9 +74,9 @@ export default function GroupChat() {
           ))}
         </ReactScrollToBottom>
         <div className="footer w-full h-fit flex gap-3">
-          <span className="link text-xl cursor-pointer">
+          {/* <span className="link text-xl cursor-pointer">
             <HiMiniLink className="text-accent font-bold mt-2" />
-          </span>
+          </span> */}
           <form className="flex w-full" onSubmit={handleSendMessage}>
             <input
               value={message}
