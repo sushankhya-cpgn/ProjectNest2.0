@@ -220,7 +220,11 @@ exports.getAssignedTasks = catchAsync(async (req, res, next) => {
   if (project.supervisor.toString() !== req.user.id) {
     return next(new AppError(400, "you are not the super of this project"));
   }
-  const tasks = await Task.find(query);
+  const tasks = await Task.find(query).populate({
+    path: "assignedTo",
+    model: "User",
+    select: "firstName lastName email photo",
+  });
   res.status(200).json({
     status: "success",
     total: tasks.length,
