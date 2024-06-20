@@ -163,22 +163,23 @@ exports.acceptProjectJoinRequest = catchAsync(async (req, res, next) => {
   projectProposal.joinrequests = newProjectRequestList;
   projectProposal.teamMembers.push(requestorUserId);
   await projectProposal.save();
-  await projectProposal
-    .populate({
+  await projectProposal.populate([
+    {
       path: "createdBy",
       model: "User",
       select: "firstName lastName email photo",
-    })
-    .populate({
+    },
+    {
       path: "teamMembers",
       model: "User",
       select: "firstName lastName email photo",
-    })
-    .populate({
+    },
+    {
       path: "joinrequests",
       model: "User",
       select: "firstName lastName email photo",
-    });
+    },
+  ]);
   res.status(200).json({
     status: "success",
     data: {
@@ -265,6 +266,24 @@ exports.rejectProjectJoinRequest = catchAsync(async (req, res, next) => {
   projectProposal.joinrequests = newProjectRequestList;
 
   await projectProposal.save();
+  await projectProposal.populate([
+    {
+      path: "createdBy",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+    {
+      path: "teamMembers",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+    {
+      path: "joinrequests",
+      model: "User",
+      select: "firstName lastName email photo",
+    },
+  ]);
+
   res.status(200).json({
     status: "success",
     data: {

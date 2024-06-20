@@ -5,18 +5,26 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../Spinner";
+import { useUser } from "../../contexts/userContext";
 
 function FindProjectProjectDetail() {
+  const { user, getUser } = useUser();
   const { id } = useParams();
   const [createdProject, setCreatedProject] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [joinLoading, setJoinLoading] = useState(false);
   const [joinError, setJoinError] = useState("");
-  const [joinRequested, setJoinRequested] = useState(false);
   const [canSendRequest, setCanSendRequest] = useState(true);
   const [interestedPeople, setInterestedPeople] = useState([]);
   const [isAlreadyInProject, setIsAlreadyInProject] = useState(false);
+  const [isProjectMember, setIsProjectMember] = useState(false);
+
+  useEffect(function () {
+    if (!user) {
+      getUser();
+    }
+  }, []);
   useEffect(() => {
     async function fetchProject() {
       try {
@@ -44,6 +52,14 @@ function FindProjectProjectDetail() {
             ...data.data.project.teamMembers,
           ]);
           setCreatedProject(data.data.project);
+
+          if (
+            data.data.project.teamMembers.find(
+              (member) => member._id === user._id
+            )
+          ) {
+            setIsProjectMember(true);
+          }
         } else {
           setError("Invalid data structure");
         }
@@ -77,7 +93,7 @@ function FindProjectProjectDetail() {
         }
       );
       console.log("Join request sent successfully:", response.data);
-      setJoinRequested(true); // Set joinRequested to true after a successful request
+      setCanSendRequest(false);
     } catch (err) {
       console.log("Join request sent successfully error:", err);
 
@@ -110,11 +126,13 @@ function FindProjectProjectDetail() {
         <h1 className=" text-2xl">{createdProject.title}</h1>
         <Button
           onClick={handleJoinRequest}
-          disabled={joinLoading || joinRequested || !canSendRequest}
+          disabled={joinLoading || !canSendRequest || isProjectMember}
         >
           {!isAlreadyInProject &&
             (!canSendRequest
-              ? "Requested"
+              ? isProjectMember
+                ? "Your request was accepted"
+                : "Requested"
               : joinLoading
               ? "Requesting"
               : "Request to Join")}

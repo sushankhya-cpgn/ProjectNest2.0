@@ -10,6 +10,8 @@ import Button from "../Button";
 function MyProject() {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isAccepting, setIsAccepting] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
   const [isSendingProposal, setIsSendingProposal] = useState(false);
   const [projects, setProjects] = useState(null);
   const [file, setFile] = useState(null);
@@ -61,9 +63,9 @@ function MyProject() {
   async function handleAcceptRequest(person) {
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
       const projectId = projects._id;
 
+      setIsAccepting(true);
       const { data } = await axios.patch(
         `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/accept-join-request`,
         {
@@ -75,16 +77,20 @@ function MyProject() {
           },
         }
       );
+      // console.log("accept-join-request", data);
 
       // Update the local state to reflect the accepted request
-      setProjects((prevProjects) => ({
-        ...prevProjects,
-        joinrequests: prevProjects.joinrequests.filter(
-          (request) => request._id !== person._id
-        ),
-      }));
+      // setProjects((prevProjects) => ({
+      //   ...prevProjects,
+      //   joinrequests: prevProjects.joinrequests.filter(
+      //     (request) => request._id !== person._id
+      //   ),
+      // }));
+      setProjects(data.data.projectProposal);
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
+    } finally {
+      setIsAccepting(false);
     }
   }
 
@@ -119,9 +125,8 @@ function MyProject() {
   async function handleRejectRequest(person) {
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
       const projectId = projects._id;
-
+      setIsRejecting(true);
       const { data } = await axios.patch(
         `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/reject-join-request`,
         {
@@ -135,14 +140,17 @@ function MyProject() {
       );
 
       // Update the local state to reflect the rejected request
-      setProjects((prevProjects) => ({
-        ...prevProjects,
-        joinrequests: prevProjects.joinrequests.filter(
-          (request) => request._id !== person._id
-        ),
-      }));
+      // setProjects((prevProjects) => ({
+      //   ...prevProjects,
+      //   joinrequests: prevProjects.joinrequests.filter(
+      //     (request) => request._id !== person._id
+      //   ),
+      // }));
+      setProjects(data.data.projectProposal);
     } catch (err) {
       console.log(err.message);
+    } finally {
+      setIsRejecting(false);
     }
   }
 
@@ -293,16 +301,18 @@ function MyProject() {
                   <PersonItem name={person.firstName} image={person.photo} />
 
                   <button
-                    className="text-white bg-slate-600 w-20 hover:bg-slate-500"
+                    className="text-white bg-slate-600 p-2 hover:bg-slate-500"
                     onClick={() => handleAcceptRequest(person)}
+                    disabled={isAccepting || isRejecting}
                   >
-                    Accept
+                    {isAccepting ? "Accepting..." : "Accept"}
                   </button>
                   <button
-                    className="text-white bg-slate-600 w-20 hover:bg-slate-500"
+                    className="text-white bg-slate-600 p-2 hover:bg-slate-500"
                     onClick={() => handleRejectRequest(person)}
+                    disabled={isAccepting || isRejecting}
                   >
-                    Reject
+                    {isRejecting ? "Rejecting..." : "Reject"}
                   </button>
                 </div>
               </li>
