@@ -208,6 +208,7 @@ exports.getAssignedTasks = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const project = await Project.findById(id);
   let query = {};
+  query.project = id;
   if (req.query.date) {
     query.dueDate = req.query.date;
   }
@@ -223,16 +224,20 @@ exports.getAssignedTasks = catchAsync(async (req, res, next) => {
   ) {
     return next(new AppError(400, "you are not the super of this project"));
   }
+  console.log(query);
+
   const tasks = await Task.find(query).populate({
     path: "assignedTo",
     model: "User",
     select: "firstName lastName email photo",
   });
+  console.log(tasks);
   res.status(200).json({
     status: "success",
     total: tasks.length,
     tasks,
   });
+
 });
 exports.getProjectMembers = catchAsync(async (req, res, next) => {
   const { members } = await Project.findById(req.project).populate({

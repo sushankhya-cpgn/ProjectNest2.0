@@ -1,16 +1,6 @@
-import React, { useState } from "react";
-import Message from "./Message";
 import { useProject } from "../../contexts/ProjectContext";
 
 export default function Members() {
-  const [open, setOpen] = useState(false);
-  const handleClick = () => {
-    setOpen(!open);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const { projectDetails, isLoading, error } = useProject();
 
   if (isLoading) {
@@ -31,16 +21,19 @@ export default function Members() {
 
   const membersData = [
     ...projectDetails.project.members,
-    ...(projectDetails.project.supervisor
-      ? [projectDetails.project.supervisor]
-      : []),
     // Add more roles here if needed, e.g., evaluators, coordinators
   ];
 
   return (
-    <div className="w-full flex justify-center items-center">
-      <div className="memcontainer w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
-        <table>
+    <div className="w-full flex flex-col justify-center items-center">
+      {/* <h1>{projectDetails.project.title} members</h1> */}
+      <div className="logsheet bg-gray-700 dark:bg-gray-800 px-6 py-3 rounded-lg shadow-lg">
+        <span className="text-xl font-semibold text-text">
+          {projectDetails.project.title} members
+        </span>
+      </div>
+      <div className="memcontainer w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll justify-center flex ">
+        <table className="h-1/2">
           <thead>
             <tr>
               <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
@@ -50,58 +43,37 @@ export default function Members() {
                 Role
               </th>
               <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
-                Expertise
-              </th>
-              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Gmail
-              </th>
-              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
-                Contact
               </th>
             </tr>
           </thead>
-          <tbody className="text-gray-500">
+          <tbody className="text-gray-500 ">
             {membersData.map((member, index) => (
               <tr key={index} className="mt-3">
                 <td className="py-4 px-4 text-md">
                   {member.firstName} {member.lastName}
                 </td>
                 <td className="py-4 px-4 text-md">
-                  {member.role || "Student"} {/* Add other roles if needed */}
-                </td>
-                <td className="py-4 px-4 text-md">
-                  {member.skill || "Frontend"}
+                  Student{/* Add other roles if needed */}
                 </td>
                 <td className="py-4 px-4 text-md">{member.email}</td>
-                <td className="py-4 px-4 text-md">
-                  <button
-                    className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text"
-                    onClick={handleClick}
-                  >
-                    Message
-                  </button>
-                </td>
               </tr>
             ))}
+            <tr className="mt-3">
+              <td className="py-4 px-4 text-md">
+                {projectDetails.project.supervisor.firstName}{" "}
+                {projectDetails.project.supervisor.lastName}
+              </td>
+              <td className="py-4 px-4 text-md">
+                Supervisor{/* Add other roles if needed */}
+              </td>
+              <td className="py-4 px-4 text-md">
+                {projectDetails.project.supervisor.email}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-      {open && (
-        <>
-          <div className="fixed inset-0 backdrop-blur-sm"></div>
-          <div className="fixed inset-0 flex justify-center items-center">
-            <div className="bg-gray-700 dark:bg-gray-800 w-2/5 h-2/3 rounded-lg p-4 relative">
-              <button
-                className="absolute top-2 right-3 text-text font-bold text-xl hover:text-gray-400"
-                onClick={handleClose}
-              >
-                X
-              </button>
-              <Message />
-            </div>
-          </div>
-        </>
-      )}
     </div>
   );
 }

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import CircularProgress from "./CircularProgress";
+import { useProject } from "../../contexts/ProjectContext";
 
 export default function TaskItem() {
   const [tasks, setTasks] = useState([]);
   const token = localStorage.getItem("token");
-
+  const { projectDetails } = useProject();
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/v2/project/666d45930a01aa9c53493ff3/task?status=progress",
+          `http://127.0.0.1:8000/api/v2/project/${projectDetails.project._id}/task?status=progress`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -31,10 +32,6 @@ export default function TaskItem() {
 
     fetchTasks();
   }, [token]);
-
-  const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter((task) => task._id !== taskId));
-  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -93,7 +90,9 @@ export default function TaskItem() {
                     <td className="py-2 px-4 text-md">
                       {row.assignedTo.firstName}
                     </td>
-                    <td className="py-2 px-4 text-md">{row.title}</td>
+                    <td className="py-2 px-4 text-md">
+                      {projectDetails.project.title}
+                    </td>
                     <td className="py-2 px-4 text-md">
                       {formatDate(row.dueDate)}
                     </td>
@@ -102,14 +101,6 @@ export default function TaskItem() {
                 </tbody>
               </table>
             </div>
-          </div>
-          <div className="buttons flex w-full justify-end">
-            <button
-              className="text-red-500 mt-2"
-              onClick={() => handleDeleteTask(row._id)}
-            >
-              - Delete task
-            </button>
           </div>
         </div>
       ))}

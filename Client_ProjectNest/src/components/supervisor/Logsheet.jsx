@@ -15,7 +15,7 @@ export default function Logsheet() {
     const fetchTasks = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/v2/project/666d45930a01aa9c53493ff3/task?status=progress",
+          `http://127.0.0.1:8000/api/v2/project/${projectDetails.project._id}/task?status=progress`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

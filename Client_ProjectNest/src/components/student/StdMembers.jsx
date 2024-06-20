@@ -31,9 +31,14 @@ export default function StdMembers() {
   }
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="logsheet bg-gray-700 dark:bg-gray-800 px-6 py-3 rounded-lg shadow-lg">
+        <span className="text-xl font-semibold text-text">
+          {projectDetails.project.title} members
+        </span>
+      </div>
       <div className="memcontainer w-11/12 h-5/6 rounded-lg p-4 relative overflow-scroll">
-        <table>
+        <table className="h-1/2">
           <thead>
             <tr>
               <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
@@ -43,13 +48,7 @@ export default function StdMembers() {
                 Role
               </th>
               <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
-                Expertise
-              </th>
-              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
                 Gmail
-              </th>
-              <th className="py-4 px-4 border-b text-left text-md font-semibold text-text">
-                Contact
               </th>
             </tr>
           </thead>
@@ -60,16 +59,7 @@ export default function StdMembers() {
                   {member.firstName} {member.lastName}
                 </td>
                 <td className="py-4 px-4 text-md">Student</td>
-                <td className="py-4 px-4 text-md">Frontend</td>
                 <td className="py-4 px-4 text-md">{member.email}</td>
-                <td className="py-4 px-4 text-md">
-                  <button
-                    className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text"
-                    onClick={handleClick}
-                  >
-                    Message
-                  </button>
-                </td>
               </tr>
             ))}
             {projectDetails.project.supervisor && (
@@ -79,40 +69,14 @@ export default function StdMembers() {
                   {projectDetails.project.supervisor.lastName}
                 </td>
                 <td className="py-4 px-4 text-md">Supervisor</td>
-                <td className="py-4 px-4 text-md">Frontend</td>
                 <td className="py-4 px-4 text-md">
                   {projectDetails.project.supervisor.email}
-                </td>
-                <td className="py-4 px-4 text-md">
-                  <button
-                    className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text"
-                    onClick={handleClick}
-                  >
-                    Message
-                  </button>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-      {open && (
-        <>
-          <div className="fixed inset-0 backdrop-blur-sm"></div>
-          <div className="fixed inset-0 flex justify-center items-center">
-            <div className="bg-gray-700 dark:bg-gray-800 w-2/5 h-2/3 rounded-lg p-4 relative">
-              <button
-                className="absolute top-2 right-3 text-text font-bold text-xl hover:text-gray-400"
-                onClick={handleClose}
-              >
-                X
-              </button>
-              {/* Render StdMessage component */}
-              <StdMessage />
-            </div>
-          </div>
-        </>
-      )}
     </div>
   );
 }
