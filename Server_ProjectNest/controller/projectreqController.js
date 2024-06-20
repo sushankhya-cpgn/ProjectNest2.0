@@ -338,6 +338,10 @@ exports.getProject = catchAsync(async (req, res, next) => {
   }
   const projectExists = await ProjectReq.exists({ createdBy: req.user.id });
   let canSendRequest = true;
+  let alreadyInProject = false;
+  if (projectExists) {
+    alreadyInProject = true;
+  }
   if (
     project.joinrequests.includes(req.user.id) ||
     project.teamMembers.includes(req.user.id) ||
@@ -369,6 +373,7 @@ exports.getProject = catchAsync(async (req, res, next) => {
     data: {
       project,
       canSendRequest,
+      alreadyInProject,
     },
   });
 });

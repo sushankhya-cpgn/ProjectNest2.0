@@ -16,13 +16,13 @@ function FindProjectProjectDetail() {
   const [joinRequested, setJoinRequested] = useState(false);
   const [canSendRequest, setCanSendRequest] = useState(true);
   const [interestedPeople, setInterestedPeople] = useState([]);
+  const [isAlreadyInProject, setIsAlreadyInProject] = useState(false);
   useEffect(() => {
     async function fetchProject() {
       try {
         setLoading(true);
         setError("");
         const token = localStorage.getItem("token");
-        console.log("Token retrieved:", token);
 
         const { data } = await axios.get(
           `http://127.0.0.1:8000/api/v2/projectreq/${id}`,
@@ -38,6 +38,7 @@ function FindProjectProjectDetail() {
         if (data && data.data) {
           // Adjust based on the actual data structure
           setCanSendRequest(data.data.canSendRequest);
+          setIsAlreadyInProject(data.data.alreadyInProject);
           setInterestedPeople([
             ...data.data.project.joinrequests,
             ...data.data.project.teamMembers,
@@ -58,14 +59,12 @@ function FindProjectProjectDetail() {
   }, [id]);
 
   // Update interestedPeople to use the keys firstName and photo
-  console.log("created proejct", createdProject);
 
   async function handleJoinRequest() {
     try {
       setJoinLoading(true);
       setJoinError("");
       const token = localStorage.getItem("token");
-      console.log("Requesting to join project...");
 
       const response = await axios.patch(
         `http://127.0.0.1:8000/api/v2/projectreq/${id}/send-join-request`,
@@ -113,13 +112,13 @@ function FindProjectProjectDetail() {
           onClick={handleJoinRequest}
           disabled={joinLoading || joinRequested || !canSendRequest}
         >
-          {!canSendRequest
-            ? "Requested"
-            : joinLoading
-            ? "Requesting..."
-            : joinRequested
-            ? "Requested"
-            : "Request to join"}
+          {!isAlreadyInProject &&
+            (!canSendRequest
+              ? "Requested"
+              : joinLoading
+              ? "Requesting"
+              : "Request to Join")}
+          {isAlreadyInProject && "You are already in a project"}
         </Button>
       </div>
       {joinError && <p className="text-red-500">{joinError}</p>}
