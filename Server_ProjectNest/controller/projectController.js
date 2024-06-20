@@ -51,6 +51,9 @@ exports.getAllMyProjects = catchAsync(async (req, res, next) => {
     select: "firstName lastName email photo",
   });
 
+  console.log(req.user.projects);
+  console.log(projects);
+
   res.status(200).json({
     status: "success",
     total: projects.length,

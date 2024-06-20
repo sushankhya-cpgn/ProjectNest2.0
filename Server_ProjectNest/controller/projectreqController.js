@@ -504,6 +504,8 @@ exports.acceptProjectProposal = catchAsync(async (req, res, next) => {
     return next(new AppError(400, "no supervisor with that id"));
   }
 
+  const supervisorUser = await User.findById(supervisor);
+
   const newProjectData = {
     title: proposal.title,
     semester: proposal.semester,
@@ -523,6 +525,8 @@ exports.acceptProjectProposal = catchAsync(async (req, res, next) => {
     memb.projects.push(newProject.id);
     await memb.save({ validateBeforeSave: false });
   });
+  supervisorUser.projects.push(newProject.id);
+  await supervisorUser.save({ validateBeforeSave: false });
 
   if (newProject) {
     proposal.status = "approved";
