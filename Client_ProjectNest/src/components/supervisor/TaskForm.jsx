@@ -1,5 +1,7 @@
 import Datepicker from "tailwind-datepicker-react";
 import { useState } from "react";
+import { useProject } from "../../contexts/ProjectContext";
+import axios from "axios";
 
 const options = {
   title: "Pick Date",
@@ -42,23 +44,19 @@ const options = {
 };
 
 export default function TaskForm() {
-  const initialData = [
-    {
-      id: 1,
-      name: "",
-      members: "",
-    },
-  ];
-  const projectOptions = ["rentNread"];
-  const memberOptions = ["Ravi", "Mohit", "Arun", "Sushankhya"];
+  const initialData = {
+    project: "",
+    members: "",
+    remarks: "",
+  };
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [data, setData] = useState(initialData);
+  const [formData, setFormData] = useState(initialData);
   const [inputs, setInputs] = useState([""]);
+  const { projectDetails } = useProject();
 
   const addInput = () => {
     if (inputs.length < 3) {
-      // Initial input plus two more
       setInputs([...inputs, ""]);
     }
   };
@@ -67,10 +65,11 @@ export default function TaskForm() {
     setInputs(inputs.filter((_, i) => i !== index));
   };
 
-  const handleSelectChange = (id, field, value) => {
-    setData((prevData) =>
-      prevData.map((row) => (row.id === id ? { ...row, [field]: value } : row))
-    );
+  const handleSelectChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
   };
 
   const handleChange = (date) => {
@@ -87,28 +86,62 @@ export default function TaskForm() {
     setInputs(newInputs);
   };
 
+  const handleSubmit = async () => {
+    const submitData = {
+      assignedTo: formData.members,
+      task: inputs.join(", "), // Assuming all tasks should be concatenated
+      dueDate: selectedDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
+      remarks: inputs.join(","),
+    };
+
+    console.log("Submit Data:", submitData);
+    console.log("Project ID:", projectDetails.project._id);
+
+    if (!projectDetails.project) {
+      console.error("Project details are not available.");
+      alert("Project details are not available. Please try again.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Token not found. Please log in again.");
+        return;
+      }
+
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/v2/project/${projectDetails.project._id}/task`,
+        submitData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Task submitted successfully!");
+        // Optionally, reset form or handle success
+      } else {
+        console.error("Error submitting task:", response.data);
+        alert("Failed to submit task. Please try again.");
+      }
+    } catch (error) {
+      console.error(
+        "Error:",
+        error.response ? error.response.data : error.message
+      );
+      alert("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div className="taskform flex flex-col text-base gap-4 mt-4 px-8">
       <div className="section1 flex justify-between">
         <span className="text-text font-medium">Projects</span>
-        {data.map((row) => (
-          <span className="text-text" key={row.id}>
-            <select
-              value={row.name}
-              onChange={(e) =>
-                handleSelectChange(row.id, "name", e.target.value)
-              }
-              className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
-            >
-              <option value="">project</option>
-              {projectOptions.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </span>
-        ))}
+        {/* Assuming this is meant to be filled in a future implementation */}
       </div>
       <div className="section2 flex flex-col p-2 bg-primary rounded-lg gap-1.5">
         <span className="text-text font-medium">Tasks</span>
@@ -144,24 +177,20 @@ export default function TaskForm() {
       </div>
       <div className="section3 flex justify-between">
         <span className="text-text font-medium">Members</span>
-        {data.map((row) => (
-          <span className="text-text" key={row.id}>
-            <select
-              value={row.members}
-              onChange={(e) =>
-                handleSelectChange(row.id, "members", e.target.value)
-              }
-              className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
-            >
-              <option value="">member</option>
-              {memberOptions.map((members) => (
-                <option key={members} value={members}>
-                  {members}
-                </option>
-              ))}
-            </select>
-          </span>
-        ))}
+        <span className="text-text">
+          <select
+            value={formData.members}
+            onChange={(e) => handleSelectChange("members", e.target.value)}
+            className="bg-primary border-none rounded-md p-1.5 focus:outline-none focus:ring-0"
+          >
+            <option value="">member</option>
+            {projectDetails?.project?.members.map((member) => (
+              <option key={member._id} value={member._id}>
+                {member.firstName}
+              </option>
+            ))}
+          </select>
+        </span>
       </div>
       <div className="section4 flex justify-between">
         <span className="text-text font-medium">Due date</span>
@@ -185,7 +214,10 @@ export default function TaskForm() {
         </div>
       </div>
       <div className="buttons flex justify-end ">
-        <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
+        <button
+          className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>

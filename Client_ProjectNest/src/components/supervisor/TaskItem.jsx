@@ -1,30 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CircularProgress from "./CircularProgress";
 
 export default function TaskItem() {
-  const initialData = [
-    {
-      id: 1,
-      name: "Ravi Pajiyar",
-      project: "ProjectNest",
-      dueDate: "2024-05-21",
-      remark: "Urgent",
-      task: "frontend task complete",
-    },
-    // Add more task items if needed
-  ];
+  const [tasks, setTasks] = useState([]);
+  const token = localStorage.getItem("token");
 
-  const [tasks, setTasks] = useState(initialData);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/v2/project/666d45930a01aa9c53493ff3/task?status=progress",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Fetched data:", data);
+        setTasks(data.tasks); // Adjust this line based on the structure of the API response
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, [token]);
 
   const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+    setTasks(tasks.filter((task) => task._id !== taskId));
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB"); // Format: DD/MM/YYYY
   };
 
   return (
     <div className="w-full">
       {tasks.map((row) => (
         <div
-          key={row.id}
+          key={row._id}
           className="flex flex-col items-start bg-secondary rounded-lg p-4 shadow-md cursor-pointer w-full mb-4"
         >
           <div className="uppersection flex w-full">
@@ -69,10 +90,14 @@ export default function TaskItem() {
                 </thead>
                 <tbody className="text-gray-500">
                   <tr className="mt-3">
-                    <td className="py-2 px-4 text-md">{row.name}</td>
-                    <td className="py-2 px-4 text-md">{row.project}</td>
-                    <td className="py-2 px-4 text-md">{row.dueDate}</td>
-                    <td className="py-2 px-4 text-md">{row.remark}</td>
+                    <td className="py-2 px-4 text-md">
+                      {row.assignedTo.firstName}
+                    </td>
+                    <td className="py-2 px-4 text-md">{row.title}</td>
+                    <td className="py-2 px-4 text-md">
+                      {formatDate(row.dueDate)}
+                    </td>
+                    <td className="py-2 px-4 text-md">{row.remarks}</td>
                   </tr>
                 </tbody>
               </table>
@@ -81,7 +106,7 @@ export default function TaskItem() {
           <div className="buttons flex w-full justify-end">
             <button
               className="text-red-500 mt-2"
-              onClick={() => handleDeleteTask(row.id)}
+              onClick={() => handleDeleteTask(row._id)}
             >
               - Delete task
             </button>
