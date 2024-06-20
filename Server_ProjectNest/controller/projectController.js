@@ -217,7 +217,10 @@ exports.getAssignedTasks = catchAsync(async (req, res, next) => {
   if (!project) {
     return next(new AppError(400, "cannot find project with that id"));
   }
-  if (project.supervisor.toString() !== req.user.id) {
+  if (
+    project.supervisor.toString() !== req.user.id &&
+    !project.members.includes(req.user.id)
+  ) {
     return next(new AppError(400, "you are not the super of this project"));
   }
   const tasks = await Task.find(query).populate({

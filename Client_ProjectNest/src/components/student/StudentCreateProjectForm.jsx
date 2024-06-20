@@ -2,9 +2,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import getTechIcon from "../../utils/getTechIcon";
 import Button from "../Button";
+import Spinner from "../Spinner";
 
-
-
+const techStackOptions = [
+  "React",
+  "Vue",
+  "Blockchain",
+  "ML/AI",
+  "NextJS",
+  "NodeJS",
+  "Tailwind",
+  "HTML",
+  "CSS",
+  "Python",
+  "Django",
+  "PyTorch",
+  "Pandas",
+  "Numpy",
+  "Php",
+  "Laravel",
+];
 export default function StudentCreateProjectForm() {
   const [formData, setFormData] = useState({
     title: "",
@@ -14,32 +31,65 @@ export default function StudentCreateProjectForm() {
     techTags: [],
   });
 
-  const [techStackOptions, setTechStackOptions] = useState([]);
+  // const [techStackOptions, setTechStackOptions] = useState([]);
   const [techTagSearchTerm, setTechTagSearchTerm] = useState("");
   const [techTagSuggestions, setTechTagSuggestions] = useState([]);
   const [availableTechTags, setAvailableTechTags] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false); // New state variable
+  const [isLoading, setIsLoading] = useState(false);
+  const [alreadyHasProject, setAlreadyHasProject] = useState(false);
+  // useEffect(() => {
+  //   async function fetchTechTags() {
+  //     try {
+  //       setIsLoading(true);
+  //       const response = await axios.get(
+  //         "http://127.0.0.1:8000/api/v2/project/techtags"
+  //       );
+  //       setTechStackOptions([...response.data.techTags]);
+  //       // console.log([...response.data.data.techTags]);
+  //       // console.log(response.data.techTags);
+  //     } catch (err) {
+  //       setTechStackOptions([
+  //         "React",
+  //         "NodeJS",
+  //         "Python",
+  //         "JavaScript",
+  //         "Java",
+  //       ]);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   }
+  //   fetchTechTags();
+  // }, []);
 
+  // console.log("tech tags", techStackOptions);
   useEffect(() => {
-    async function fetchTechTags() {
+    async function fetchProjects() {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/v2/project/techtags"
+        setIsLoading(true);
+        const token = localStorage.getItem("token");
+        console.log("Token retrieved:", token);
+
+        const { data } = await axios.get(
+          `http://127.0.0.1:8000/api/v2/projectreq/my-project-proposal`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setTechStackOptions([...response.data.techTags]);
-        // console.log([...response.data.data.techTags]);
-        // console.log(response.data.techTags);
+        if (data.data.projectProposal) {
+          setAlreadyHasProject(true);
+          console.log("already has a project", data.data.projectProposal);
+        }
       } catch (err) {
-        setTechStackOptions([
-          "React",
-          "NodeJS",
-          "Python",
-          "JavaScript",
-          "Java",
-        ]);
+        console.error("Error fetching projects:", err.message);
+      } finally {
+        setIsLoading(false);
       }
     }
-    fetchTechTags();
+    fetchProjects();
   }, []);
 
   useEffect(() => {
@@ -47,6 +97,7 @@ export default function StudentCreateProjectForm() {
     setAvailableTechTags([...techStackOptions]);
   }, []);
 
+  console.log("already has a project", alreadyHasProject);
   useEffect(() => {
     const searchTerm = techTagSearchTerm.trim().toLocaleLowerCase();
     if (searchTerm.length < 2) {
@@ -88,6 +139,7 @@ export default function StudentCreateProjectForm() {
     console.log("Token retrieved:", token);
 
     try {
+      setIsLoading(true);
       const response = await axios.post(
         "http://127.0.0.1:8000/api/v2/projectreq",
         {
@@ -107,6 +159,8 @@ export default function StudentCreateProjectForm() {
       setFormSubmitted(true); // Set formSubmitted to true after successful submission
     } catch (error) {
       console.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,6 +168,26 @@ export default function StudentCreateProjectForm() {
     return (
       <div className="fixed bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
         <p className="text-slate-300">Project created successfully!</p>
+      </div>
+    );
+  }
+  if (alreadyHasProject) {
+    return (
+      <div className="fixed bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
+        <p className="text-slate-300">
+          You already have a{" "}
+          <a href="/app/student/myprojects" className=" text-blue-500">
+            {" "}
+            project
+          </a>
+        </p>
+      </div>
+    );
+  }
+  if (isLoading) {
+    return (
+      <div className="fixed bg-background z-40 p-3 rounded-lg top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 overflow-auto">
+        <Spinner />
       </div>
     );
   }
@@ -193,7 +267,9 @@ export default function StudentCreateProjectForm() {
             ))}
           </div>
         </div>
-        <Button type="submit">Create</Button>
+        <Button onClick={() => {}} type="submit">
+          Create
+        </Button>
       </form>
     </div>
   );

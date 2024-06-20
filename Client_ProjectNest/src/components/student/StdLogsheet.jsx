@@ -1,40 +1,45 @@
+import { useEffect, useState } from "react";
 import DateBox from "../DateBox";
+import axios from "axios";
+import { useProject } from "../../contexts/ProjectContext";
+import Spinner from "../Spinner";
+const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
 export default function StdLogsheet() {
-  const initialData = [
-    {
-      id: 1,
-      name: "Mohit Shahi",
-      task: "frontend task ui complete",
-      status: "completed",
-      remarks: "do it urgent",
-      grade: "A",
-    },
-    {
-      id: 2,
-      name: "Ravi Pajiyar",
-      task: "frontend task ui complete",
-      status: "inprogress",
-      remarks: "do it urgent",
-      grade: "B+",
-    },
-    {
-      id: 3,
-      name: "Sushankhya Chapagain",
-      task: "frontend task ui complete",
-      status: "inprogress",
-      remarks: "do it urgent",
-      grade: "A-",
-    },
-    {
-      id: 4,
-      name: "Arun Bhandari",
-      task: "frontend task ui complete",
-      status: "completed",
-      remarks: "do it urgent",
-      grade: "A",
-    },
-  ];
+  const { projectDetails } = useProject();
+  const { project } = projectDetails;
+  const [tasks, setTasks] = useState([]);
+  const [isTaskLoading, setIsTaskLoading] = useState(false);
+
+  useEffect(function () {
+    async function fetchMyTasks() {
+      try {
+        setIsTaskLoading(true);
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${BASE_URL}/project/${project._id}/task`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTasks(res.data.tasks);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsTaskLoading(false);
+      }
+    }
+
+    fetchMyTasks();
+  }, []);
+
+  if (isTaskLoading) {
+    return (
+      <div className="w-full flex flex-col items-center px-4 gap-5 py-3 justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex flex-col items-center px-4 gap-5 py-3">
@@ -63,13 +68,15 @@ export default function StdLogsheet() {
             </tr>
           </thead>
           <tbody className="text-gray-500">
-            {initialData.map((row) => (
-              <tr key={row.id} className="mt-3">
-                <td className="py-4 px-4 text-md">{row.name}</td>
-                <td className="py-4 px-4 text-md">{row.task}</td>
-                <td className="py-4 px-4 text-md">{row.status}</td>
-                <td className="py-4 px-4 text-md">{row.remarks}</td>
-                <td className="py-4 px-4 text-md">{row.grade}</td>
+            {tasks.map((task) => (
+              <tr key={task._id} className="mt-3">
+                <td className="py-4 px-4 text-md">
+                  {task.assignedTo.firstName + " " + task.assignedTo.lastName}
+                </td>
+                <td className="py-4 px-4 text-md">{task.task}</td>
+                <td className="py-4 px-4 text-md">{task.status}</td>
+                <td className="py-4 px-4 text-md">{task.remarks}</td>
+                <td className="py-4 px-4 text-md">{task.grade}</td>
               </tr>
             ))}
           </tbody>

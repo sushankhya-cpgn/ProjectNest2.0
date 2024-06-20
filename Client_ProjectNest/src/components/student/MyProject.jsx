@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../Spinner";
-import Button from "../Button";
 import PersonItem from "./PersonItem";
 import TechnologyTag from "./TechnologyTag";
-import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
 function MyProject() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [projects, setProjects] = useState(null);
   const [file, setFile] = useState(null);
   const [numPages, setNumPages] = useState(null);
@@ -51,7 +48,11 @@ function MyProject() {
   }
 
   if (!projects) {
-    return <div>No projects found.</div>;
+    return (
+      <div className=" text-slate-400">
+        You have not created any project yet.
+      </div>
+    );
   }
 
   async function handleAcceptRequest(person) {
@@ -143,6 +144,7 @@ function MyProject() {
       const token = localStorage.getItem("token");
       const projectId = projects._id;
 
+      setIsUploading(true);
       const formData = new FormData();
       formData.append("proposal", file);
 
@@ -157,7 +159,7 @@ function MyProject() {
         }
       );
 
-      console.log("Proposal sent:", data.data.propsal);
+      // console.log("Proposal sent:", data.data.propsal);
 
       // Check if the proposal was successful,ly uploaded
 
@@ -168,6 +170,8 @@ function MyProject() {
       }));
     } catch (err) {
       console.error("Error sending proposal:", err.message);
+    } finally {
+      setIsUploading(false);
     }
   }
 
@@ -183,10 +187,6 @@ function MyProject() {
     <div className="p-3 pt-0 overflow-scroll flex flex-col gap-4 bg-backgroundlight ">
       <div className="py-3 sticky top-0 flex justify-between items-center">
         <h1 className="text-2xl">{projects.title}</h1>
-        <Button onClick={handleprojectreq}>
-          {/* {!projects.proposalPDF ? "Send Project" : "Request Sent"} */}
-          {projects.status !== "pending" ? "Send Request" : "Request Pending"}
-        </Button>
       </div>
       <div className="flex justify-between">
         <PersonItem
@@ -239,24 +239,30 @@ function MyProject() {
             className="bg-accent/70 transition-all duration-200 ring-2 rounded-md  h-10  w-40 text-white "
             onClick={handleSendProposal}
           >
-            {projects.proposalPDF ? "Reupload Report" : "Upload Report"}
+            {isUploading
+              ? "Uploading..."
+              : projects.proposalPDF
+              ? "Reupload Report"
+              : "Upload Report"}
+            {/* {} */}
           </button>
         </>
-
-        <div>
-          <p>{projects.proposalPDF}</p>
-          <p>
-            {" "}
-            <a
-              href={`../../public/${projects.proposalPDF}`}
-              alt="PDF"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Proposal
-            </a>
-          </p>
-        </div>
+        {projects.proposalPDF && (
+          <div>
+            <p>{projects.proposalPDF}</p>
+            <p className=" text-blue-700">
+              {" "}
+              <a
+                href={`http://127.0.0.1:8000/public/projectproposals/${projects.proposalPDF}`}
+                alt="PDF"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Proposal
+              </a>
+            </p>
+          </div>
+        )}
       </div>
       <div>
         <h2 className="mb-4">These people are interested in the project:</h2>
