@@ -10,12 +10,13 @@ import { useState } from "react";
 import NavBarItem from "./NavBarItem";
 import { AiTwotoneProject } from "react-icons/ai";
 import { useUser } from "../contexts/userContext";
-
+import { useNavigate } from "react-router-dom";
 const iconColor = "#dbdbdb";
 
 export default function NavBar() {
   const [isFullMenue, setIsFullMenue] = useState(true);
   const { user } = useUser();
+  const navigate = useNavigate();
   if (!user) return <h1>Loading..</h1>;
   return (
     <div className=" bg-background overflow-y-scroll w-fit flex flex-col justify-between h-dvh px-2 py-8 rounded-lg flex-shrink-0">
@@ -73,7 +74,7 @@ export default function NavBar() {
             </NavBarItem>
             <NavBarItem
               isFullMenue={isFullMenue}
-              name="project details"
+              name="ongoing projects"
               navto="project"
             >
               <LuSearchCode color={iconColor} size={20} />
@@ -111,9 +112,25 @@ export default function NavBar() {
         )}
       </div>
 
-      <NavBarItem navto="logout" isFullMenue={isFullMenue} name="logout">
+      {/* <NavBarItem navto="" isFullMenue={isFullMenue} name="logout">
         <CiLogout color={iconColor} size={20} />
-      </NavBarItem>
+      </NavBarItem> */}
+      <div
+        className={`${
+          !isFullMenue && "justify-center"
+        } text-text hover:text-stone-50 transition-all duration-400 cursor-pointer flex felx-col items-center px-5 py-4 hover:bg-accent/60 rounded-lg`}
+        onClick={() => {
+          localStorage.clear("token");
+          navigate("/login");
+        }}
+      >
+        <CiLogout color={iconColor} size={20} />
+        {isFullMenue && (
+          <span className="hidden sm:block ml-10 text-md uppercase tracking-widest">
+            Logout
+          </span>
+        )}
+      </div>
     </div>
   );
 }

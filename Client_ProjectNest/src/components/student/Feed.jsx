@@ -1,15 +1,8 @@
 function Feed() {
   return (
     <div className="flex gap-3 flex-col overflow-y-scroll h-4/5">
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
-      <FeedContent />
+      {/* <FeedContent />
+      <FeedContent /> */}
     </div>
   );
 }

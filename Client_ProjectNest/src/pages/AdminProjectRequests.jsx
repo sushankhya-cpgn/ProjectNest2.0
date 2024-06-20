@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
 import CreateTable from "../components/Admin/AddProject/CreateTable";
+import Spinner from "../components/Spinner";
 
 function ProjectRequests() {
   const [projectreq, setProjectreq] = useState([]);
@@ -161,7 +162,11 @@ function ProjectRequests() {
 
   const [columnFilters, setColumnFilters] = useState([]);
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-screen bg-backgroundlight flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Spinner from "../components/Spinner";
 
 function Archives() {
   const [archived, setArchived] = useState([]);
@@ -36,11 +37,21 @@ function Archives() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-screen bg-backgroundlight flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    if (loading) {
+      return (
+        <div className="w-full h-screen bg-backgroundlight flex items-center justify-center">
+          <h1>Something went wrong!</h1>
+        </div>
+      );
+    }
   }
 
   return (

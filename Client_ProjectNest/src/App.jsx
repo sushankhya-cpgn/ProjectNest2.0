@@ -35,6 +35,7 @@ import { ProjectProvider } from "./contexts/ProjectContext";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Error404Page from "./pages/Error404Page";
 import RoleProtectedRoutes from "./utils/RoleProtectedRoutes";
+import LogOutPage from "./pages/LogOutPage";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
                   <Route index element={<Navigate to="/login" replace />} />
                   <Route path="login" element={<LoginPage />} />
                 </Route>
+                <Route path="logout" element={<LogOutPage />} />
                 <Route element={<ProtectedRoutes />}>
                   <Route path="profile" element={<Profile />} />
                   <Route path="/app">
