@@ -33,6 +33,7 @@ function ProjectRequests() {
     );
 
     console.log(data);
+    setProjectreq((prev) => prev.filter((proj) => proj._id !== project_id));
   }
 
   async function handlerejectRequest(project_id) {
@@ -40,7 +41,7 @@ function ProjectRequests() {
     console.log("projectreq", projectreq);
     const data = await axios.patch(
       `http://127.0.0.1:8000/api/v2/projectreq/${project_id}/reject-proposal`,
-
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,6 +49,7 @@ function ProjectRequests() {
       }
     );
     console.log(data);
+    setProjectreq((prev) => prev.filter((proj) => proj._id !== project_id));
   }
 
   useEffect(() => {
