@@ -38,32 +38,7 @@ export default function StudentCreateProjectForm() {
   const [formSubmitted, setFormSubmitted] = useState(false); // New state variable
   const [isLoading, setIsLoading] = useState(false);
   const [alreadyHasProject, setAlreadyHasProject] = useState(false);
-  // useEffect(() => {
-  //   async function fetchTechTags() {
-  //     try {
-  //       setIsLoading(true);
-  //       const response = await axios.get(
-  //         "http://127.0.0.1:8000/api/v2/project/techtags"
-  //       );
-  //       setTechStackOptions([...response.data.techTags]);
-  //       // console.log([...response.data.data.techTags]);
-  //       // console.log(response.data.techTags);
-  //     } catch (err) {
-  //       setTechStackOptions([
-  //         "React",
-  //         "NodeJS",
-  //         "Python",
-  //         "JavaScript",
-  //         "Java",
-  //       ]);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   fetchTechTags();
-  // }, []);
 
-  // console.log("tech tags", techStackOptions);
   useEffect(() => {
     async function fetchProjects() {
       try {
@@ -97,7 +72,6 @@ export default function StudentCreateProjectForm() {
     setAvailableTechTags([...techStackOptions]);
   }, []);
 
-  console.log("already has a project", alreadyHasProject);
   useEffect(() => {
     const searchTerm = techTagSearchTerm.trim().toLocaleLowerCase();
     if (searchTerm.length < 2) {

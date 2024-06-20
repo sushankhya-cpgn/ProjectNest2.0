@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CreateTable from "../components/Admin/AddProject/CreateTable";
 import { createColumnHelper } from "@tanstack/react-table";
+import Spinner from "../components/Spinner";
 
 function AdminProjectDetails() {
   const columnHelper = createColumnHelper();
@@ -75,11 +76,19 @@ function AdminProjectDetails() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-screen bg-backgroundlight flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="w-full h-screen bg-backgroundlight flex items-center justify-center">
+        <h1>Something went wrong</h1>
+      </div>
+    );
   }
 
   return (

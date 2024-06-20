@@ -14,14 +14,15 @@ function FindProjectProjectDetail() {
   const [joinLoading, setJoinLoading] = useState(false);
   const [joinError, setJoinError] = useState("");
   const [joinRequested, setJoinRequested] = useState(false);
-
+  const [canSendRequest, setCanSendRequest] = useState(true);
+  const [interestedPeople, setInterestedPeople] = useState([]);
+  const [isAlreadyInProject, setIsAlreadyInProject] = useState(false);
   useEffect(() => {
     async function fetchProject() {
       try {
         setLoading(true);
         setError("");
         const token = localStorage.getItem("token");
-        console.log("Token retrieved:", token);
 
         const { data } = await axios.get(
           `http://127.0.0.1:8000/api/v2/projectreq/${id}`,
@@ -32,10 +33,16 @@ function FindProjectProjectDetail() {
           }
         );
 
-        console.log("Fetched data:", data); // Log the fetched data to inspect its structure
+        // console.log("Fetched data:", data.data.canSendRequest); // Log the fetched data to inspect its structure
 
         if (data && data.data) {
           // Adjust based on the actual data structure
+          setCanSendRequest(data.data.canSendRequest);
+          setIsAlreadyInProject(data.data.alreadyInProject);
+          setInterestedPeople([
+            ...data.data.project.joinrequests,
+            ...data.data.project.teamMembers,
+          ]);
           setCreatedProject(data.data.project);
         } else {
           setError("Invalid data structure");
@@ -52,15 +59,12 @@ function FindProjectProjectDetail() {
   }, [id]);
 
   // Update interestedPeople to use the keys firstName and photo
-  const interestedPeople = [];
-  console.log(createdProject);
 
   async function handleJoinRequest() {
     try {
       setJoinLoading(true);
       setJoinError("");
       const token = localStorage.getItem("token");
-      console.log("Requesting to join project...");
 
       const response = await axios.patch(
         `http://127.0.0.1:8000/api/v2/projectreq/${id}/send-join-request`,
@@ -95,7 +99,7 @@ function FindProjectProjectDetail() {
   if (error) {
     return (
       <div className="h-4/5 flex items-center justify-center">
-        Something went wrong, try again later.
+        Something went wrong, try again later. {error}
       </div>
     );
   }
@@ -106,13 +110,15 @@ function FindProjectProjectDetail() {
         <h1 className=" text-2xl">{createdProject.title}</h1>
         <Button
           onClick={handleJoinRequest}
-          disabled={joinLoading || joinRequested}
+          disabled={joinLoading || joinRequested || !canSendRequest}
         >
-          {joinLoading
-            ? "Requesting..."
-            : joinRequested
-            ? "Requested"
-            : "Request to join"}
+          {!isAlreadyInProject &&
+            (!canSendRequest
+              ? "Requested"
+              : joinLoading
+              ? "Requesting"
+              : "Request to Join")}
+          {isAlreadyInProject && "You are already in a project"}
         </Button>
       </div>
       {joinError && <p className="text-red-500">{joinError}</p>}
@@ -158,18 +164,23 @@ function FindProjectProjectDetail() {
         </div>
       )}
 
-      <div>
-        <h2 className="mb-4">These people are interested in the project:</h2>
+      {interestedPeople.length > 0 && (
         <div>
-          <ul className="flex flex-col gap-2 mt-2">
-            {interestedPeople?.map((person, i) => (
-              <li key={i}>
-                <PersonItem name={person.firstName} image={person.photo} />
-              </li>
-            ))}
-          </ul>
+          <h2 className="mb-4">These people are interested in the project:</h2>
+          <div>
+            <ul className="flex flex-col gap-2 mt-2">
+              {interestedPeople?.map((person, i) => (
+                <li key={i}>
+                  <PersonItem
+                    name={person.firstName + " " + person.lastName}
+                    image={person.photo}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

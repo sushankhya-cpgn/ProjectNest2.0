@@ -5,13 +5,16 @@ import PersonItem from "./PersonItem";
 import TechnologyTag from "./TechnologyTag";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
+import Button from "../Button";
 
 function MyProject() {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isSendingProposal, setIsSendingProposal] = useState(false);
   const [projects, setProjects] = useState(null);
   const [file, setFile] = useState(null);
   const [numPages, setNumPages] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function fetchProjects() {
@@ -89,7 +92,8 @@ function MyProject() {
     try {
       const token = localStorage.getItem("token");
       const projectId = projects._id;
-      console.log(projectId);
+      setErrorMessage("");
+      setIsSendingProposal(true);
       const { data } = await axios.patch(
         `http://127.0.0.1:8000/api/v2/projectreq/${projectId}/send`,
         {},
@@ -104,8 +108,11 @@ function MyProject() {
         status: "pending",
       }));
       console.log(data);
+      setProjects(data.data.projectProposal);
     } catch (err) {
-      console.log(err);
+      setErrorMessage(err.response.data.message);
+    } finally {
+      setIsSendingProposal(false);
     }
   }
 
@@ -164,6 +171,7 @@ function MyProject() {
       // Check if the proposal was successful,ly uploaded
 
       // Update the local state to indicate that the proposal was uploaded
+      setFile(null);
       setProjects((prevProjects) => ({
         ...prevProjects,
         proposalPDF: data.data.propsal,
@@ -185,8 +193,19 @@ function MyProject() {
 
   return (
     <div className="p-3 pt-0 overflow-scroll flex flex-col gap-4 bg-backgroundlight ">
+      <p className="text-center text-red-700">{errorMessage}</p>
       <div className="py-3 sticky top-0 flex justify-between items-center">
         <h1 className="text-2xl">{projects.title}</h1>
+        <Button
+          disabled={projects.status !== "draft"}
+          onClick={handleprojectreq}
+        >
+          {isSendingProposal
+            ? "Sending..."
+            : projects.status === "draft"
+            ? "Send Proposal"
+            : "Pending"}
+        </Button>
       </div>
       <div className="flex justify-between">
         <PersonItem
@@ -238,13 +257,13 @@ function MyProject() {
           <button
             className="bg-accent/70 transition-all duration-200 ring-2 rounded-md  h-10  w-40 text-white "
             onClick={handleSendProposal}
+            disabled={file ? false : true}
           >
             {isUploading
               ? "Uploading..."
               : projects.proposalPDF
-              ? "Reupload Report"
-              : "Upload Report"}
-            {/* {} */}
+              ? "Reupload Proposal"
+              : "Upload Proposal"}
           </button>
         </>
         {projects.proposalPDF && (

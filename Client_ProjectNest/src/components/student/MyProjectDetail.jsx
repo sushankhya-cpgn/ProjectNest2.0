@@ -13,30 +13,6 @@ function MyProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(
-    function () {
-      async function fetchProject() {
-        try {
-          setLoading(true);
-          setError("");
-          const { data } = await axios.get(
-            `http://localhost:9000/createdProjects/${id}`
-          );
-
-          setCreatedProject(data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-      if (id) {
-        fetchProject();
-      }
-    },
-    [id]
-  );
-
   const [persons, setPersons] = useState([
     {
       name: "Mohit Shahi",

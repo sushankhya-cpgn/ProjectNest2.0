@@ -29,11 +29,11 @@ import StdDocuments from "./components/student/StdDocuments";
 import StdMembers from "./components/student/StdMembers";
 import StudentProjectPage from "./pages/StudentProjectPage";
 import MyProject from "./components/student/MyProject";
-import MyProjectDetail from "./components/student/MyProjectDetail";
 import { ProjectProvider } from "./contexts/ProjectContext";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Error404Page from "./pages/Error404Page";
 import RoleProtectedRoutes from "./utils/RoleProtectedRoutes";
+import LogOutPage from "./pages/LogOutPage";
 
 function App() {
   return (
@@ -47,6 +47,7 @@ function App() {
                   <Route index element={<Navigate to="/login" replace />} />
                   <Route path="login" element={<LoginPage />} />
                 </Route>
+                <Route path="logout" element={<LogOutPage />} />
                 <Route element={<ProtectedRoutes />}>
                   <Route path="profile" element={<Profile />} />
                   <Route path="/app">
@@ -64,9 +65,10 @@ function App() {
                             element={<FindPorjectProjectDetail />}
                           />
                         </Route>
-                        <Route path="myprojects" element={<MyProject />}>
-                          <Route path=":id" element={<MyProjectDetail />} />
-                        </Route>
+                        <Route
+                          path="myprojects"
+                          element={<MyProject />}
+                        ></Route>
                         <Route path="settings" element={<Setting />} />
                       </Route>
                       <Route
