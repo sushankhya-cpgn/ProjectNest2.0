@@ -95,23 +95,19 @@ const CreateTable = ({
               ? table.getRowModel().rows.map((row) => (
                   <tr
                     key={row.id}
-                    className="even:bg-gray-800 hover:bg-slate-600 cursor-pointer"
+                    className="even:bg-gray-800  hover:bg-slate-950 cursor-pointer"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="px-3.5 py-2">
-                        {path === "/projectdetails" ? (
-                          <Link to={`/projectdetail/${row.id}`}>
-                            {flexRender(
+                        {path === "/projectdetails"
+                          ? flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )
+                          : flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )}
-                          </Link>
-                        ) : (
-                          flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
-                        )}
                       </td>
                     ))}
                   </tr>

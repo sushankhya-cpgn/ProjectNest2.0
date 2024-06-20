@@ -135,7 +135,7 @@ function App() {
                           <Route
                             path="projectdetails"
                             element={<AdminProjectDetails />}
-                          />
+                          ></Route>
                           <Route
                             path="projectdetails/projectdetail/:projectID"
                             element={<ProjectPage />}

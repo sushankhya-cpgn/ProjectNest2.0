@@ -64,6 +64,7 @@ function ProjectRequests() {
           },
         }
       );
+
       const supervisor = await axios.get(
         "http://127.0.0.1:8000/api/v2/user?role=supervisor",
         {
@@ -72,12 +73,11 @@ function ProjectRequests() {
           },
         }
       );
-      setLoading("false");
-
+      setLoading(false);
       console.log(supervisor.data.data.users);
 
       setProjectreq(data.data.proposals);
-      console.log(projectreq);
+      console.log("Proposal PDF", data.data.proposals);
       setSupervisors(supervisor.data.data.users);
     }
     fetchProjectReq();
@@ -105,11 +105,23 @@ function ProjectRequests() {
       cell: (info) => <span>{info.getValue()}</span>,
       header: "Solution",
     }),
+    columnHelper.accessor("proposalPDF", {
+      id: "proposal",
+      cell: (info) => (
+        <a
+          href={`http://127.0.0.1:8000/public/projectproposals/${info.getValue()}`}
+          target="_blank"
+        >
+          <span className=" text-blue-600 hover:text-red-200">View </span>
+        </a>
+      ),
+      header: "Proposal",
+    }),
     columnHelper.accessor("Supervisor", {
       id: "Supervisor",
       cell: (info) => (
         <select
-          className="text-black w-32"
+          className="h-full w-full rounded-[7px] text-black px-2 "
           onChange={(e) =>
             handleSupervisorChange(info.cell.row.original._id, e.target.value)
           }
@@ -130,13 +142,13 @@ function ProjectRequests() {
       cell: (info) => (
         <div className="flex gap-2">
           <button
-            className="text-black bg-slate-200 w-24"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => handleapproveRequest(info.cell.row.original._id)}
           >
             Approve
           </button>
           <button
-            className="text-black bg-slate-200 w-24"
+            className="bg-red-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => handlerejectRequest(info.cell.row.original._id)}
           >
             Reject
@@ -148,16 +160,19 @@ function ProjectRequests() {
   ];
 
   const [columnFilters, setColumnFilters] = useState([]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="w-full">
       <h1 className="text-center text-2xl">Project Requests</h1>
+
       <CreateTable
         columns={columns}
         data={projectreq}
         columnFilters={columnFilters}
         setColumnFilters={setColumnFilters}
-        loading={loading}
         supervisors={supervisors}
       />
     </div>
