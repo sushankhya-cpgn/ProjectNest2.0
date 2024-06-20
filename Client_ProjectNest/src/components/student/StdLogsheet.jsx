@@ -43,8 +43,8 @@ export default function StdLogsheet() {
 
   return (
     <div className="w-full flex flex-col items-center px-4 gap-5 py-3">
-      <div className="datebox">
-        <DateBox />
+      <div className="logsheet bg-gray-700 dark:bg-gray-800 px-6 py-3 rounded-lg shadow-lg">
+        <span className="text-xl font-semibold text-text">Logsheet</span>
       </div>
       <div className="memcontainer w-full h-3/4 rounded-lg p-4 relative overflow-scroll">
         <table>
@@ -81,14 +81,6 @@ export default function StdLogsheet() {
             ))}
           </tbody>
         </table>
-      </div>
-      <div className="nextnprevbtn w-full flex justify-between">
-        <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
-          Previous
-        </button>
-        <button className="bg-accent px-5 py-3 rounded-lg flex items-center justify-center gap-2 h-9 text-text">
-          Next
-        </button>
       </div>
     </div>
   );
