@@ -71,69 +71,82 @@ function App() {
                         </Route>
                         <Route path="settings" element={<Setting />} />
                       </Route>
-                    </Route>
-                    <Route path="supervisor" element={<SupervisorDashboard />}>
                       <Route
-                        index
-                        element={<Navigate to="homesuper" replace />}
-                      />
-                      <Route path="homesuper" element={<SuperFeed />} />
-                      <Route path="findprojects" element={<FindProjects />} />
-                      <Route path="settings" element={<Settings />} />
-                    </Route>
-                    <Route
-                      path="supervisor/projects/:projectId"
-                      element={<ProjectsPage />}
-                    >
-                      <Route index element={<Navigate to="tasks" replace />} />
-                      <Route path="tasks" element={<Task />} />
-                      <Route path="member" element={<Members />} />
-                      <Route path="logsheets" element={<Logsheet />} />
-                      <Route path="chats" element={<GroupChat />} />
-                      <Route path="documents" element={<Documents />} />
-                    </Route>
-                    <Route
-                      path="student/project/:projectId"
-                      element={<StudentProjectPage />}
-                    >
-                      <Route
-                        index
-                        element={<Navigate to="stdtasks" replace />}
-                      />
-                      <Route path="stdtasks" element={<StdTask />} />
-                      <Route path="stdmember" element={<StdMembers />} />
-                      <Route path="stdlogsheets" element={<StdLogsheet />} />
-                      <Route path="stdchats" element={<StdGroupChat />} />
-                      <Route path="stddocuments" element={<StdDocuments />} />
-                    </Route>
-                    <Route path="admin" element={<AdminPage />}>
-                      <Route
-                        index
-                        element={<Navigate to="projectrequests" replace />}
-                      />
-                      <Route
-                        path="projectrequests"
-                        element={<ProjectRequests />}
-                      />
-                      <Route path="project">
+                        path="student/project/:projectId"
+                        element={<StudentProjectPage />}
+                      >
                         <Route
                           index
-                          element={<Navigate to="projectdetails" />}
+                          element={<Navigate to="stdtasks" replace />}
                         />
+                        <Route path="stdtasks" element={<StdTask />} />
+                        <Route path="stdmember" element={<StdMembers />} />
+                        <Route path="stdlogsheets" element={<StdLogsheet />} />
+                        <Route path="stdchats" element={<StdGroupChat />} />
+                        <Route path="stddocuments" element={<StdDocuments />} />
+                      </Route>
+                    </Route>
+                    <Route
+                      element={<RoleProtectedRoutes role={"supervisor"} />}
+                    >
+                      <Route
+                        path="supervisor"
+                        element={<SupervisorDashboard />}
+                      >
                         <Route
-                          path="projectdetails"
-                          element={<AdminProjectDetails />}
+                          index
+                          element={<Navigate to="homesuper" replace />}
                         />
-                        <Route
-                          path="projectdetails/projectdetail/:projectID"
-                          element={<ProjectPage />}
-                        />
+                        <Route path="homesuper" element={<SuperFeed />} />
+                        <Route path="findprojects" element={<FindProjects />} />
+                        <Route path="settings" element={<Settings />} />
                       </Route>
                       <Route
-                        path="deletedprojects"
-                        element={<Deletedprojects />}
-                      />
-                      <Route path="archives" element={<Archieves />} />
+                        path="supervisor/projects/:projectId"
+                        element={<ProjectsPage />}
+                      >
+                        <Route
+                          index
+                          element={<Navigate to="tasks" replace />}
+                        />
+                        <Route path="tasks" element={<Task />} />
+                        <Route path="member" element={<Members />} />
+                        <Route path="logsheets" element={<Logsheet />} />
+                        <Route path="chats" element={<GroupChat />} />
+                        <Route path="documents" element={<Documents />} />
+                      </Route>
+                    </Route>
+
+                    <Route element={<RoleProtectedRoutes role={"admin"} />}>
+                      <Route path="admin" element={<AdminPage />}>
+                        <Route
+                          index
+                          element={<Navigate to="projectrequests" replace />}
+                        />
+                        <Route
+                          path="projectrequests"
+                          element={<ProjectRequests />}
+                        />
+                        <Route path="project">
+                          <Route
+                            index
+                            element={<Navigate to="projectdetails" />}
+                          />
+                          <Route
+                            path="projectdetails"
+                            element={<AdminProjectDetails />}
+                          />
+                          <Route
+                            path="projectdetails/projectdetail/:projectID"
+                            element={<ProjectPage />}
+                          />
+                        </Route>
+                        <Route
+                          path="deletedprojects"
+                          element={<Deletedprojects />}
+                        />
+                        <Route path="archives" element={<Archieves />} />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>
