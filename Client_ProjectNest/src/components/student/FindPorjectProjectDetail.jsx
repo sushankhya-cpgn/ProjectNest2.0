@@ -14,7 +14,8 @@ function FindProjectProjectDetail() {
   const [joinLoading, setJoinLoading] = useState(false);
   const [joinError, setJoinError] = useState("");
   const [joinRequested, setJoinRequested] = useState(false);
-
+  const [canSendRequest, setCanSendRequest] = useState(true);
+  const [interestedPeople, setInterestedPeople] = useState([]);
   useEffect(() => {
     async function fetchProject() {
       try {
@@ -32,10 +33,15 @@ function FindProjectProjectDetail() {
           }
         );
 
-        console.log("Fetched data:", data); // Log the fetched data to inspect its structure
+        // console.log("Fetched data:", data.data.canSendRequest); // Log the fetched data to inspect its structure
 
         if (data && data.data) {
           // Adjust based on the actual data structure
+          setCanSendRequest(data.data.canSendRequest);
+          setInterestedPeople([
+            ...data.data.project.joinrequests,
+            ...data.data.project.teamMembers,
+          ]);
           setCreatedProject(data.data.project);
         } else {
           setError("Invalid data structure");
@@ -52,8 +58,7 @@ function FindProjectProjectDetail() {
   }, [id]);
 
   // Update interestedPeople to use the keys firstName and photo
-  const interestedPeople = [];
-  console.log(createdProject);
+  console.log("created proejct", createdProject);
 
   async function handleJoinRequest() {
     try {
@@ -95,7 +100,7 @@ function FindProjectProjectDetail() {
   if (error) {
     return (
       <div className="h-4/5 flex items-center justify-center">
-        Something went wrong, try again later.
+        Something went wrong, try again later. {error}
       </div>
     );
   }
@@ -106,9 +111,11 @@ function FindProjectProjectDetail() {
         <h1 className=" text-2xl">{createdProject.title}</h1>
         <Button
           onClick={handleJoinRequest}
-          disabled={joinLoading || joinRequested}
+          disabled={joinLoading || joinRequested || !canSendRequest}
         >
-          {joinLoading
+          {!canSendRequest
+            ? "Requested"
+            : joinLoading
             ? "Requesting..."
             : joinRequested
             ? "Requested"
@@ -158,18 +165,23 @@ function FindProjectProjectDetail() {
         </div>
       )}
 
-      <div>
-        <h2 className="mb-4">These people are interested in the project:</h2>
+      {interestedPeople.length > 0 && (
         <div>
-          <ul className="flex flex-col gap-2 mt-2">
-            {interestedPeople?.map((person, i) => (
-              <li key={i}>
-                <PersonItem name={person.firstName} image={person.photo} />
-              </li>
-            ))}
-          </ul>
+          <h2 className="mb-4">These people are interested in the project:</h2>
+          <div>
+            <ul className="flex flex-col gap-2 mt-2">
+              {interestedPeople?.map((person, i) => (
+                <li key={i}>
+                  <PersonItem
+                    name={person.firstName + " " + person.lastName}
+                    image={person.photo}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -31,7 +31,6 @@ import StdDocuments from "./components/student/StdDocuments";
 import StdMembers from "./components/student/StdMembers";
 import StudentProjectPage from "./pages/StudentProjectPage";
 import MyProject from "./components/student/MyProject";
-import MyProjectDetail from "./components/student/MyProjectDetail";
 import { ProjectProvider } from "./contexts/ProjectContext";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Error404Page from "./pages/Error404Page";
@@ -66,9 +65,10 @@ function App() {
                             element={<FindPorjectProjectDetail />}
                           />
                         </Route>
-                        <Route path="myprojects" element={<MyProject />}>
-                          <Route path=":id" element={<MyProjectDetail />} />
-                        </Route>
+                        <Route
+                          path="myprojects"
+                          element={<MyProject />}
+                        ></Route>
                         <Route path="settings" element={<Setting />} />
                       </Route>
                       <Route
