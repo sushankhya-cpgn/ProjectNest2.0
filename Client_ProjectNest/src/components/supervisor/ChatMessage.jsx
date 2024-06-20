@@ -1,6 +1,12 @@
 import React from "react";
 
-const ChatMessage = ({ user, message, classs }) => {
+const StdChatMessage = ({
+  senderId,
+  userName,
+  content,
+  classs,
+  currentUserId,
+}) => {
   const messageClass =
     classs === "right" ? "bg-crimson text-white" : "bg-green-200";
   const floatClass =
@@ -10,9 +16,9 @@ const ChatMessage = ({ user, message, classs }) => {
     <div
       className={`rounded-lg p-4 my-2 max-w-[70%] clear-both ${messageClass} ${floatClass}`}
     >
-      {user ? `${user}: ${message}` : `You: ${message}`}
+      {senderId === currentUserId ? `${content}` : `${userName}: ${content}`}
     </div>
   );
 };
 
-export default ChatMessage;
+export default StdChatMessage;
