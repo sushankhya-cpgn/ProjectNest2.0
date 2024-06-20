@@ -5,10 +5,55 @@ import CreateTable from "../components/Admin/AddProject/CreateTable";
 
 function ProjectRequests() {
   const [projectreq, setProjectreq] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedSupervisors, setSelectedSupervisors] = useState({});
+
+  function handleSupervisorChange(projectId, supervisorId) {
+    setSelectedSupervisors((prevState) => ({
+      ...prevState,
+      [projectId]: supervisorId,
+    }));
+  }
+
+  async function handleapproveRequest(project_id) {
+    const token = localStorage.getItem("token");
+    const supervisorId = selectedSupervisors[project_id];
+
+    const data = await axios.patch(
+      `http://127.0.0.1:8000/api/v2/projectreq/${project_id}/accept-proposal`,
+      {
+        supervisor: supervisorId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(data);
+  }
+
+  async function handlerejectRequest(project_id) {
+    const token = localStorage.getItem("token");
+    console.log("projectreq", projectreq);
+    const data = await axios.patch(
+      `http://127.0.0.1:8000/api/v2/projectreq/${project_id}/reject-proposal`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(data);
+  }
 
   useEffect(() => {
     async function fetchProjectReq() {
       const token = localStorage.getItem("token");
+      setLoading(true);
       const data = await axios.get(
         "http://127.0.0.1:8000/api/v2/projectreq/proposals",
         {
@@ -18,10 +63,19 @@ function ProjectRequests() {
         }
       );
       const supervisor = await axios.get(
-        "http://127.0.0.1:8000/api/v2/user?role=supervisor"
+        "http://127.0.0.1:8000/api/v2/user?role=supervisor",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log(supervisor);
+      setLoading("false");
+
+      console.log(supervisor.data.data.users);
+
       setProjectreq(data.data.proposals);
+      setSupervisors(supervisor.data.data.users);
     }
     fetchProjectReq();
   }, []);
@@ -51,8 +105,19 @@ function ProjectRequests() {
     columnHelper.accessor("Supervisor", {
       id: "Supervisor",
       cell: (info) => (
-        <select className="text-black w-32">
-          <option>{info.getValue()}</option>
+        <select
+          className="text-black w-32"
+          onChange={(e) =>
+            handleSupervisorChange(info.cell.row.original._id, e.target.value)
+          }
+          value={selectedSupervisors[info.cell.row.original._id] || ""}
+        >
+          <option>Select Here</option>
+          {supervisors.map((supervisor) => (
+            <option key={supervisor._id} value={supervisor._id}>
+              {supervisor.firstName}
+            </option>
+          ))}
         </select>
       ),
       header: "Allocate Supervisor",
@@ -61,8 +126,18 @@ function ProjectRequests() {
       id: "registered",
       cell: (info) => (
         <div className="flex gap-2">
-          <button className="text-black bg-slate-200 w-24">Approve</button>
-          <button className="text-black bg-slate-200 w-24">Reject</button>
+          <button
+            className="text-black bg-slate-200 w-24"
+            onClick={() => handleapproveRequest(info.cell.row.original._id)}
+          >
+            Approve
+          </button>
+          <button
+            className="text-black bg-slate-200 w-24"
+            onClick={() => handlerejectRequest(info.cell.row.original._id)}
+          >
+            Reject
+          </button>
         </div>
       ),
       header: "Registration Action",
@@ -79,6 +154,8 @@ function ProjectRequests() {
         data={projectreq}
         columnFilters={columnFilters}
         setColumnFilters={setColumnFilters}
+        loading={loading}
+        supervisors={supervisors}
       />
     </div>
   );

@@ -8,9 +8,18 @@ import {
 } from "@tanstack/react-table";
 import { Link, useLocation } from "react-router-dom";
 
-const CreateTable = ({ columns, data, columnFilters, setColumnFilters }) => {
+const CreateTable = ({
+  columns,
+  data,
+  columnFilters,
+  setColumnFilters,
+  loading,
+  supervisors,
+}) => {
   const [selectedFilter, setSelectedFilter] = useState("ProjectName");
-  console.log("hi", data);
+
+  console.log(supervisors);
+
   const table = useReactTable({
     data,
     columns,
@@ -44,12 +53,12 @@ const CreateTable = ({ columns, data, columnFilters, setColumnFilters }) => {
             }
             placeholder="Search In Table"
             type="text"
-            className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-accent/60 mb-4 "
+            className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-accent/60 mb-4"
           />
           <div className="w-2/6">
             <span className="mr-5">Filter by</span>
             <select
-              className=" bg-primary outline-none  w-200 h-10 px-2"
+              className="bg-primary outline-none w-200 h-10 px-2"
               value={selectedFilter}
               onChange={(e) => setSelectedFilter(e.target.value)}
             >
@@ -121,7 +130,7 @@ const CreateTable = ({ columns, data, columnFilters, setColumnFilters }) => {
             )}
           </select>
           <button
-            className="p-1 border boreder-gray-300 px-2 disabled:opacity-30"
+            className="p-1 border border-gray-300 px-2 disabled:opacity-30"
             onClick={() => {
               table.previousPage();
             }}
@@ -130,7 +139,7 @@ const CreateTable = ({ columns, data, columnFilters, setColumnFilters }) => {
             {"<"}
           </button>
           <button
-            className="p-1 border boreder-gray-300 px-2 disabled:opacity-30"
+            className="p-1 border border-gray-300 px-2 disabled:opacity-30"
             onClick={() => {
               table.nextPage();
             }}
