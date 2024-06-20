@@ -8,7 +8,7 @@ function Feed() {
 
 function FeedContent() {
   return (
-    <div className="bg-background p-5 rounded-md text-sm sm:text-base">
+    <div className="bg-background p-5 rounded-md text-sm sm:text-base text-gray-400 ">
       <h1 className="text-3xl font-bold mb-6">
         Guide to Using the Project Proposal Platform
       </h1>
@@ -17,11 +17,11 @@ function FeedContent() {
         <h2 className="text-2xl font-semibold mb-2">
           1. Viewing Project Details
         </h2>
-        <p className="text-white">
+        <p className="">
           When you first access the platform, you will see a list of projects.
           Click on a project to view detailed information, including:
         </p>
-        <ul className="list-disc list-inside mt-2 text-white">
+        <ul className="list-disc list-inside mt-2 ">
           <li>
             <strong>Project Title</strong>
           </li>
@@ -55,11 +55,11 @@ function FeedContent() {
         <h2 className="text-2xl font-semibold mb-2">
           2. Submitting a Proposal
         </h2>
-        <p className="text-white">
+        <p className="">
           If you have a proposal (e.g., a PDF document) that outlines your ideas
           or plans for the project, follow these steps:
         </p>
-        <ol className="list-decimal list-inside mt-2 text-white">
+        <ol className="list-decimal list-inside mt-2 ">
           <li>
             <strong>Upload Proposal</strong>:
             <ul className="list-disc list-inside ml-6">
@@ -90,12 +90,12 @@ function FeedContent() {
         <h2 className="text-2xl font-semibold mb-2">
           3. Handling Join Requests
         </h2>
-        <p className="text-white">
+        <p className="">
           If you are a project owner, you may receive join requests from other
           users interested in participating in your project. Manage these
           requests as follows:
         </p>
-        <ol className="list-decimal list-inside mt-2 text-white">
+        <ol className="list-decimal list-inside mt-2 ">
           <li>
             <strong>View Join Requests</strong>:
             <ul className="list-disc list-inside ml-6">
@@ -126,7 +126,7 @@ function FeedContent() {
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">4. Important Features</h2>
-        <ul className="list-disc list-inside mt-2 text-white">
+        <ul className="list-disc list-inside mt-2 ">
           <li>
             <strong>Loading Indicator</strong>: A spinner will appear while data
             is being fetched or actions are being processed. This helps you know
@@ -145,7 +145,7 @@ function FeedContent() {
         <h2 className="text-2xl font-semibold mb-2">
           5. Troubleshooting and Support
         </h2>
-        <ul className="list-disc list-inside mt-2 text-white">
+        <ul className="list-disc list-inside mt-2 ">
           <li>
             <strong>Error Messages</strong>: If you encounter any errors (e.g.,
             while fetching projects or sending proposals), error messages will
@@ -162,7 +162,7 @@ function FeedContent() {
 
       <section className="mb-6">
         <h2 className="text-2xl font-semibold mb-2">6. Additional Tips</h2>
-        <ul className="list-disc list-inside mt-2 text-white">
+        <ul className="list-disc list-inside mt-2 ">
           <li>
             <strong>Keep Information Up-to-Date</strong>: Regularly update your
             project details to reflect the latest status and requirements.
