@@ -16,7 +16,7 @@ const CreateTable = ({
   loading,
   supervisors,
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState("ProjectName");
+  const [selectedFilter, setSelectedFilter] = useState("title");
 
   console.log(supervisors);
 
@@ -56,18 +56,23 @@ const CreateTable = ({
             className="p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-accent/60 mb-4"
           />
           <div className="w-2/6">
-            <span className="mr-5">Filter by</span>
-            <select
-              className="bg-primary outline-none w-200 h-10 px-2"
-              value={selectedFilter}
-              onChange={(e) => setSelectedFilter(e.target.value)}
-            >
-              <option value="ProjectName">Project Name</option>
-              <option value="Members">Team Member Name</option>
-              {path === "/projectrequests" && (
-                <option value="ProjectDescription">Project Description</option>
-              )}
-            </select>
+            {path === "/projectrequests" && (
+              <span className="mr-5">Filter by</span>
+            )}
+
+            {path === "/projectrequests" && (
+              <>
+                <select
+                  className="bg-primary outline-none w-200 h-10 px-2"
+                  value={selectedFilter}
+                  onChange={(e) => setSelectedFilter(e.target.value)}
+                >
+                  <option value="title">Project Name</option>
+                  <option value="problemStatement">Problem Statement</option>
+                  <option value="solution">Solution</option>
+                </select>
+              </>
+            )}
           </div>
         </div>
         <table className="border border-gray-700 w-full text-left mt-3">
@@ -94,19 +99,19 @@ const CreateTable = ({
                   >
                     {row.getVisibleCells().map((cell) => (
                       <td key={cell.id} className="px-3.5 py-2">
-                        {path === "/projectdetails" && (
-                          <Link to={`projectdetail/${row.id}`}>
+                        {path === "/projectdetails" ? (
+                          <Link to={`/projectdetail/${row.id}`}>
                             {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )}
                           </Link>
-                        )}
-                        {path === "/projectrequests" &&
+                        ) : (
                           flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
-                          )}
+                          )
+                        )}
                       </td>
                     ))}
                   </tr>

@@ -77,6 +77,7 @@ function ProjectRequests() {
       console.log(supervisor.data.data.users);
 
       setProjectreq(data.data.proposals);
+      console.log(projectreq);
       setSupervisors(supervisor.data.data.users);
     }
     fetchProjectReq();
