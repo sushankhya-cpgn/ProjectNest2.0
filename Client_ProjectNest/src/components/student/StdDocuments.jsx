@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { FaFilter } from "react-icons/fa6";
-import { FaSortAmountUp } from "react-icons/fa";
 import StdDocForm from "./StdDocForm";
 import StdFile from "./StdFile";
 import { useProject } from "../../contexts/ProjectContext";
@@ -29,18 +27,6 @@ export default function StdDocuments() {
             <span className="text-xl">+</span>
             <span className="hidden sm:block sm:text-sm">New</span>
           </button>
-          <button className="bg-secondary px-5 py-3 rounded-lg flex items-center justify-center gap-3 h-10 text-text">
-            <span className="text-xl">
-              <FaFilter />
-            </span>
-            <span className="hidden sm:block sm:text-sm">Filters</span>
-          </button>
-          <button className="bg-secondary px-5 py-3 rounded-lg flex items-center justify-center gap-3 h-10 text-text">
-            <span className="text-xl">
-              <FaSortAmountUp />
-            </span>
-            <span className="hidden sm:block sm:text-sm">Sort By</span>
-          </button>
         </div>
         <div className="folders flex flex-col gap-3 mt-5">
           <span className="text-text font-semibold text-xl">Files</span>
@@ -62,13 +48,6 @@ export default function StdDocuments() {
             )}
           </div>
         </div>
-        {/* <div className="recent flex flex-col gap-3 mt-5">
-          <span className="text-text font-semibold text-xl">Recent</span>
-          <div className="boxes flex gap-5">
-            <StdRecentFile />
-            <StdRecentFile />
-          </div>
-        </div> */}
       </div>
       {openNew && (
         <>

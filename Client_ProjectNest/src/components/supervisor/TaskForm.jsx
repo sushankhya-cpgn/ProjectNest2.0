@@ -52,18 +52,9 @@ export default function TaskForm() {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formData, setFormData] = useState(initialData);
-  const [inputs, setInputs] = useState([""]);
+  const [task, setTask] = useState("");
+  const [isFormVisible, setIsFormVisible] = useState(true);
   const { projectDetails } = useProject();
-
-  const addInput = () => {
-    if (inputs.length < 3) {
-      setInputs([...inputs, ""]);
-    }
-  };
-
-  const removeInput = (index) => {
-    setInputs(inputs.filter((_, i) => i !== index));
-  };
 
   const handleSelectChange = (field, value) => {
     setFormData((prevData) => ({
@@ -80,18 +71,12 @@ export default function TaskForm() {
     setShow(state);
   };
 
-  const handleInputChange = (index, event) => {
-    const newInputs = [...inputs];
-    newInputs[index] = event.target.value;
-    setInputs(newInputs);
-  };
-
   const handleSubmit = async () => {
     const submitData = {
       assignedTo: formData.members,
-      task: inputs.join(", "), // Assuming all tasks should be concatenated
+      task: task, // Single task input
       dueDate: selectedDate.toISOString().split("T")[0], // Format as YYYY-MM-DD
-      remarks: inputs.join(","),
+      remarks: formData.remarks,
     };
 
     console.log("Submit Data:", submitData);
@@ -122,7 +107,8 @@ export default function TaskForm() {
       );
 
       if (response.status === 200) {
-        alert("Task submitted successfully!");
+        // alert("Task submitted successfully!");
+        setIsFormVisible(false); // Hide the form after successful submission
         // Optionally, reset form or handle success
       } else {
         console.error("Error submitting task:", response.data);
@@ -137,6 +123,12 @@ export default function TaskForm() {
     }
   };
 
+  if (!isFormVisible) {
+    return (
+      <div className="text-center text-text">Task submitted successfully!</div>
+    );
+  }
+
   return (
     <div className="taskform flex flex-col text-base gap-4 mt-4 px-8">
       <div className="section1 flex justify-between">
@@ -146,33 +138,13 @@ export default function TaskForm() {
       <div className="section2 flex flex-col p-2 bg-primary rounded-lg gap-1.5">
         <span className="text-text font-medium">Tasks</span>
         <div className="inputs flex flex-col gap-1.5 overflow-auto max-h-[4.5rem]">
-          {inputs.map((input, index) => (
-            <div key={index} className="flex items-center">
-              <input
-                type="text"
-                placeholder="task"
-                value={input}
-                className="task-input w-full rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
-                onChange={(event) => handleInputChange(index, event)}
-              />
-              {index !== 0 && (
-                <button
-                  className="ml-2 text-red-500"
-                  onClick={() => removeInput(index)}
-                >
-                  &times;
-                </button>
-              )}
-            </div>
-          ))}
-          {inputs.length < 2 && (
-            <span
-              className="text-accent cursor-pointer text-2xl text-center"
-              onClick={addInput}
-            >
-              +
-            </span>
-          )}
+          <input
+            type="text"
+            placeholder="task"
+            value={task}
+            className="task-input w-full rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
+            onChange={(event) => setTask(event.target.value)}
+          />
         </div>
       </div>
       <div className="section3 flex justify-between">
@@ -209,6 +181,8 @@ export default function TaskForm() {
           <input
             type="text"
             placeholder="remark"
+            value={formData.remarks}
+            onChange={(e) => handleSelectChange("remarks", e.target.value)}
             className="rounded-md px-2 py-0.5 border-none focus:outline-none focus:ring-0"
           />
         </div>

@@ -68,14 +68,6 @@ export default function StdGroupChat() {
         </div>
         <div className="header flex justify-between mt-5">
           <OverlappingProfiles />
-          <div className="audionvideo flex gap-10 text-accent mx-4">
-            <span className="name">
-              <IoCall className="text-xl" />
-            </span>
-            <span className="name">
-              <FaVideo className="text-xl" />
-            </span>
-          </div>
         </div>
         <ReactScrollToBottom className="messagebox w-full h-5/6 overflow-y-scroll p-4 ">
           {messages.map((item, i) => (
