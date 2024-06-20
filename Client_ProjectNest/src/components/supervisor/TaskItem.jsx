@@ -42,7 +42,7 @@ export default function TaskItem() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       {tasks.map((row) => (
         <div
           key={row._id}

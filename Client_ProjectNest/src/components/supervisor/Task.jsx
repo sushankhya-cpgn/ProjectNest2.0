@@ -41,9 +41,9 @@ export default function Task() {
           />
         </span>
       </div>
-      <div className="w-full h-fit flex flex-col mt-2">
+      <div className="w-full h-5/6 flex flex-col mt-2 overflow-scroll">
         <h1 className="text-text text-lg py-3 font-bold">Tasks</h1>
-        <div className="flex flex-col gap-3 mt-2">
+        <div className="flex flex-col gap-3 mt-2 overflow-scroll">
           <TaskItem />
         </div>
       </div>
