@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useUser } from "../contexts/userContext";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Error404Page from "../pages/Error404Page";
 

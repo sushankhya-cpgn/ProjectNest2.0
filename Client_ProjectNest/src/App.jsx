@@ -33,7 +33,7 @@ import StudentProjectPage from "./pages/StudentProjectPage";
 import MyProject from "./components/student/MyProject";
 import MyProjectDetail from "./components/student/MyProjectDetail";
 import { ProjectProvider } from "./contexts/ProjectContext";
-import ProtectedRoutes from "./utils/protectedRoutes";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Error404Page from "./pages/Error404Page";
 import RoleProtectedRoutes from "./utils/RoleProtectedRoutes";
 
