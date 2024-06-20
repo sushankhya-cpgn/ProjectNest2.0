@@ -1,29 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CircularProgress from "./CircularProgress";
+import axios from "axios";
+import { useProject } from "../../contexts/ProjectContext";
+import { useUser } from "../../contexts/userContext";
+import Spinner from "../Spinner";
+
+const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
 export default function StdTaskItem() {
-  const initialData = [
-    {
-      id: 1,
-      name: "Ravi Pajiyar",
-      project: "ProjectNest",
-      dueDate: "2024-05-21",
-      remark: "Urgent",
-      task: "frontend task complete",
-    },
-  ];
+  const { projectDetails } = useProject();
+  const { project } = projectDetails;
+  const { user, getUser } = useUser();
+  const [tasks, setTasks] = useState([]);
+  const [isTaskLoading, setIsTaskLoading] = useState(false);
 
-  const [tasks, setTasks] = useState(initialData);
+  useEffect(function () {
+    if (!user) {
+      getUser();
+    }
+  }, []);
+  useEffect(function () {
+    async function fetchMyTasks() {
+      try {
+        setIsTaskLoading(true);
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          `${BASE_URL}/project/${project._id}/my-task`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setTasks(res.data.myTasks);
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+        setIsTaskLoading(false);
+      }
+    }
 
-  const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
-  };
+    fetchMyTasks();
+  }, []);
 
+  if (isTaskLoading) {
+    return (
+      <div className="">
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <div className="w-full">
-      {tasks.map((row) => (
+      {tasks.map((task) => (
         <div
-          key={row.id}
+          key={task._id}
           className="flex flex-col items-start bg-secondary rounded-lg p-4 shadow-md cursor-pointer w-full mb-4"
         >
           <div className="uppersection flex w-full">
@@ -42,7 +73,7 @@ export default function StdTaskItem() {
                 <tbody>
                   <tr>
                     <td className="py-2 px-4 text-md flex items-center gap-4 text-text">
-                      <span className="ml-2">{row.task}</span>
+                      <span className="ml-2">{task.task}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -59,6 +90,9 @@ export default function StdTaskItem() {
                       Project
                     </th>
                     <th className="py-2 px-4 border-b text-left text-md font-semibold text-text">
+                      Assigned On
+                    </th>
+                    <th className="py-2 px-4 border-b text-left text-md font-semibold text-text">
                       Due Date
                     </th>
                     <th className="py-2 px-4 border-b text-left text-md font-semibold text-text">
@@ -68,23 +102,23 @@ export default function StdTaskItem() {
                 </thead>
                 <tbody className="text-gray-500">
                   <tr className="mt-3">
-                    <td className="py-2 px-4 text-md">{row.name}</td>
-                    <td className="py-2 px-4 text-md">{row.project}</td>
-                    <td className="py-2 px-4 text-md">{row.dueDate}</td>
-                    <td className="py-2 px-4 text-md">{row.remark}</td>
+                    <td className="py-2 px-4 text-md">
+                      {user.firstName + " " + user.lastName}{" "}
+                    </td>
+                    <td className="py-2 px-4 text-md">{project.title}</td>
+                    <td className="py-2 px-4 text-md">
+                      {new Date(task.createdAt).toDateString()}
+                    </td>
+                    <td className="py-2 px-4 text-md">
+                      {new Date(task.dueDate).toDateString()}
+                    </td>
+                    <td className="py-2 px-4 text-md">{task.remarks}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div className="buttons flex w-full justify-end">
-            <button
-              className="text-red-500 mt-2"
-              onClick={() => handleDeleteTask(row.id)}
-            >
-              - Delete task
-            </button>
-          </div>
+          <div className="buttons flex w-full justify-end"></div>
         </div>
       ))}
     </div>

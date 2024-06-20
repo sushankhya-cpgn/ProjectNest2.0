@@ -529,3 +529,18 @@ exports.acceptProjectProposal = catchAsync(async (req, res, next) => {
     project: newProject,
   });
 });
+
+exports.rejectProjectProposal = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const proposal = await ProjectReq.findById(id);
+  if (proposal.status !== "pending")
+    return next(new AppError(400, "no proposal exists"));
+
+  proposal.status = "draft";
+  await proposal.save();
+
+  res.status(200).json({
+    status: "success",
+    proposal,
+  });
+});

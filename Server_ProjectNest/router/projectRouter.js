@@ -150,7 +150,6 @@ router
   .route("/:id/report")
   .patch(
     authController.protect,
-    authController.projectMemberRestricted,
     projectController.uploadReportPdf,
     projectController.uploadReport
   )
@@ -163,7 +162,6 @@ router
   .route("/:id/proposal")
   .patch(
     authController.protect,
-    authController.projectMemberRestricted,
     projectController.uploadProposalPdf,
     projectController.uploadProposal
   )

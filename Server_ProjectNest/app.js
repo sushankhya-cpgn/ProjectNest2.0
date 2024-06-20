@@ -11,7 +11,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-
+app.use("/public", express.static("public"));
 app.use("/api/v2/project", projectRouter);
 app.use("/api/v2/user", userRouter);
 app.use("/api/v2/event", eventRouter);

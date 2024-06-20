@@ -89,6 +89,15 @@ router
     projectreqController.acceptProjectProposal
   );
 
+  router
+    .route("/:id/reject-proposal")
+    .patch(
+      authController.protect,
+      authController.restrictTo("admin"),
+      projectreqController.restrictToStatus("pending"),
+      projectreqController.rejectProjectProposal
+    );
+
 router
   .route("/:id")
   .get(

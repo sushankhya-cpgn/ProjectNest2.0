@@ -3,11 +3,12 @@ import { FaFilter } from "react-icons/fa6";
 import { FaSortAmountUp } from "react-icons/fa";
 import StdDocForm from "./StdDocForm";
 import StdFile from "./StdFile";
-import StdRecentFile from "./StdRecentFile";
+import { useProject } from "../../contexts/ProjectContext";
 
 export default function StdDocuments() {
   const [openNew, setOpenNew] = useState(false);
 
+  const { projectDetails } = useProject();
   const handleClick = () => {
     setOpenNew(!openNew);
   };
@@ -44,18 +45,30 @@ export default function StdDocuments() {
         <div className="folders flex flex-col gap-3 mt-5">
           <span className="text-text font-semibold text-xl">Files</span>
           <div className="boxes flex gap-5 overflow-y-scroll whitespace-nowrap">
-            <StdFile />
-            <StdFile />
-            <StdFile />
+            {projectDetails.project.proposalFile && (
+              <StdFile
+                fileName={projectDetails.project.proposalFile}
+                fileTitle={`Proposal`}
+                projectTitle={projectDetails.project.title}
+              />
+            )}
+
+            {projectDetails.project.reportFile && (
+              <StdFile
+                fileName={projectDetails.project.reportFile}
+                fileTitle={`Report`}
+                projectTitle={projectDetails.project.title}
+              />
+            )}
           </div>
         </div>
-        <div className="recent flex flex-col gap-3 mt-5">
+        {/* <div className="recent flex flex-col gap-3 mt-5">
           <span className="text-text font-semibold text-xl">Recent</span>
           <div className="boxes flex gap-5">
             <StdRecentFile />
             <StdRecentFile />
           </div>
-        </div>
+        </div> */}
       </div>
       {openNew && (
         <>
