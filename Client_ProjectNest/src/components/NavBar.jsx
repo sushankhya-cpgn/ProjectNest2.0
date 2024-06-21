@@ -54,13 +54,13 @@ export default function NavBar() {
             >
               <AiTwotoneProject color={iconColor} size={20} />
             </NavBarItem>
-            <NavBarItem
+            {/* <NavBarItem
               navto="settings"
               isFullMenue={isFullMenue}
               name="settings"
             >
               <FiSettings color={iconColor} size={20} />
-            </NavBarItem>
+            </NavBarItem> */}
           </>
         )}
         {user.role === "admin" && (
